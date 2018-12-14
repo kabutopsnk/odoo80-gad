@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+<template id="account_asset_activo">
+	<t t-call="report.html_container">
+		<t t-foreach="docs" t-as="o">
+			<t t-call="report.external_layout">
+				<div class="header"/>
+				<div class="page">
+					<center>
+
+           <!--blockTable colWidths="145.0" style="Tabla1">
+	    <tr>
+		<td width="100%">        
+		  <barCode code="Code128" quiet="0" fontName='Arial' style="barcode" barWidth="0.535" barHeight="23" >0004-03-123-98765</barCode>
+		  <barCode code="Code128" quiet="0" fontName='Arial' style="barcode" barWidth="0.7" barHeight="15" ><span t-field="o.code"/></barCode>
+	    	</td>
+	    </tr>
+	    <tr>
+        	<td>
+	            <para style="P3"><span t-field="o.code"/></para>
+	            <para style="P2"><span t-field="o.name"/></para>          	 
+        	</td>	
+	    </tr>
+    	</blockTable-->
+
+					    <table cellspacing="0" width="100%" style="font-size:12px;vertical-align:top;">
+
+					    	<tr>
+					    		<td colspan="6" style="font-size:18px;vertical-align:top;" width="100%">ACTIVO FIJO #<span t-field="o.code"/><br/></td>
+					    	</tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr>
+					    		<th width="30%" style="text-align:left;" colspan="2"># Ingreso:</th>
+					    		<td width="70%" style="text-align:left;" colspan="4"><span t-field="o.numero_ingreso"/></td>
+					    	</tr>
+					    	<tr>
+					    		<th width="30%" style="text-align:left;" colspan="2">Descripción:</th>
+					    		<td width="70%" style="text-align:left;" colspan="4"><span t-field="o.name"/></td>
+					    	</tr>
+					    	<tr>
+					    		<th width="30%" style="text-align:left;" colspan="2">Clasificador:</th>
+							<p t-if="o.clasificador == 'bld'">
+						    		<td width="70%" style="text-align:left;" colspan="4">Bienes de Larga Duración</td>
+					    		</p>
+					    		<p t-if="o.clasificador == 'bsc'">
+						    		<td width="70%" style="text-align:left;" colspan="4">Bienes Sujetos a Control</td>
+					    		</p>
+					    	</tr>
+					    	<tr>
+					    		<th width="30%" style="text-align:left;" colspan="2">Categoría:</th>
+							<td width="70%" style="text-align:left;" colspan="4"><span t-field="o.category_id.code"/> - <span t-field="o.category_id.name"/></td>
+					    	</tr>
+					    	<tr>
+					    		<th width="30%" style="text-align:left;" colspan="2">Tipo Ingreso:</th>
+							<p t-if="o.tipo_ingreso == 'compra'">
+						    		<td width="70%" style="text-align:left;" colspan="4">Compra</td>
+					    		</p>
+					    		<p t-if="o.tipo_ingreso == 'tomafisica'">
+						    		<td width="70%" style="text-align:left;" colspan="4">Toma Física</td>
+					    		</p>
+							<p t-if="o.tipo_ingreso == 'donacion'">
+						    		<td width="70%" style="text-align:left;" colspan="4">Donación</td>
+					    		</p>
+					    		<p t-if="o.tipo_ingreso == 'comodato'">
+						    		<td width="70%" style="text-align:left;" colspan="4">Comodato</td>
+					    		</p>
+					    	</tr>
+					    	<tr>
+					    		<th width="30%" style="text-align:left;" colspan="2">Proveedor:</th>
+							<td width="70%" style="text-align:left;" colspan="4"><span t-field="o.partner_id.name"/> </td>
+					    	</tr>
+					    	<tr>
+					    		<th width="30%" style="text-align:left;" colspan="2">Fecha Adquisición:</th>
+							<td width="70%" style="text-align:left;" colspan="4"><span t-field="o.purchase_date"/> </td>
+					    	</tr>
+					    	<tr>
+					    		<th width="30%" style="text-align:left;" colspan="2">Valor Adquisición:</th>
+					    		<td width="70%" style="text-align:left;" colspan="4"><span t-field="o.purchase_value"/></td>
+					    	</tr>
+					    	<tr>
+					    		<th width="30%" style="text-align:left;" colspan="2">Dpto. / Unidad Operativa:</th>
+							<td width="70%" style="text-align:left;" colspan="4"><span t-field="o.department_id.name"/></td>
+						</tr>
+					    	<tr>
+					    		<th width="30%" style="text-align:left;" colspan="2">Responsable / Custodio:</th>
+							<td width="70%" style="text-align:left;" colspan="4"><span t-field="o.employee_id.name_related"/></td>
+						</tr>
+					    	<tr>
+					    		<th width="30%" style="text-align:left;" colspan="2">Estado del Bien:</th>
+					    		<td width="70%" style="text-align:left;" colspan="4"><span t-field="o.estado"/></td>
+					    	</tr>
+					    	<tr>
+					    		<th width="30%" style="text-align:left;" colspan="2">Nro. Depreciaciones:</th>
+					    		<td width="70%" style="text-align:left;" colspan="4"><span t-field="o.method_number"/></td>
+					    	</tr>
+					    	<tr><th colspan="6"> <br/> PROPIEDADES </th></tr>
+						<tr>
+							<td colspan="6">
+								<table  cellspacing="0" width="100%">
+					    				<t t-foreach="o.propiedades_ids" t-as="line">
+										<tr>
+				    							<td width="30%" style="text-align:left;" colspan="2"><span t-field="line.category_propiedades_id.name"/></td>
+				    							<td width="70%" style="text-align:left;" colspan="4"><span t-field="line.valor"/></td>
+				    						</tr>
+					    				</t>
+					    			</table>
+							</td>
+						</tr>
+					    	<tr><th colspan="6"> <br/> COMPONENTES </th></tr>
+						<tr>
+							<td colspan="6">
+								<table  cellspacing="0" width="100%">
+					    				<t t-foreach="o.componentes_ids" t-as="line">
+										<tr>
+				    							<td width="30%" style="text-align:left;" colspan="2"><span t-field="line.name"/></td>
+				    							<td width="20%" style="text-align:left;" colspan="1">Cantidad: <span t-field="line.cantidad"/></td>
+				    							<td width="50%" style="text-align:left;" colspan="3"><span t-field="line.descripcion"/></td>
+				    						</tr>
+					    				</t>
+					    			</table>
+							</td>
+						</tr>
+					    	<tr><th colspan="4"> <br/> </th></tr>
+					    	<tr>
+					    		<th width="30%" style="text-align:left;" colspan="2">Estado:</th>
+					    		<p t-if="o.state == 'draft'">
+						    		<td width="100%" style="text-align:left;" colspan="4">Borrador</td>
+					    		</p>
+					    		<p t-if="o.state == 'open'">
+						    		<td width="100%" style="text-align:left;" colspan="4">OPERATIVO</td>
+					    		</p>
+					    		<p t-if="o.state == 'close'">
+						    		<td width="100%" style="text-align:left;" colspan="4">Dado de Baja</td>
+					    		</p>
+
+					    	</tr>
+					    	<tr>
+					    		<th width="30%" style="text-align:left;" colspan="2">Observaciones:</th>
+							<td width="70%" style="text-align:left;" colspan="4"><span t-field="o.note"/></td>
+					    	</tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr>
+					    	   <th width="50%" colspan="4" height="50px" style="text-align:center;"><br/>_____________________________<br/><span t-field="o.create_uid.name"/></th>
+					    	   <th width="50%" colspan="4" height="50px" style="text-align:center;"><br/>_____________________________<br/>AUTORIZADO</th>
+					    	</tr>
+					    </table>
+				    </center>
+				</div>
+				<div class="footer"/>
+			</t>
+		</t>
+    </t>
+</template>
+</data>
+</openerp>

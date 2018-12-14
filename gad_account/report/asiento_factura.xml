@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+	<report
+		id="action_asiento_factura"
+		model="account.invoice"
+		string="Asiento de Factura"
+		report_type="qweb-pdf"
+		name="gad_account.asiento_factura"
+		file="gad_account.asiento_factura"
+		/>
+		
+		
+	<template id="asiento_factura" name="Reporte Comprobante de Movimiento">
+		<t t-call="report.html_container">
+			<t t-foreach="docs" t-as="o">
+				<t t-call="report.external_layout">
+					<div class="header"/>
+					<div class="page">
+						<table class="table" style="font-size:12px;vertical-align:top;">
+							<tbody>
+								<tr>
+						    		<th width="30%">Comprobante(s):</th>
+						    		<td width="70%">
+						    			<span t-field="o.move_id.journal_id.name"/> - <span t-field="o.move_id.name"/>
+						    			<t t-foreach="o.payment_ids" t-as="pago">
+						    				<br/>
+						    				<span t-field="pago.move_id.journal_id.name"/> - <span t-field="pago.move_id.name"/>
+						    			</t>
+						    		</td>
+						    	</tr>
+						    	<!--tr>
+						    		<th width="30%">Diario:</th>
+						    		<td width="70%"><span t-field="o.journal_id.name"/></td>
+						    	</tr-->
+						    	<tr>
+						    		<th width="30%">Periodo:</th>
+						    		<td width="70%"><span t-field="o.period_id.name"/></td>
+						    	</tr>
+						    	<tr>
+						    		<th width="30%">Fecha:</th>
+						    		<td width="70%"><span t-field="o.move_id.date"/></td>
+						    	</tr>
+						    	<tr>
+						    		<th width="30%">Empresa:</th>
+						    		<td width="70%"><span t-field="o.partner_id.identifier"/> - <span t-field="o.partner_id.name"/></td>
+						    	</tr>
+						    	<p t-if="o.budget_doc_id">
+									<tr>
+										<th width="30%">Presupuesto:</th>
+										<td width="70%"><span t-field="o.budget_doc_id.name"/></td>
+									</tr>
+								</p>
+								<tr>
+						    		<th width="30%">Referencia:</th>
+						    		<td width="70%"><span t-field="o.comment"/></td>
+						    	</tr>
+							</tbody>
+						</table>
+						
+						<br></br>
+						<p style="text-align: left;"><strong>Detalle Contable</strong></p>
+						<br></br>
+						
+						<table class="table table-striped" style="font-size: 10pt">
+							<thead>
+								<tr>
+									<th style="text-align: center;" width="15%">Cod.</th>
+									<th style="text-align: center;" width="55%">Cuenta</th>
+									<th style="text-align: center;" width="15%">Debe</th>
+									<th style="text-align: center;" width="15%">Haber</th>
+								</tr>
+							</thead>
+							<tbody>
+								<t t-set="total_debit" t-value="0"/>
+								<t t-set="total_credit" t-value="0"/>
+								<t t-foreach="o.move_id.line_id" t-as="move">
+									<t t-if="move.debit != 0 or move.credit != 0">
+										<tr>
+											<td style="text-align: left;"><t t-esc="move.account_id.code"/></td>
+											<td style="text-align: left;"><t t-esc="move.account_id.name"></t></td>
+											<td style="text-align: right;"><t t-esc="move.debit"></t></td>
+											<td style="text-align: right;"><t t-esc="move.credit"></t></td>
+											<t t-set="total_debit" t-value="total_debit+move.debit"/>
+											<t t-set="total_credit" t-value="total_credit+move.credit"/>
+										</tr>
+									</t>
+								</t>
+								<!--t t-foreach="o.move_lines" t-as="pago">
+									<t t-foreach="pago.move_id.line_id" t-as="move">
+										<t t-if="move.debit != 0 or move.credit != 0">
+											<tr>
+												<td style="text-align: left;"><t t-esc="move.account_id.code"/></td>
+												<td style="text-align: left;"><t t-esc="move.account_id.name"></t></td>
+												<td style="text-align: right;"><t t-esc="move.debit"></t></td>
+												<td style="text-align: right;"><t t-esc="move.credit"></t></td>
+												<t t-set="total_debit" t-value="total_debit+move.debit"/>
+												<t t-set="total_credit" t-value="total_credit+move.credit"/>
+											</tr>
+										</t>
+									</t>
+								</t-->
+								<t t-foreach="o.payment_ids" t-as="pago">
+									<t t-foreach="pago.move_id.line_id" t-as="move">
+										<t t-if="move.debit != 0 or move.credit != 0">
+											<tr>
+												<td style="text-align: left;"><t t-esc="move.account_id.code"/></td>
+												<td style="text-align: left;"><t t-esc="move.account_id.name"></t></td>
+												<td style="text-align: right;"><t t-esc="move.debit"></t></td>
+												<td style="text-align: right;"><t t-esc="move.credit"></t></td>
+												<t t-set="total_debit" t-value="total_debit+move.debit"/>
+												<t t-set="total_credit" t-value="total_credit+move.credit"/>
+											</tr>
+										</t>
+									</t>
+								</t>
+							</tbody>
+							<tfoot>
+								<tr>
+									<td style="text-align: right;" colspan="2"><strong>Total</strong></td>
+									<td style="text-align: right;"><strong><t t-esc="formatLang(total_debit, currency_obj=o.company_id.currency_id)"></t></strong></td>
+									<td style="text-align: right;"><strong><t t-esc="formatLang(total_credit, currency_obj=o.company_id.currency_id)"></t></strong></td>
+								</tr>
+							</tfoot>
+						</table>
+						
+						<tr><td colspan="4"> <br/> </td></tr>
+						<p style="text-align: left;"><strong>Detalle Presupuestario</strong></p>
+						<br></br>
+				    	<p t-if="o.budget_doc_id">
+					    	<tr><td colspan="4" width="100%">
+					    		<table cellspacing="0" width="100%" border="1" class="table table-condensed" style="font-size: 10pt">
+					    			<tr>
+					    				<th width="70%">Partida Presupuestaria</th>
+					    				<th width="30%" style="text-align:right;">Valor</th>
+					    				<t t-set="budget" t-value="0" />
+					    			</tr>
+					    			<t t-foreach="o.invoice_budget_lines" t-as="line">
+					    				<tr>
+						    				<td>[<span t-field="line.budget_line_id.general_budget_id.code"/>] <span t-field="line.budget_line_id.general_budget_id.name"/></td>
+						    				<td style="text-align:right;"><span t-field="line.amount"/></td>
+						    				<t t-set="budget" t-value="budget+line.amount"/>
+						    			</tr>
+					    			</t>
+					    			<tr>
+					    				<th width="70%" style="text-align:right;">Total</th>
+					    				<th width="30%" style="text-align:right;"><t t-esc="formatLang(budget, currency_obj=o.company_id.currency_id)"/></th>
+					    			</tr>
+					    		</table>
+					    	</td></tr>
+				    	</p>
+						
+						<br/><br/><br/><br/>
+						<table class="table table-striped" style="font-size: 10pt">
+							<tr>
+								<td style="text-align: center">Revisado por:</td>
+								<td style="text-align: center">Autorizado Por:</td>
+								<td style="text-align: center" colspan="2">Recibi Conforme:</td>
+							</tr>
+						</table>
+						
+					</div>
+					
+				</t>
+			</t>
+		</t>
+	</template>
+	
+</data>
+</openerp>

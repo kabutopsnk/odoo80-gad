@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+<!-- WIZARD import hr.io.head -->
+    <record id="view_wizard_import_hr_io_head" model="ir.ui.view">
+      <field name="name">Importar Ingresos/Egresos</field>
+      <field name="model">wizard.import.hr.io.head</field>
+      <field name="type">form</field>
+      <field name="arch" type="xml">
+	<form string="Importar Ingresos/Egresos">	 
+	    <label colspan="4" string="Este Asistente le permite importar una hoja de excel (.xls) de Ingresos/Egresos. El formato debe ser: Nombre - Cedula - Valor"/>
+	    <group col="4" colspan="4">
+	      <field name="archivo" colspan="4"/>
+	    </group>  
+	    <group col="4" colspan="4">
+	      <button icon="gtk-cancel" special="cancel" string="Cancelar" colspan="2"/>
+	      <button name="import_sheet" string="Importar" colspan="2" type="object" icon="gtk-execute"/>
+	    </group>
+	</form>
+      </field>
+    </record>
+
+    <!--act_window
+       id="act_wizard_import_hr_io_head"
+       name="Importar XLS"
+       res_model="wizard.import.hr.io.head"
+       view_mode="form"
+       target="new"
+       src_model="hr.io.head"/-->
+
+
+    </data>
+</openerp>

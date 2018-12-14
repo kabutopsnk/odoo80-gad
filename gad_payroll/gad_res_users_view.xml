@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		
+		<record id="gad_res_users_form" model="ir.ui.view">
+            <field name="name">res.users.form.inherit</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form"/>
+            <field name="arch" type="xml">
+            	<xpath expr="/form/sheet/div/label[@for='name']" position="before">
+                    <label for="employe_id" class="oe_edit_only" string="Empleado"/>
+                    <h2><field name="employee_id" required="1" on_change="onchange_employee(employee_id)"/></h2>
+                </xpath>
+                <!--xpath expr="/form/sheet/div/group/field[@name='partner_id']" position="after">
+                    <field name="employee_id"/>
+                </xpath-->
+            </field>
+        </record>
+        
+        <record id="gad_res_users_tree" model="ir.ui.view">
+            <field name="name">res.users.tree.inherit</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="/tree/field[@name='login']" position="after">
+                    <field name="employee_id"/>
+                </xpath>
+            </field>
+        </record>
+		
+	</data>
+</openerp>

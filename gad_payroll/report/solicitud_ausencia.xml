@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+<template id="solicitud_ausencia">
+    <t t-call="report.html_container">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="report.external_layout">
+                <!--p t-if="o.state=='validate'"-->
+                <div class="header"/>
+                <div class="page">
+                	<center>
+                    <table class="table table-condensed table-bordered" cellspacing="0" width="80%">
+                    <!--table cellspacing="0" width="80%"-->
+                    	<!--tr>
+                            <td width="100%" colspan="4" style="text-align:center;font-size:18px"><center><b>SOLICITUD, APROBACION Y ACEPTACION DE AUSENCIA</b></center></td>
+                        </tr>
+                        <tr><td colspan="4"> <br/> </td></tr-->
+                        <tr>
+                            <td colspan="3" style="text-align:right;font-size:12px">Macas, <span t-field="o.date"/></td>
+                        </tr>
+                        <tr><td colspan="3"> <br/> </td></tr>
+                    	<tr>
+                            <td colspan="3" style="text-align:left;font-size:12px">
+                            	SEÑOR
+                            	<br/><span t-field="o.employee_id.contract_id.department_id.manager_id.name_related"/>
+                            	<br/><span t-field="o.employee_id.contract_id.department_id.name"/>
+                            </td>
+                        </tr>
+                        <tr><td colspan="3"> <br/> </td></tr>
+                        <tr>
+                            <td colspan="3" style="text-align:left;font-size:12px">
+                            	PRESENTE
+                            	<br/> <br/> Yo <strong><span t-field="o.employee_id.name_related"/></strong> empleado o trabajador de esta Institución,
+                            	del Departamento <strong><span t-field="o.employee_id.contract_id.department_id.name"/></strong>, solicito de la manera más comedida,
+                            	se sirva autorizar hacer uso del permiso de <strong><span t-field="o.holiday_status_id.name"/></strong>, a partir del
+                            	<strong><span t-field="o.date_from"/></strong> hasta el <strong><span t-field="o.date_to"/></strong><p t-if="o.employee_holidays">, con cargo a Vacaciones</p>.
+                            </td>
+                        </tr>
+                        <tr><td colspan="3"> <br/> </td></tr>
+                    	<tr>
+                            <td colspan="3" style="text-align:left;font-size:12px">Atentamente,
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="33%" style="text-align:center;font-size:12px"><br/><br/>____________________<br/>Solicitante</td>
+                            <td width="33%" style="text-align:center;font-size:12px"><br/><br/>____________________<br/>Jefe Inmediato</td>
+                            <td width="33%" style="text-align:center;font-size:12px"><br/><br/>____________________<br/>Autorización</td>
+                        </tr>
+                        <tr><td colspan="3"> <br/> </td></tr>
+                        <tr><td colspan="3"> <br/> </td></tr>
+                    	<tr>
+                            <td colspan="3" style="text-align:left;font-size:10px">Observaciones:
+                            </td>
+                        </tr>
+                    </table>
+                    </center>
+                </div>
+                <div class="footer"/>
+                <!--/p-->
+            </t>
+        </t>
+    </t>
+</template>
+</data>
+</openerp>

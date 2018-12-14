@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding="UTF-8"?>
+<openerp>
+	<data>
+		
+		<record id="account_project_task_form" model="ir.ui.view">
+			<field name="name">account.project.task.form</field>
+			<field name="model">project.task</field>
+			<field name="inherit_id" ref="project.view_task_form2"/>
+			<field name="arch" type="xml">
+				<xpath expr="/form/notebook/page[@string='Líneas Presupuestarias']/field[@name='budget_lines_ids']/tree/field[@name='available_amount']" position="after">
+					<field name="accrued_amount"/>
+					<field name="paid_amount"/>
+				</xpath>
+			</field>
+		</record>
+		
+		<record id="account_crossovered_budget_view_form_inherit" model="ir.ui.view">
+			<field name="name">account.crossovered.budget.form</field>
+			<field name="model">crossovered.budget</field>
+			<field name="inherit_id" ref="gad_account_budget.crossovered_budget_view_form_inherit"/>
+			<field name="arch" type="xml">
+				<field name="available_amount" position="after">
+				<!--xpath expr="/xpath/notebook/page/field[@name='crossovered_budget_line']/tree/field[@name='available amount']" position="after"-->
+					<field name="accrued_amount"/>
+					<field name="paid_amount"/>
+				<!--/xpath-->
+				</field>
+			</field>
+		</record>
+		
+		<record model="ir.ui.view" id="view_account_crossovered_budget_line_tree">
+            <field name="name">crossovered.budget.lines.tree</field>
+            <field name="model">crossovered.budget.lines</field>
+            <field name="inherit_id" ref="account_budget.view_crossovered_budget_line_tree"/>
+            <field name="arch" type="xml">
+            	<field name="commited_amount" position="after">
+					<field name="accrued_amount" string="DEVENGADO"/>
+					<field name="paid_amount" string="PAGADO"/>
+					<field name="x_comprometer_amount" string="POR COMPROMETER"/>
+					<field name="x_devengar_amount" string="POR DEVENGAR"/>
+					<field name="x_pag_rec_amount" string="POR PAGAR" invisible="1"/>
+				</field>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="view_account_crossovered_budget_line_tree_ingresos">
+            <field name="name">crossovered.budget.lines.tree.ingresos</field>
+            <field name="model">crossovered.budget.lines</field>
+            <field name="inherit_id" ref="gad_account_budget.view_crossovered_budget_line_tree_ingresos"/>
+            <field name="arch" type="xml">
+            	<field name="coded_amount" position="after">
+					<field name="accrued_amount" string="DEVENGADO"/>
+					<field name="paid_amount" string="RECAUDADO"/>
+					<field name="x_devengar_amount" string="POR DEVENGAR"/>
+					<field name="x_pag_rec_amount" string="POR RECAUDAR" invisible="1"/>
+				</field>
+			</field>
+		</record>
+		
+	</data>
+</openerp>

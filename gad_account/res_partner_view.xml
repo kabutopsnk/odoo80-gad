@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+		
+		<!-- Partner -->
+		<record id="view_gad_partner_search" model="ir.ui.view">
+			<field name="name">view.partner.gad.search</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="base.view_res_partner_filter"/>
+			<field name="arch" type="xml">
+				<field name="name" position="before">
+					<field name="identifier"/>
+				</field>
+			</field>
+		</record>
+		
+		<record id="view_gad_partner_tree" model="ir.ui.view">
+			<field name="name">view.partner.gad.tree</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="base.view_partner_tree"/>
+			<field name="arch" type="xml">
+				<xpath expr="/tree/field[@name='display_name']" position="before">
+					<field name="identifier"/>
+				</xpath>
+			</field>
+		</record>
+		
+		<record id="view_gad_partner_form" model="ir.ui.view">
+			<field name="name">res.partner.gad.form</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="base.view_partner_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="//label[@for='name']" position="attributes">
+					<attribute name="string">Razón Social</attribute>
+				</xpath>
+				<xpath expr="//field[@name='parent_id']" position="after">
+					<div>
+						<field name="type_identifier" placeholder="Tipo de Identificador" class="oe_inline"/>
+						<field name="identifier" placeholder="Cédula / RUC" class="oe_inline"/>
+					</div>
+					<field name="type_person" placeholder="Tipo de Persona"/>
+					<newline/>
+				</xpath>
+				<xpath expr="//field[@name='website']" position="after">
+					<field name="personeria_juridica" attrs="{'invisible': [('type_person','!=','9')]}"/>
+					<field name="inscrito_en" attrs="{'invisible': [('type_person','!=','9')]}"/>
+					<field name="lugar_inscripcion" attrs="{'invisible': [('type_person','!=','9')]}"/>
+					<field name="fecha_inscripcion" attrs="{'invisible': [('type_person','!=','9')]}"/>
+					<field name="numero_inscripcion" attrs="{'invisible': [('type_person','!=','9')]}"/>
+					<field name="cedula_rl" attrs="{'invisible': [('type_person','!=','9')]}"/>
+					<field name="nombre_rl" attrs="{'invisible': [('type_person','!=','9')]}"/>
+				</xpath>
+				<xpath expr="//field[@name='title']" position="after">
+					<field name="date_birth" attrs="{'invisible': [('type_person','!=','6')]}"/>
+					<field name="nacionalidad" attrs="{'invisible': [('type_person','!=','6')]}"/>
+					<field name="estado_civil" attrs="{'invisible': [('type_person','!=','6')]}"/>
+					<field name="nombre_conyuge" attrs="{'invisible': [('type_person','!=','6')]}"/>
+					<field name="separacion_bienes" attrs="{'invisible': [('type_person','!=','6')]}"/>
+					<field name="date_death" attrs="{'invisible': [('type_person','!=','6')]}"/>
+				</xpath>
+				<xpath expr="//field[@name='title']" position="attributes">
+					<attribute name="attrs">{'invisible': [('type_person','!=','6')]}</attribute>
+				</xpath>
+			</field>
+		</record>
+		
+		
+		<!-- Compañia -->
+		
+		<record id="view_gad_company_form" model="ir.ui.view">
+			<field name="name">res.company.gad.form</field>
+			<field name="model">res.company</field>
+			<field name="inherit_id" ref="base.view_company_form"/>
+			<field name="arch" type="xml">
+				<field name="partner_id" position="after">
+					<field name="accountant_identifier"/>
+					<field name="cedula_rl"/>
+					<field name="codigo_ce"/>
+				</field>
+				<field name="state_id" position="after">
+					<field name="canton_id" placeholder="Cantón" domain="[('state_id','=',state_id)]"/>
+				</field>
+			</field>
+		</record>
+		
+	</data>
+</openerp>

@@ -1,0 +1,379 @@
+<openerp>
+    <data>
+
+        <!-- Holidays: Leave Request -->
+
+        <record model="ir.ui.view" id="l10n_ec_edit_holiday_status_form">
+            <field name="name">hr.holidays.status.form</field>
+            <field name="model">hr.holidays.status</field>
+            <field name="inherit_id" ref="hr_holidays.edit_holiday_status_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="/form/sheet/group/field[@name='name']" position="after">
+                        <field name="code"/>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+
+        <!-- Holidays: Leave Request -->
+
+        <record id="l10n_ec_edit_holiday_new" model="ir.ui.view">
+            <field name="name">Peticiones de ausencia</field>
+            <field name="model">hr.holidays</field>
+            <field name="inherit_id" ref="hr_holidays.edit_holiday_new"/>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <data>
+                <xpath expr="/form/sheet/group/group/field[@name='holiday_status_id']" position="after">
+                	<field name="date"/>
+                	<!--label for="date_from_reference" string="Duración Real"/>
+                    <div>
+                        <group col="3" attrs="{'invisible': [('type', '=', 'add')]}">
+                            <field name="date_from_reference" nolabel="1" class="oe_inline"/>
+                            <label string="-" class="oe_inline"/>
+                            <field name="date_to_reference" nolabel="1" class="oe_inline"/>
+                        </group>
+                    </div-->
+                </xpath>
+                <xpath expr="/form/sheet/group/group/div/div/field[@name='number_of_days_temp']" position="replace">
+                    <field name="number_of_days_temp" class="oe_inline" on_change="onchange_employee_holidays(employee_holidays,number_of_days_temp,calc_type)"/>
+                </xpath>
+                <xpath expr="/form/sheet/group/group/field[@name='holiday_type']" position="replace">
+                    <field name="holiday_type" on_change="onchange_type(holiday_type)" attrs="{'readonly':[('state','!=','draft')]}" width="130" string="Mode" groups="base.group_hr_user" context="{'employee_id':employee_id}" invisible="1"/>
+                </xpath>
+                <xpath expr="/form/sheet/group/group/field[@name='department_id']" position="replace">
+                    <!--field name="vacation_type" on_change="onchange_vacation_type(vacation_type)"/-->
+                    <!--field name="employee_holidays" domain="[('employee_id','=',employee_id)]"/-->
+                    <field name="employee_holidays" domain="[('employee_id','=',employee_id)]" on_change="onchange_employee_holidays(employee_holidays,number_of_days_temp,calc_type)"/>
+                    <field name="calc_type" attrs="{'invisible':[('employee_holidays','=',False)],'required':[('employee_holidays','!=',False)]}" on_change="onchange_employee_holidays(employee_holidays,number_of_days_temp,calc_type)"/>
+                    <field name="tax_value" attrs="{'invisible':[('employee_holidays','=',False)],'required':[('employee_holidays','!=',False)]}"/>
+                    <field name="tax_value_ajuste" attrs="{'invisible':[('employee_holidays','=',False)]}"/>
+                    <!--field name="notax_value" attrs="{'invisible':[('employee_holidays','=',False)],'required':[('employee_holidays','!=',False)]}"/-->
+                </xpath>
+                <xpath expr="/form/sheet/group" position="inside">
+                    <group attrs="{'invisible':[('employee_holidays','=',False)]}" colspan="4">
+                        <label for="line_ids" string="Rubros para rol de pagos" colspan="4"/>
+                        <field name="line_ids" readonly="1" colspan="4"/>
+                    </group>
+                </xpath>
+                <xpath expr="/form/sheet/field[@name='notes']" position="replace">
+                    <field name="notes" nolabel="1" colspan="4" placeholder="Escriba sus observaciones..."/>
+                </xpath>
+                </data>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="view_holidays_graph_bar">
+        	<field name="name">hr.holidays.graph</field>
+        	<field name="model">hr.holidays</field>
+        	<field name="type">graph</field>
+        	<field name="arch" type="xml">
+        		<graph string="Ausencias por Tipo">
+        			<field name="holiday_status_id" group="True"/>
+        			<field name="number_of_days_temp" operator="+"/>
+        			<!--field name="employee_id"/-->
+        		</graph>
+        	</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="hr_holidays.open_ask_holidays">
+            <field name="name">Peticiones de ausencia</field>
+            <field name="res_model">hr.holidays</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="hr_holidays.edit_holiday_new"/>
+            <field name="context">{'default_type': 'remove'}</field>
+            <field name="domain">[('type','=','remove')]</field>
+            <field name="search_view_id" ref="hr_holidays.view_hr_holidays_filter"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create a new leave request.
+              </p><p>
+                Once you have recorded your leave request, it will be sent
+                to a manager for validation. Be sure to set the right leave
+                type (recuperation, legal holidays, sickness) and the exact
+                number of open days related to your leave.
+              </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window.view" id="hr_holidays.action_open_ask_holidays_tree">
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="hr_holidays.view_holiday"/>
+            <field name="act_window_id" ref="hr_holidays.open_ask_holidays"/>
+        </record>
+
+        <record model="ir.actions.act_window.view" id="hr_holidays.action_open_ask_holidays_form">
+            <field name="sequence" eval="2"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="hr_holidays.edit_holiday_new"/>
+            <field name="act_window_id" ref="hr_holidays.open_ask_holidays"/>
+        </record>
+
+        <record model="ir.actions.act_window.view" id="hr_holidays.action_open_ask_holidays_calendar">
+            <field name="sequence" eval="3"/>
+            <field name="view_mode">calendar</field>
+            <field name="view_id" ref="hr_holidays.view_holiday_new_calendar"/>
+            <field name="act_window_id" ref="hr_holidays.open_ask_holidays"/>
+        </record>
+        
+        <record model="ir.actions.act_window.view" id="hr_holidays.action_open_ask_holidays_graph_bar">
+            <field name="sequence" eval="4"/>
+            <field name="view_mode">graph</field>
+            <field name="view_id" ref="view_holidays_graph_bar"/>
+            <field name="act_window_id" ref="hr_holidays.open_ask_holidays"/>
+        </record>
+
+        <record model="ir.ui.view" id="hr_holidays.view_holiday">
+            <field name="name">hr.holidays.tree</field>
+            <field name="model">hr.holidays</field>
+            <field name="arch" type="xml">
+                <tree colors="grey:state == 'refuse';black:state == 'draft';blue:state in ('confirm','validate1');green:state == 'validate'" string="Leave Requests">
+                    <field name="employee_id"/>
+                    <field name="holiday_type" string="Mode" groups="base.group_hr_user" invisible="1"/>
+                    <field name="holiday_status_id"/>
+                    <field name="name"/>
+                    <!--field name="date_from_reference"/-->
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                    <field name="number_of_days" string="Number of Days" sum="Remaining Days"/>
+                    <field name="state"/>
+                    <field name="category_id" invisible="1"/>
+                    <field name="department_id" invisible="not context.get('set_visible',False)"/>
+                    <field name="manager_id" invisible="1"/>
+                    <field name="user_id" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="hr_holidays.view_holiday_simple">
+            <field name="name">hr.holidays.report_tree</field>
+            <field name="model">hr.holidays</field>
+            <field name="priority">20</field>
+            <field name="arch" type="xml">
+                <tree colors="grey:state == 'refuse';black:state == 'draft';blue:state in ('confirm','validate1');green:state == 'validate'" string="Leaves Summary">
+                    <field name="employee_id"/>
+                    <field name="category_id" invisible="1"/>
+                    <field name="department_id" invisible="1"/>
+                    <field name="type"/>
+                    <field name="name"/>
+                    <field name="holiday_status_id"/>
+                    <field name="number_of_days" string="Number of Days" sum="Remaining Days"/>
+                    <!--field name="date_from_reference"/-->
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                    <field name="manager_id" invisible="1"/>
+                    <field name="user_id" invisible="1"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="hr_holidays.view_holiday_allocation_tree">
+            <field name="name">hr.holidays.allocation.tree</field>
+            <field name="model">hr.holidays</field>
+            <field name="arch" type="xml">
+                <tree colors="grey:state == 'refuse';black:state == 'draft';blue:state in ('confirm','validate1');green:state == 'validate'" string="Allocation Requests">
+                    <field name="employee_id"/>
+                    <field name="holiday_type"/>
+                    <field name="category_id"/>
+                    <field name="department_id" invisible="1"/>
+                    <field name="holiday_status_id"/>
+                    <field name="name"/>
+                    <field name="number_of_days" string="Allocated Days" sum="Remaining Days"/>
+                    <field name="manager_id" invisible="1"/>
+                    <field name="user_id" invisible="1"/>
+                    <field name="date_from" invisible="1"/>
+                    <!--field name="type"/-->
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="l10n_ec_view_hr_holidays_filter" model="ir.ui.view">
+            <field name="name">hr.holidays.filter</field>
+            <field name="model">hr.holidays</field>
+            <field name="inherit_id" ref="hr_holidays.view_hr_holidays_filter"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="/search" position="inside">
+	              <field name="date_from" string="Ausencia desde" filter_domain="[('date_from','&gt;=',self)]"/>
+	              <field name="date_to" string="Ausencia hasta" filter_domain="[('date_to','&lt;=',self)]"/>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+
+        <!--delete model="ir.ui.menu" id="hr_holidays.menu_open_allocation_holidays"/>
+        <delete model="ir.ui.menu" id="hr_holidays.menu_request_approve_allocation"/-->
+        	
+        <!-- MENU DE SOLICITUD DE AUSENCIAS -->
+        
+         <record id="action_hr_holidays_solicitar" model="ir.actions.act_window">
+         	<field name="name">Solicitud de Ausencias</field>
+         	<field name="res_model">hr.holidays</field>
+         	<field name="view_type">form</field>
+         	<field name="view_mode">tree,form</field>
+         </record>
+        
+        <menuitem id="menu_user_ausencias" parent="gad_tools.menu_main_user" name="Ausencias"/>
+        <menuitem id="menu_user_jefe_ausencias" groups="gad_tools.group_jefe_departamento" parent="menu_user_ausencias" name="Solicitar Ausencias" action="action_hr_holidays_solicitar"/>
+
+      <!-- configuracion de reglas para vacaciones -->
+
+      <record model="ir.ui.view" id="l10n_ec_view_holidays_configuration_form">
+		<field name="name">hr.holidays.configuration.form</field>
+		<field name="model">hr.holidays.configuration</field>
+		<field name="type">form</field>
+		<field name="arch" type="xml">
+		  <form string="Configuración de Vacaciones">
+		  	<group>
+				<field name="rule_vac_normal" required="1"/>
+				<field name="rule_vac_normal_ajuste"/>
+				<!--field name="rule_bono_vac_normal" required="1"/>
+				<field name="rule_vac_extra" required="1"/>
+				<field name="rule_bono_vac_extra" required="1"/>
+				<field name="rule_novac_normal" required="1"/>
+				<field name="rule_bono_novac_normal" required="1"/>
+				<field name="rule_bono_novac_extra" required="1"/-->
+				<field name="rule_novac_extra" required="1"/>
+			</group>
+		  </form>
+		</field>
+      </record>
+	  
+      <record id="l10n_ec_view_holidays_configuration_tree" model="ir.ui.view">
+		<field name="name">hr.holidays.configuration.tree</field>
+		<field name="model">hr.holidays.configuration</field>
+		<field name="type">tree</field>
+		<field name="arch" type="xml">
+		  <tree string="Configuración de Vacaciones">
+			<field name="rule_vac_normal"/>
+			<field name="rule_vac_normal_ajuste"/>
+			<!--field name="rule_bono_vac_normal"/>
+			<field name="rule_vac_extra"/>
+			<field name="rule_bono_vac_extra"/>
+			<field name="rule_novac_normal"/>
+			<field name="rule_bono_novac_normal"/>
+			<field name="rule_bono_novac_extra"/-->
+			<field name="rule_novac_extra"/>
+		  </tree>
+		</field>
+      </record>
+	  
+      <record id="l10n_ec_action_holidays_configuration" model="ir.actions.act_window">
+		<field name="name">Reglas de Vacaciones</field>
+		<field name="res_model">hr.holidays.configuration</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+      </record>
+
+      <menuitem parent="menu_hr_misc" id="menu_hr_holidays_configuration" action="l10n_ec_action_holidays_configuration"/>
+
+
+      <!-- vacaciones asignadas a empleado -->
+
+      <record model="ir.ui.view" id="l10n_ec_view_holidays_employee_form">
+		<field name="name">hr.employee.holidays.form</field>
+		<field name="model">hr.employee.holidays</field>
+		<field name="type">form</field>
+		<field name="arch" type="xml">
+                                <form string="Detalle de vacaciones">
+                                    <group>
+			                <group string="Información">
+			                  <field name="name"/>
+			                  <field name="employee_id" readonly="1"/>
+			                  <field name="date_start"/>
+			                  <field name="date_end"/>
+			                </group>
+			                <group string="Asignación de días">
+			                  <field name="days_normal"/>
+			                  <field name="days_extra"/>
+			                  <field name="days_s_normal_used"/>
+			                  <field name="days_s_extra_used"/>
+			                </group>
+			                <group string="Cálculo de utilizados">
+			                  <field name="days_normal_used" readonly="1"/>
+			                  <field name="days_extra_used" readonly="1"/>
+			                  <field name="days_normal_avai" readonly="1"/>
+			                  <field name="days_extra_avai" readonly="1"/>
+			                </group>
+			                <group string="Cálculo de valores">
+			                  <field name="tax_typed_value"/>
+			                  <!--field name="notax_typed_value"/-->
+			                  <field name="tax_calc_value" readonly="1"/>
+			                  <!--field name="notax_calc_value" readonly="1"/-->
+			                  <field name="description_calc" nolabel="1" readonly="1" colspan="4"/>
+			                </group>
+                                    </group>
+                                </form>
+		</field>
+      </record>
+	  
+      <record id="l10n_ec_view_holidays_employee_tree" model="ir.ui.view">
+		<field name="name">hr.employee.holidays.tree</field>
+		<field name="model">hr.employee.holidays</field>
+		<field name="type">tree</field>
+		<field name="arch" type="xml">
+		                <tree string="Detalle de vacaciones">
+			              <field name="name"/>
+			              <field name="date_start"/>
+			              <field name="date_end" />
+			              <field name="days_normal"/>
+			              <field name="days_extra"/>
+			              <field name="days_s_normal_used"/>
+			              <field name="days_s_extra_used"/>
+			              <field name="days_normal_used" readonly="1"/>
+			              <field name="days_extra_used" readonly="1"/>
+			              <field name="days_normal_avai" readonly="1" sum="Normales"/>
+			              <field name="days_extra_avai" readonly="1" sum="Adicionales"/>
+		                </tree>
+		</field>
+      </record>
+
+      <record id="l10n_ec_view_holidays_employee_search" model="ir.ui.view">
+		<field name="name">hr.employee.holidays.search</field>
+		<field name="model">hr.employee.holidays</field>
+		<field name="type">tree</field>
+		<field name="arch" type="xml">
+		                <search string="Detalle de vacaciones">
+			              <field name="employee_id"/>
+			              <field name="name"/>
+			              <field name="date_start"/>
+			              <field name="date_end" />
+			              <field name="days_normal"/>
+			              <field name="days_extra"/>
+		                </search>
+		</field>
+      </record>
+      
+		<record id="action_migracion_employee_holidays" model="ir.actions.act_window">
+			<field name="name">Detalle de Vacaciones</field>
+			<field name="res_model">hr.employee.holidays</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+		
+		<menuitem parent="menu_hr_misc" id="hr_migracion_employee_holidays" action="action_migracion_employee_holidays"/>
+		
+		<!-- HR.CONTRACT - TIPO DE CONTRATO DE EMPLEADO -->
+		
+		<record id="l10n_ec_hr_contract_type_view_form" model="ir.ui.view">
+            <field name="name">hr.contract.type.view.form</field>
+            <field name="model">hr.contract.type</field>
+            <field name="inherit_id" ref="hr_contract.hr_contract_type_view_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="/form/group/field[@name='name']" position="after">
+                     <group string="Formulas para vacaciones" colspan="4" col="4">
+                      <field name="python_normal" required="True" colspan="4"/>
+                      <field name="python_extra" required="True" colspan="4"/>
+                     </group>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+
+    </data>
+</openerp>

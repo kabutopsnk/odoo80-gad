@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+stock_user_picking_doc,stock.picking.doc,model_stock_picking_doc,stock.group_stock_user,1,1,1,1
+
+account_user_picking_out_account,picking.out.account,model_picking_out_account,account.group_account_user,1,1,1,1
+account_user_picking_out_account_line,picking.out.account.line,model_picking_out_account_line,account.group_account_user,1,1,1,1

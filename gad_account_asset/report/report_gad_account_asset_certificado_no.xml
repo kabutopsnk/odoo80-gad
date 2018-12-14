@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+<template id="account_asset_certificado_no">
+	<t t-call="report.html_container">
+		<t t-foreach="docs" t-as="o">
+			<t t-call="report.external_layout">
+				<div class="header"/>
+				<div class="page">
+					<center>
+					    <table cellspacing="0" width="100%" style="font-size:14px;vertical-align:top;">
+
+					    	<tr>
+					    		<th colspan="6" style="font-size:18px;vertical-align:top;" width="100%">CERTIFICADO DE NO TENER BIENES A CARGO<br/></th>
+					    	</tr>
+					    	<tr><td colspan="6"> <br/> </td></tr>
+					    	<tr>
+					    		<td style="text-align:left;" colspan="6"><b>Fecha:</b> <span t-field="o.fecha"/></td>
+					    	</tr>
+					    	<tr><td colspan="6"> <br/> </td></tr>
+
+					    	<tr><th colspan="6"> <br/> </th></tr>
+					    	<tr><td colspan="6"> Certifico que el funcionario <b><span t-field="o.employee_id.name_related"/></b> con C.I. #<b><span t-field="o.employee_id.name"/></b> y que labora en el departamento de  <b><span t-field="o.department_id.name"/></b> con el cargo de <b><span t-field="o.job_id.name"/></b>, NO TIENE BIENES A SU CARGO en la institución.<br/><br/>Es todo cuanto puedo indicar en honor a la verdad. </td></tr>
+					    	<tr><th colspan="6"> <br/> </th></tr>
+					    	<tr><th colspan="6"> <br/> </th></tr>
+
+					    	<tr>
+					    	   <td width="50%" height="50px" style="text-align:center;"><br/>Realizado Por<br/></td>
+					    	   <td width="50%" height="50px" style="text-align:center;"><br/>Funcionario<br/></td>
+					    	</tr>
+					    	<tr><td colspan="6"> <br/> </td></tr>
+					    	<tr><td colspan="6"> <br/> </td></tr>
+					    	<tr><td colspan="6"> <br/> </td></tr>
+					    	<tr>
+					    	   <th width="50%" height="50px" style="text-align:center;"><br/>_______________________________________<br/><span t-field="o.elaborado_id.name_related"/></th>
+					    	   <th width="50%" height="50px" style="text-align:center;"><br/>_______________________________________<br/><span t-field="o.employee_id.name_related"/></th>
+					    	</tr>
+					    	<tr><td colspan="6"> <br/> </td></tr>
+					    	<tr><td colspan="6"> <br/> </td></tr>
+					    	<tr>
+					    	   <td width="100%" colspan="6" height="50px" style="font-size:10px;text-align:left;"><br/>Art. 3: Reglamento General Sustitutivo para el manejo y administración de Bienes del Sector Público: La conservación, buen uso y mantenimiento de los bienes será responsabilidad directa del servidor que los ha recibido para el desempeño de sus funciones y labores oficiales.<br/></td>
+					    	</tr>
+					    </table>
+				    </center>
+				</div>
+				<div class="footer"/>
+			</t>
+		</t>
+    </t>
+</template>
+</data>
+</openerp>

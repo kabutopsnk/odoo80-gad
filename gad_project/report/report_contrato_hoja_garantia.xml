@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+<template id="report_contrato_hoja_garantia">
+	<t t-call="report.html_container">
+		<t t-foreach="docs" t-as="o">
+			<t t-call="report.external_layout">
+				<div class="header"/>
+				<div class="page">
+					<center>
+					    <table cellspacing="0" width="100%" style="font-size:12px;vertical-align:top;">
+
+					    	<tr>
+					    		<td colspan="8" style="font-size:12px;vertical-align:top;text-align:center;" width="100%">CONTRATO VIGENTE<br/></td>
+					    	</tr>
+					    	<tr>
+					    		<th colspan="8" style="font-size:18px;vertical-align:top;text-align:center;" width="100%">TESORERÍA<br/></th>
+					    	</tr>
+					    	<tr>
+					    		<th colspan="8" style="font-size:14px;vertical-align:top;text-align:center;" width="100%">HOJA DE CONTROL DE GARANTÍA<br/></th>
+					    	</tr>
+					    	<tr><td colspan="8"> <br/> </td></tr>
+					    	<tr>
+					    		<th width="10%" style="text-align:left;" colspan="1">CONTRATISTA:</th>
+					    		<td width="90%" style="text-align:left;font-size:16px;" colspan="7"><span t-field="o.partner_id.name"/></td>
+					    	</tr>
+						    <tr>
+					    		<th width="10%" style="text-align:left;" colspan="1">CONCEPTO:</th>
+					    		<td width="90%" style="text-align:left;" colspan="7"><span t-field="o.name"/></td>
+					    	</tr>
+						    <tr>
+					    		<th width="10%" style="text-align:left;" colspan="1"># Contrato:</th>
+					    		<td width="15%" style="text-align:left;" colspan="1"><span t-field="o.code"/></td>
+					    		<th width="10%" style="text-align:left;" colspan="1">Fecha Contrato:</th>
+					    		<td width="15%" style="text-align:left;" colspan="1"><span t-field="o.fecha"/></td>
+					    		<th width="10%" style="text-align:left;" colspan="1">Plazo Contrato:</th>
+					    		<td width="40%" style="text-align:left;" colspan="3"><span t-field="o.plazo"/></td>
+					    	</tr>
+						    <tr>
+					    		<th width="10%" style="text-align:left;" colspan="1">Monto Contrato:</th>
+					    		<td width="15%" style="text-align:left;" colspan="1"><span t-field="o.monto"/></td>
+					    		<th width="10%" style="text-align:left;" colspan="1">% Anticipo:</th>
+					    		<td width="15%" style="text-align:left;" colspan="1"><span t-field="o.porcentaje_anticipo"/></td>
+					    		<th width="10%" style="text-align:left;" colspan="1">Ubicación Archivo:</th>
+					    		<td width="15%" style="text-align:left;" colspan="1"><span t-field="o.ubicacion_archivo"/></td>
+					    		<th width="10%" style="text-align:left;" colspan="1"> </th>
+					    		<td width="15%" style="text-align:left;" colspan="1"> </td>
+					    	</tr>
+					    	<tr><td colspan="8"> <br/> </td></tr>
+					    	<tr><th colspan="8" style="font-size:14px;vertical-align:top;text-align:center;"> <br/> DETALLE DE PÓLIZAS </th></tr>
+						    <tr>
+							<td colspan="8" col="4">
+								<table  cellspacing="0" width="100%" colspan="4">
+									<tr colspan="4" col="14">
+				    						<th width="20%" style="text-align:left;" colspan="2">ASEGURADORA</th>
+				    						<th width="10%" style="text-align:left;" colspan="2"># PÓLIZA</th>
+				    						<th width="15%" style="text-align:left;" colspan="2">TIPO</th>
+				    						<th width="13%" style="text-align:left;" colspan="2">MONTO ASEGURADO</th>
+				    						<th width="11%" style="text-align:left;" colspan="2">F. EMISIÓN</th>
+				    						<th width="11%" style="text-align:left;" colspan="2">F. VENCIMIENTO</th>
+				    						<th width="20%" style="text-align:left;" colspan="2">OBSERVACIONES</th>
+									</tr>
+					    				<t t-foreach="o.garantia_ids" t-as="line">
+                        					<t t-foreach="line.renovaciones_ids.sorted(key=lambda r: r.fecha_fin)" t-as="renov">
+										        <tr colspan="4" col="14">
+				        							<td width="20%" style="text-align:left;" colspan="2"><span t-field="line.partner_id.name"/></td>
+				        							<td width="10%" style="text-align:left;" colspan="2"><span t-field="line.name"/></td>
+				        							<td width="15%" style="text-align:left;" colspan="2"><span t-field="line.tipo_id.name"/></td>
+				        							<td width="13%" style="text-align:left;" colspan="2"><span t-field="renov.monto"/></td>
+				        							<td width="11%" style="text-align:left;" colspan="2"><span t-field="renov.fecha_emision"/></td>
+				        							<td width="11%" style="text-align:left;" colspan="2"><span t-field="renov.fecha_fin"/></td>
+				        							<td width="20%" style="text-align:left;" colspan="2"><span t-field="renov.observaciones"/></td>
+				        						</tr>
+					    				    </t>
+										    <tr colspan="4" col="14">
+				    							<td width="20%" style="text-align:left;" colspan="2"><span t-field="line.partner_id.name"/></td>
+				    							<td width="10%" style="text-align:left;" colspan="2"><span t-field="line.name"/></td>
+				    							<td width="15%" style="text-align:left;" colspan="2"><span t-field="line.tipo_id.name"/></td>
+				    							<td width="13%" style="text-align:left;" colspan="2"><span t-field="line.monto"/></td>
+				    							<td width="11%" style="text-align:left;" colspan="2"><span t-field="line.fecha_emision"/></td>
+				    							<td width="11%" style="text-align:left;" colspan="2"><span t-field="line.fecha_fin"/></td>
+				    							<td width="20%" style="text-align:left;" colspan="2"><span t-field="line.observaciones"/></td>
+				    						</tr>
+					    				</t>
+					    			</table>
+							</td>
+						    </tr>
+					    	<!--tr><th colspan="4"> <br/> </th></tr>
+					    	<tr>
+					    		<th width="20%" style="text-align:left;" colspan="2">Estado:</th>
+					    		<p t-if="o.state == 'draft'">
+						    		<td width="80%" style="text-align:left;" colspan="4">Borrador</td>
+					    		</p>
+					    		<p t-if="o.state == 'in_progress'">
+						    		<td width="80%" style="text-align:left;" colspan="4">1.En Proceso</td>
+					    		</p>
+					    		<p t-if="o.state == 'approved'">
+						    		<td width="80%" style="text-align:left;" colspan="4">2.Aprobado</td>
+					    		</p>
+					    		<p t-if="o.state == 'certified'">
+						    		<td width="80%" style="text-align:left;" colspan="4">3.Certificado</td>
+					    		</p>
+					    		<p t-if="o.state == 'authorized'">
+						    		<td width="80%" style="text-align:left;" colspan="4">4.Autorizado</td>
+					    		</p>
+					    		<p t-if="o.state == 'done'">
+						    		<td width="80%" style="text-align:left;" colspan="4">5.Finalizado</td>
+					    		</p>
+					    		<p t-if="o.state == 'cancel'">
+						    		<td width="80%" style="text-align:left;" colspan="4">Cancelado</td>
+					    		</p>
+					    	</tr>
+						<tr>
+					    		<th width="20%" style="text-align:left;" colspan="2">Observaciones:</th>
+					    		<td width="80%" style="text-align:left;" colspan="4"><span t-field="o.description"/></td>
+					    	</tr>
+
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr col="8">
+					    	   <th width="25%" colspan="2" height="50px" style="text-align:center;"><br/>_____________________________<br/><span t-field="o.solicitant_id.name_related"/></th>
+					    	   <th width="25%" colspan="2" height="50px" style="text-align:center;"><br/>_____________________________<br/><span t-field="o.solicitant_id.department_id.manager_id.name_related"/></th>
+					    	   <th width="25%" colspan="2" height="50px" style="text-align:center;"><br/>_____________________________<br/><span t-field="o.employee_autoriza_id.name_related"/></th>
+					    	   <th width="25%" colspan="2" height="50px" style="text-align:center;"><br/>_____________________________<br/><span t-field="o.employee_autoriza_id.name_related"/></th>
+					    	   <th width="25%" colspan="2" height="50px" style="text-align:center;"><br/> ________________________ <br/>SOLICITADO POR</th>
+					    	   <th width="25%" colspan="2" height="50px" style="text-align:center;"><br/> ________________________ <br/>APROBADO</th>
+					    	   <th width="25%" colspan="2" height="50px" style="text-align:center;"><br/> ________________________ <br/>DIRECTOR FINANCIERO</th>
+					    	   <th width="25%" colspan="2" height="50px" style="text-align:center;"><br/> ________________________ <br/>AUTORIZADO</th>
+					    	</tr-->
+					    </table>
+				    </center>
+				</div>
+				<div class="footer"/>
+			</t>
+		</t>
+    </t>
+</template>
+</data>
+</openerp>

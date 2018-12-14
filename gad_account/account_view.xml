@@ -1,0 +1,215 @@
+<?xml version='1.0' encoding="UTF-8"?>
+<openerp>
+	<data>
+
+		<!-- CUENTA CONTABLE-->
+		
+		<record id="view_gad_account_form" model="ir.ui.view">
+			<field name="name">account.account.gad.form</field>
+			<field name="model">account.account</field>
+			<field name="inherit_id" ref="account.view_account_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="/form/group/group/field[@name='active']" position="before">
+					<field name="budget_debit_id"/>
+					<field name="budget_credit_id"/>
+				</xpath>
+			</field>
+		</record>
+		
+		<!-- ASIENTO CONTABLE -->
+		
+		<record id="view_gad_account_move_form" model="ir.ui.view">
+			<field name="name">account.move.gad.form</field>
+			<field name="model">account.move</field>
+			<field name="inherit_id" ref="account.view_move_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="/form/group/group/field[@name='partner_id']" position="after">
+					<field name="budget_doc_id"/>
+				</xpath>
+				<xpath expr="/form/group/group/field[@name='to_check']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//notebook" position="inside">
+					<page string="Detalle Presupuestario">
+						<field name="move_budget">
+							<tree string="Detalle presupuestario" editable="top">
+								<field name="budget_doc_line" domain="[('budget_doc_id','=',parent.budget_doc_id)]"/>
+								<!--field name="accrued_amount"/>
+								<field name="paid_amount"/-->
+								<field name="amount" sum="Total"/>
+								<field name="state" invisible="1"/>
+								<field name="state_move" invisible="1"/>
+							</tree>
+						</field>
+					</page>
+				</xpath>
+				<xpath expr="/form/notebook/page[@string='Journal Items']/field[@name='line_id']/tree/field[@name='date_maturity']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="/form/notebook/page[@string='Journal Items']/field[@name='line_id']/tree/field[@name='amount_currency']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="/form/notebook/page[@string='Journal Items']/field[@name='line_id']/tree/field[@name='currency_id']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="/form/notebook/page[@string='Journal Items']/field[@name='line_id']/tree/field[@name='tax_code_id']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="/form/notebook/page[@string='Journal Items']/field[@name='line_id']/tree/field[@name='tax_amount']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+			</field>
+		</record>
+		
+		<!-- PRESUPUESTO EN CONTABILIDAD -->
+		
+		<!--record id="view_account_move_budget_form" model="ir.ui.view">
+			<field name="name">account.move.budget.tree</field>
+			<field name="model">account.move.budget</field>
+			<field name="arch" type="xml">
+				<tree string="Detalle presupuestario de comprobantes" editable="top">
+					<field name="budget_doc_line"/>
+					<field name="accrued_amount"/>
+					<field name="paid_amount"/>
+					<field name="state"/>
+				</tree>
+			</field>
+		</record-->
+		
+		
+        <!--
+            Grupo de impuestos visible
+        -->
+        <record id="view_account_tax_group_tree" model="ir.ui.view">
+            <field name="name">account.tax.group.tree</field>
+            <field name="model">account.tax</field>
+            <field name="inherit_id" ref="account.view_tax_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='description']" position="replace">
+                    <field name="tax_group"/>
+                </xpath>
+                <xpath expr="//field[@name='name']" position="before">
+                    <field name="porcentaje"/>
+                    <field name="description"/>
+                </xpath>
+                <xpath expr="//field[@name='price_include']" position="replace">
+                    <field name="base_code_id"/>
+                    <field name="tax_code_id"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_account_tax_group_form" model="ir.ui.view">
+            <field name="name">account.tax.group.form</field>
+            <field name="model">account.tax</field>
+            <field name="inherit_id" ref="account.view_tax_form"/>
+            <field name="arch" type="xml">
+                <field name="active" position="after">
+                    <field name="tax_group"/>
+                    <field name="porcentaje" required="1"/>
+                </field>
+                <field name="account_collected_id" position="before">
+                    <field name="partner_id"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_account_tax_search2" model="ir.ui.view">
+            <field name="name">account.tax.tree2</field>
+            <field name="model">account.tax</field>
+            <field name="inherit_id" ref="account.view_account_tax_search"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="tax_group"/>
+                    <field name="porcentaje"/>
+                    <field name="base_code_id" select="1" string="Cod. Base Imponible"/>
+                    <field name="tax_code_id" select="1" string="Cod. Imp. Generado"/>
+                    <field name="type_tax_use"/>
+                </field>
+            </field>
+        </record>
+        
+        
+        
+        <!-- Conciliacion Bancaria -->
+        
+        <record id="view_move_line_conciliacion_bancaria_search" model="ir.ui.view">
+            <field name="name">account.move.line.search.conciliacion</field>
+            <field name="model">account.move.line</field>
+            <field name="inherit_id" ref="account.view_account_move_line_filter"/>
+            <field name="arch" type="xml">
+                <search position="inside">
+                    <filter string="En circulación" domain="[('conciliacion_bancaria','=',False)]" name="filter_conciliacion_bancaria"/>
+                </search>
+            </field>
+        </record>
+        
+        <record id="view_move_line_conciliacion_bancaria_tree" model="ir.ui.view">
+            <field name="model">account.move.line</field>
+            <field eval="24" name="priority"/>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree create="false" editable="top">
+                    <field name="date" readonly="1"/>
+                    <field name="move_id" readonly="1"/>
+                    <field name="ref" readonly="1"/>
+                    <field name="name" readonly="1"/>
+                    <field name="partner_id" readonly="1"/>
+                    <field name="account_id" readonly="1"/>
+                    <field name="period_id" readonly="1"/>
+                    <field name="journal_id" invisible="1"/>
+                    <field name="reconcile_partial_id" invisible="1"/>
+                    <field name="debit" readonly="1" sum="Débito"/>
+                    <field name="credit" readonly="1" sum="Crédito"/>
+                    <field name="conciliacion_bancaria"/>
+                    <field name="conciliacion_referencia" attrs="{'readonly': [('conciliacion_bancaria','=',False)]}"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="action_move_line_conciliacion_bancaria" model="ir.actions.act_window">
+            <!--field name="context">{'search_default_unreconciled': 1,'view_mode':True}</field-->
+            <field name="name">Conciliacion Bancaria</field>
+            <field name="res_model">account.move.line</field>
+            <field name="view_id" ref="view_move_line_conciliacion_bancaria_tree"/>
+            <field name="view_mode">tree</field>
+            <field name="domain">[('account_id.user_type.name','=','Banco')]</field>
+        </record>
+        <menuitem name="Conciliacion Bancaria" action="action_move_line_conciliacion_bancaria" id="menu_move_line_conciliacion_bancaria" parent="gad_account.menu_account_procesos"/>
+        
+        <!--record id="view_account_bank_conciliacion_form" model="ir.ui.view">
+			<field name="name">Conciliación Bancaria</field>
+			<field name="model">account.bank.conciliacion</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Conciliación Bancaria">
+					<header>
+						<button name="draft_to_send" states="draft" string="Procesar" type="object" icon="gtk-execute" groups="base.group_hr_manager"/>
+					</header>
+					<sheet>
+						<group>
+							<field name="name"/>
+							<field name="period_id"/>
+							<field name="account_id"/>
+						</group>
+						<field name="line ids" nolabel="1">
+						</field>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		
+		<record id="action_account_bank_conciliacion" model="ir.actions.act_window">
+			<field name="name">Reportes Contabilidad</field>
+            <field name="type">ir.actions.act_window</field>
+			<field name="res_model">account.bank.conciliacion</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+            <field name="target">new</field>
+		</record>
+
+		<menuitem id="menu_account_bank_conciliacion" parent="menu_account_procesos" action="action_account_bank_conciliacion"/-->
+
+
+	</data>
+</openerp>

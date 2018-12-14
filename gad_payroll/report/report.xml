@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+
+    <report 
+        id="action_rol_individual"
+        model="hr.payslip"
+        string="Rol personal"
+        report_type="qweb-pdf"
+        name="gad_payroll.rol_individual"
+        file="gad_payroll.rol_individual"
+        />
+
+
+        
+	<report 
+		id="action_solicitud_ausencia"
+		model="hr.holidays"
+		string="Solicitud Ausencia"
+		report_type="qweb-pdf"
+		name="gad_payroll.solicitud_ausencia"
+		file="gad_payroll.solicitud_ausencia"
+		/>
+        
+			
+    <!-- BORRAMOS REPORTES NO USADOS -->
+    <!--delete model="ir.actions.report.xml" search="[('report_name','=','payslip')]"/>
+    <delete model="ir.actions.report.xml" search="[('report_name','=','paylip.details')]"/-->
+        <report 
+            id="hr_payroll.action_report_payslip" 
+            model="hr.payslip" 
+            string="Payslip"
+            report_type="qweb-pdf"
+            name="hr_payroll.report_payslip" 
+            file="hr_payroll.report_payslip"
+            menu="False"
+        />
+        <report
+            id="hr_payroll.payslip_details_report"
+            model="hr.payslip"
+            string="PaySlip Details"
+            report_type="qweb-pdf"
+            name="hr_payroll.report_payslipdetails" 
+            file="hr_payroll.report_payslipdetails"
+            menu="False"
+        />
+
+		
+    <!-- ROL GENERAL en excel-->
+    <record id="view_wizard_export_rol" model="ir.ui.view">
+        <field name="name">Exportar Rol</field>
+        <field name="model">hr.payroll.export</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Exportar Rol">
+                <label colspan="4" nolabel="1" string="Este asistente le permite exportar el rol de pagos en una hoja de excel (.xls)"/>	 
+                <group>
+                    <field name="datas" filename="datas_fname" readonly="1"/>
+                    <field name="datas_fname" readonly="1" invisible="1"/>
+                </group>
+                <group>
+                    <button name="generar_archivo_rol" string="Generar" type="object" icon="gtk-execute"/>
+                    <button special="cancel" string="Cancelar" type="object" icon="gtk-cancel"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <act_window
+        id="act_export_rol"
+        name="Archivo Rol (XLS)"
+        res_model="hr.payroll.export"
+        target="new"
+        view_mode="form"
+        src_model="hr.payslip.run"/>
+
+	</data>
+</openerp>

@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+contador_ats_comprobante,account.ats.doc,model_account_ats_doc,account.group_account_user,1,1,1,1
+contador_ats_sustento,account.ats.sustento,model_account_ats_sustento,account.group_account_user,1,1,1,1
+contador_invoice_budget,account.invoice.budget,model_account_invoice_budget,account.group_account_user,1,1,1,1
+contador_account_retention,account.retention,model_account_retention,account.group_account_user,1,1,1,1

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+<template id="account_asset_tarjeta">
+	<t t-call="report.html_container">
+		<t t-foreach="docs" t-as="o">
+			<t t-call="report.external_layout">
+				<div class="header"/>
+				<div class="page">
+					<center>
+					    <table cellspacing="0" width="100%" style="font-size:12px;vertical-align:top;">
+
+					    	<tr>
+					    		<th colspan="6" style="font-size:18px;vertical-align:top;" width="100%">TARJETA DE RESPONSABILIDAD DE BIENES DE LARGA DURACIÓN #<span t-field="o.numero"/><br/></th>
+					    	</tr>
+					    	<tr><td colspan="6"> <br/> </td></tr>
+					    	<tr>
+					    		<th width="20%" style="text-align:left;" colspan="2">Fecha:</th>
+							    <td width="80%" style="text-align:left;" colspan="4"><span t-field="o.fecha"/></td>
+					    	</tr>
+					    	<tr><td colspan="6"> <br/> </td></tr>
+					    	<tr>
+					    		<th width="20%" style="text-align:left;" colspan="2">Responsable/Custodio:</th>
+							    <td width="80%" style="text-align:left;" colspan="4"><span t-field="o.employee_id.name_related"/></td>
+					    	</tr>
+					    	<tr>
+					    		<th width="20%" style="text-align:left;" colspan="2">Departamento:</th>
+							    <td width="80%" style="text-align:left;" colspan="4"><span t-field="o.department_id.name"/></td>
+					    	</tr>
+					    	<tr>
+					    		<th width="20%" style="text-align:left;" colspan="2">Cargo:</th>
+							    <td width="80%" style="text-align:left;" colspan="4"><span t-field="o.job_id.name"/></td>
+					    	</tr>
+
+					    	<tr><td colspan="4"> <br/> </td></tr>
+
+						    <tr>
+							<td colspan="6">
+								<table  cellspacing="0" width="100%">
+									<tr>
+				    						<th width="13%" style="font-size:10px;text-align:left;">Código</th>
+				    						<th width="30%" style="font-size:10px;text-align:left;">Descripción</th>
+				    						<th width="20%" style="font-size:10px;text-align:left;">Categoría</th>
+				    						<th width="8%" style="font-size:10px;text-align:left;">Estado</th>
+				    						<th width="12%" style="font-size:10px;text-align:left;">Tipo</th>
+				    						<th width="8%" style="font-size:10px;text-align:left;">Fecha</th>
+				    						<th width="9%" style="font-size:10px;text-align:center;">Valor</th>
+									</tr>
+					    				<t t-foreach="o.activos_ids" t-as="line">
+										<tr col="6">
+				    							<td width="13%" style="font-size:10px;text-align:left;"><span t-field="line.code"/></td>
+				    							<td width="30%" style="font-size:10px;text-align:left;">
+                                                    <span t-field="line.name"/>
+                                                    <span t-if="o.propiedades==True">
+                                                        <t t-foreach="line.propiedades_ids" t-as="prop">
+                                                            <br/>
+                                                            <span t-field="prop.category_propiedades_id.name"/>: 
+                                                            <span t-field="prop.valor"/>
+                                                        </t>
+                                                    </span>
+                                                </td>
+				    							<td width="20%" style="font-size:10px;text-align:left;"><span t-field="line.category_id.name"/></td>
+				    							<td width="8%" style="font-size:10px;text-align:left;"><span t-field="line.estado"/></td>
+				    							<td width="12%" style="font-size:10px;text-align:left;"><span t-field="line.tipo_ingreso"/></td>
+				    							<td width="8%" style="font-size:10px;text-align:left;"><span t-field="line.purchase_date"/></td>
+				    							<td width="9%" style="font-size:10px;text-align:right;"><span t-field="line.purchase_value"/></td>
+				    						</tr>
+					    				</t>
+					    			</table>
+							</td>
+						    </tr>
+					    	<tr><th colspan="4"> <br/> </th></tr>
+					    	<tr>
+					    	   <td width="50%" colspan="4" height="50px" style="text-align:center;"><br/>ENTREGUE CONFORME<br/></td>
+					    	   <td width="50%" colspan="4" height="50px" style="text-align:center;"><br/>RECIBI CONFORME<br/></td>
+					    	</tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr>
+					    	   <th width="50%" colspan="4" height="50px" style="text-align:center;"><br/>_______________________________________<br/><span t-field="o.elaborado_id.name_related"/></th>
+					    	   <th width="50%" colspan="4" height="50px" style="text-align:center;"><br/>_______________________________________<br/><span t-field="o.employee_id.name_related"/></th>
+					    	</tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr>
+					    	   <td width="100%" colspan="8" height="50px" style="font-size:10px;text-align:justify;"><br/>Art. 3: Reglamento General Sustitutivo para el manejo y administración de Bienes del Sector Público: La conservación, buen uso y mantenimiento de los bienes será responsabilidad directa del servidor que los ha recibido para el desempeño de sus funciones y labores oficiales.<br/></td>
+					    	</tr>
+					    </table>
+				    </center>
+				</div>
+				<div class="footer"/>
+			</t>
+		</t>
+    </t>
+</template>
+</data>
+</openerp>

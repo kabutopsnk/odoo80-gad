@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+	<report 
+		id="action_report_budget_doc"
+		model="crossovered.budget.doc"
+		string="Documento Presupuestario"
+		report_type="qweb-pdf"
+		name="gad_account_budget.budget_doc"
+		file="gad_account_budget.budget_doc"
+		/>
+
+	<report 
+		id="action_report_budget_certificate"
+		model="crossovered.budget.doc"
+		string="Certificación Presupuestaria"
+		report_type="qweb-pdf"
+		name="gad_account_budget.budget_certificate"
+		file="gad_account_budget.budget_certificate"
+		/>
+
+	<report 
+		id="action_report_budget_reform"
+		model="crossovered.budget.reform"
+		string="Reforma Presupuestaria"
+		report_type="qweb-pdf"
+		name="gad_account_budget.budget_reform"
+		file="gad_account_budget.budget_reform"
+		/>
+
+	<report 
+		id="action_report_cedula_ingreso"
+		model="crossovered.budget.lines"
+		string="Cédula Presupuestaria de Ingresos"
+		report_type="qweb-pdf"
+		name="gad_account_budget.cedula_ingresos"
+		file="gad_account_budget.cedula_ingresos"
+        menu="False"
+		/>
+
+	<report 
+		id="action_report_cedula_gasto"
+		model="crossovered.budget.lines"
+		string="Cédula Presupuestaria de Gastos"
+		report_type="qweb-pdf"
+		name="gad_account_budget.cedula_gastos"
+		file="gad_account_budget.cedula_gastos"
+        menu="False"
+		/>
+
+    <record id="paperformat_cedula" model="report.paperformat">
+           <field name="name">Cédula Presupuestaria</field>
+           <field name="orientation">Landscape</field>
+    </record>
+
+    <record id="gad_account_budget.action_report_cedula_ingreso" model="ir.actions.report.xml">
+        <field name="paperformat_id" ref="gad_account_budget.paperformat_cedula"/>
+    </record> 
+    <record id="gad_account_budget.action_report_cedula_gasto" model="ir.actions.report.xml">
+        <field name="paperformat_id" ref="gad_account_budget.paperformat_cedula"/>
+    </record> 
+
+	<report 
+		id="action_report_estado_ejecucion"
+		model="crossovered.budget.lines"
+		string="Estado de Ejecución Presupuestaria"
+		report_type="qweb-pdf"
+		name="gad_account_budget.estado_ejecucion"
+		file="gad_account_budget.estado_ejecucion"
+        menu="False"
+		/>
+
+    </data>
+</openerp>

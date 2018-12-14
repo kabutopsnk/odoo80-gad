@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+<template id="budget_reform">
+	<t t-call="report.html_container">
+		<t t-foreach="docs" t-as="o">
+			<t t-call="report.external_layout">
+				<div class="header"/>
+				<div class="page">
+					<center>
+						<table cellspacing="0" width="100%" style="font-size:12px;vertical-align:top;">
+					    	<tr>
+					    		<td colspan="4" style="font-size:18px;vertical-align:top;" width="100%">REFORMA PRESUPUESTARIA #<span t-field="o.name"/><br/></td>
+					    	</tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr>
+					    		<th width="20%" style="text-align:left;">Fecha:</th>
+					    		<td width="30%" style="text-align:left;"><span t-field="o.date_create"/></td>
+					    		<th width="50%" colspan="2" />
+					    	</tr>
+					    	<tr>
+					    		<th width="20%" style="text-align:left;">Estado:</th>
+					    		<td width="80%" style="text-align:left;" colspan="3"><span t-field="o.state"/></td>
+					    	</tr>
+					    	<tr>
+					    		<th width="20%" style="text-align:left;">Tipo:</th>
+					    		<td width="80%" style="text-align:left;" colspan="3"><span t-field="o.type_transaction"/></td>
+					    	</tr>
+					    	<tr>
+					    		<th width="20%" style="text-align:left;">Descripción:</th>
+					    		<td width="80%" style="text-align:left;" colspan="3" ><span t-field="o.description"/></td>
+					    	</tr>
+					    	<tr>
+					    		<th width="20%" style="text-align:left;">Fecha:</th>
+					    		<td width="30%" style="text-align:left;"><span t-field="o.fecha"/></td>
+					    		<th width="50%" colspan="2" />
+					    	</tr>
+					    	<tr><th colspan="4"> <br/>* DETALLE DE MOVIMIENTOS </th></tr>
+					    	<tr>
+							    <td colspan="8" width="100%">
+						    		<table cellspacing="0" width="100%" border="1">
+									<tr>
+										<th width="44%" style="text-align:left;">Origen</th>
+										<th width="44%" style="text-align:left;">Destino</th>
+										<th width="12%" style="text-align:center;">Monto</th>
+									</tr>
+						    			<t t-foreach="o.line_ids" t-as="line">
+										    <tr>
+						    				    <td width="44%"><span t-field="line.budget1_id.project_id.code"/>.<span t-field="line.budget1_id.task_id.code"/>.<span t-field="line.budget1_id.general_budget_id.code"/> - <span t-field="line.budget1_id.general_budget_id.name"/> (<span t-field="line.budget1_id.name"/>)</td>
+                                                <t t-if="o.type_transaction=='transferencia'">
+						    				        <td width="44%"><span t-field="line.budget2_id.project_id.code"/>.<span t-field="line.budget2_id.task_id.code"/>.<span t-field="line.budget2_id.general_budget_id.code"/> - <span t-field="line.budget2_id.general_budget_id.name"/> (<span t-field="line.budget2_id.name"/>)</td>
+                                                </t>
+                                                <t t-if="o.type_transaction!='transferencia'">
+						    				        <td width="44%"> </td>
+                                                </t>
+						    					<td width="12%" style="text-align:right;"><span t-field="line.amount"/><!--span t-esc="'%.2f'%(line.amount)"/--></td>
+						    				</tr>
+						    			</t>
+						    		</table>
+						    	</td>
+						    </tr>
+
+                            <tr><td colspan="4"> <br/> </td></tr>
+                            <tr>
+					    		<th width="20%" style="text-align:left;">Observaciones:</th>
+					    		<td width="80%" style="text-align:left;" colspan="3"><span t-field="o.observaciones"/></td>
+					    	</tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr>
+					    	   <th width="50%" colspan="4" height="50px" style="text-align:center;"><br/>_____________________________<br/><span t-field="o.user_id.name"/></th>
+					    	   <th width="50%" colspan="4" height="50px" style="text-align:center;"><br/>_____________________________<br/>AUTORIZADO POR</th>
+					    	</tr>
+					    </table>
+				    </center>
+				</div>
+				<div class="footer"/>
+			</t>
+		</t>
+    </t>
+</template>
+</data>
+</openerp>

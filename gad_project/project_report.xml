@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+    <!--Contrato - Hoja Garantía-->
+	<report 
+		id="action_report_contrato_hoja_garantia"
+		model="project.contrato"
+		string="Hoja de Control de Garantías"
+		report_type="qweb-pdf"
+		name="gad_project.report_contrato_hoja_garantia"
+		file="gad_project.report_contrato_hoja_garantia"
+		/>
+
+    <record id="paperformat_horizontal" model="report.paperformat">
+           <field name="name">Reporte Horizontal Project</field>
+           <field name="orientation">Landscape</field>
+    </record>
+
+    <record id="gad_project.action_report_contrato_hoja_garantia" model="ir.actions.report.xml">
+        <field name="paperformat_id" ref="gad_project.paperformat_horizontal"/>
+    </record> 
+
+    <!--Garantías - Oficio Renovación-->
+    <report 
+            id="action_contrato_garantia_oficio_renovacion" 
+            model="wizard.contrato.garantia.oficio_renovacion" 
+            string="Oficio Renovación"
+            report_type="qweb-pdf"
+            name="gad_project.report_contrato_garantia_oficio_renovacion" 
+            file="gad_project.report_contrato_garantia_oficio_renovacion"
+            menu="False"
+            auto="False"
+        />
+
+    <!--Garantías - Oficio Ejecución-->
+    <report 
+            id="action_contrato_garantia_oficio_ejecucion" 
+            model="wizard.contrato.garantia.oficio_ejecucion" 
+            string="Oficio Ejecución"
+            report_type="qweb-pdf"
+            name="gad_project.report_contrato_garantia_oficio_ejecucion" 
+            file="gad_project.report_contrato_garantia_oficio_ejecucion"
+            menu="False"
+            auto="False"
+        />
+
+
+                 
+    </data>
+</openerp>

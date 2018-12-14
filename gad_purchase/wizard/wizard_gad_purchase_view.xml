@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+	<!--REGRESAR A BORRADOR-->
+	<record id="view_wizard_purchase_requisition_regresa_borrador" model="ir.ui.view">
+            <field name="name">Wizard - Regresa a Borrador</field>
+            <field name="model">wizard.purchase.requisition.regresa_borrador</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Regresar a Borrador">
+			<group colspan="4">
+			  <field name="descripcion" colspan="4"/>
+			  <button icon="gtk-apply" name="cambia_estado" string="Regresa a Borrador" confirm="Seguro que desea REGRESAR A BORRADOR la Solicitud de Compra?" type="object" colspan="2"/>
+			</group>
+                </form>
+            </field>
+	</record>
+	<record id="action_purchase_requisition_regresa_borrador" model="ir.actions.act_window">
+	      <field name="name">Regresar a Borrador</field>
+              <field name="type">ir.actions.act_window</field>
+	      <field name="res_model">wizard.purchase.requisition.regresa_borrador</field>
+	      <field name="view_type">form</field>
+	      <field name="view_mode">form</field>
+	      <field name="view_id" ref="view_wizard_purchase_requisition_regresa_borrador"/>
+	      <field name="target">new</field>            
+	 </record>	
+
+
+	<!--CANCELAR-->
+	<record id="view_wizard_purchase_requisition_cancelar" model="ir.ui.view">
+            <field name="name">Wizard - Cancelar</field>
+            <field name="model">wizard.purchase.requisition.cancelar</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Cancelar">
+			<group colspan="4">
+			  <field name="descripcion" colspan="4"/>
+			  <button icon="gtk-apply" name="cambia_estado" string="Cancelar" confirm="Seguro que desea CANCELAR la Solicitud de Compra?" type="object" colspan="2"/>
+			</group>
+                </form>
+            </field>
+	</record>
+	<record id="action_purchase_requisition_cancelar" model="ir.actions.act_window">
+	      <field name="name">Cancelar</field>
+              <field name="type">ir.actions.act_window</field>
+	      <field name="res_model">wizard.purchase.requisition.cancelar</field>
+	      <field name="view_type">form</field>
+	      <field name="view_mode">form</field>
+	      <field name="view_id" ref="view_wizard_purchase_requisition_cancelar"/>
+	      <field name="target">new</field>            
+	 </record>
+
+
+	<!--CREAR COTIZACION-->
+	<record id="view_wizard_purchase_requisition_crear_cotizacion" model="ir.ui.view">
+            <field name="name">Wizard - Crear Cotización</field>
+            <field name="model">wizard.purchase.requisition.crear_cotizacion</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Crear Cotización">
+			<group colspan="4">
+			  <field name="partner_id" colspan="4"/>
+			  <button icon="gtk-apply" name="crea_cotizacion" string="Crear Cotización" confirm="Seguro que desea CREAR COTIZACIÓN para la Solicitud de Compra?" type="object" colspan="2"/>
+			</group>
+                </form>
+            </field>
+	</record>
+	<record id="action_purchase_requisition_crear_cotizacion" model="ir.actions.act_window">
+	      <field name="name">Crear Cotización</field>
+              <field name="type">ir.actions.act_window</field>
+	      <field name="res_model">wizard.purchase.requisition.crear_cotizacion</field>
+	      <field name="view_type">form</field>
+	      <field name="view_mode">form</field>
+	      <field name="view_id" ref="view_wizard_purchase_requisition_crear_cotizacion"/>
+	      <field name="target">new</field>            
+	 </record>
+
+ </data>
+</openerp>

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+<template id="rol_individual">
+	<t t-call="report.html_container">
+		<t t-foreach="docs" t-as="o">
+			<t t-call="report.external_layout">
+				<div class="header"/>
+				<div class="page">
+					<center>
+						<table cellspacing="0" width="100%" style="font-size:12px;vertical-align:top;">
+					    	<!--tr>
+					    		<th width="100%" colspan="4">
+					    			<center>
+					    				<span t-field="o.contract_id.company_id.name"/>
+					    				<br/>RUC: <span t-field="o.contract_id.company_id.ruc"/>
+					    			</center>
+					    		</th>
+					    	</tr-->
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr>
+					    		<th width="15%">Cedula:</th>
+					    		<td width="35%"><span t-field="o.employee_id.name"/></td>
+					    		<th width="15%">Empleado:</th>
+					    		<td width="35%"><span t-field="o.employee_id.name_related"/></td>
+					    	</tr>
+					    	<tr>
+					    		<th width="15%">Cargo:</th>
+					    		<td width="35%"><span t-field="o.job_id.name"/></td>
+					    		<th width="15%">Tipo de rol:</th>
+					    		<p t-if="o.payroll_type == 'monthly'">
+					    			<td width="35%">Mensual</td>
+					    		</p>
+					    		<p t-if="o.payroll_type == 'bi-weekly'">
+					    			<td width="35%">Quincenal</td>
+					    		</p>
+					    		<p t-if="o.payroll_type == 'bi-weekly'">
+					    			<td width="35%">Quincenal</td>
+					    		</p>
+					    		<p t-if="o.payroll_type == 'decimotercero'">
+					    			<td width="35%">Decimo Tercero</td>
+					    		</p>
+					    		<p t-if="o.payroll_type == 'decimocuarto'">
+					    			<td width="35%">Decimo Cuarto</td>
+					    		</p>
+					    		<p t-if="o.payroll_type == 'otro'">
+					    			<td width="35%">Otro</td>
+					    		</p>
+					    	</tr>
+					    	<tr>
+					    		<th width="15%">Sueldo Nominal:</th>
+					    		<td width="35%"><span t-field="o.contract_id.wage"/></td>
+					    		<th width="15%">Periodo:</th>
+					    		<td width="35%"><span t-field="o.date_from"/> - <span t-field="o.date_to"/></td>
+					    	</tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr><td colspan="4" width="100%">
+					    		<table cellspacing="0" width="35%" border="1" class="table table-condensed">
+					    			<tr>
+					    				<th width="100%" colspan="2" style="text-align:center;">Dias Laborados</th>
+					    			</tr>
+					    			<t t-foreach="o.worked_days_line_ids" t-as="worked_line">
+					    				<tr>
+					    					<td width="70%"><span t-field="worked_line.name"/></td>
+					    					<td width="30%"><span t-field="worked_line.number_of_days"/></td>
+					    				</tr>
+					    			</t>
+					    		</table>
+					    	</td></tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr><td colspan="4" width="100%">
+					    		<table cellspacing="0" width="100%" border="1" class="table table-condensed">
+					    			<tr>
+					    				<th width="45%" style="text-align:center;">INGRESOS</th>
+					    				<th width="10%"></th>
+					    				<th width="45%" style="text-align:center;">EGRESOS</th>
+					    			</tr>
+					    			<tr>
+					    				<td width="45%">
+					    					<table  cellspacing="0" width="100%">
+					    						<t t-foreach="o.line_ids" t-as="line">
+					    							<p t-if="line.category_id.code in ['APT','BASIC','ING']">
+					    								<tr>
+					    									<td width="80%" style="text-align:left;"><span t-field="line.name"/></td>
+					    									<td width="20%" style="text-align:right;"><span t-field="line.total"/></td>
+					    								</tr>
+					    							</p>
+					    						</t>
+					    					</table>
+					    				</td>
+					    				<td width="10%"></td>
+					    				<td width="45%">
+					    					<table cellspacing="0" width="100%">
+					    						<t t-foreach="o.line_ids" t-as="line">
+					    							<p t-if="line.category_id.code in ['EGR']">
+					    								<tr>
+					    									<td width="80%" style="text-align:left;"><span t-field="line.name"/></td>
+					    									<td width="20%" style="text-align:right;"><span t-field="line.total"/></td>
+					    								</tr>
+					    							</p>
+					    						</t>
+					    					</table>
+					    				</td>
+					    			</tr>
+					    			<tr>
+					    				<td width="45%">
+					    					<table cellspacing="0" width="100%">
+					    						<t t-foreach="o.line_ids" t-as="line">
+					    							<p t-if="line.code in ['C00011']">
+					    								<tr>
+					    									<td width="80%" style="text-align:left;"><span t-field="line.name"/></td>
+					    									<td width="20%" style="text-align:right;"><span t-field="line.total"/></td>
+					    								</tr>
+					    							</p>
+					    						</t>
+					    					</table>
+					    				</td>
+					    				<td width="10%"></td>
+					    				<td width="45%">
+					    					<table cellspacing="0" width="100%">
+					    						<t t-foreach="o.line_ids" t-as="line">
+					    							<p t-if="line.code in ['C00023']">
+					    								<tr>
+					    									<td width="80%" style="text-align:left;"><span t-field="line.name"/></td>
+					    									<td width="20%" style="text-align:right;"><span t-field="line.total"/></td>
+					    								</tr>
+					    							</p>
+					    						</t>
+					    					</table>
+					    				</td>
+					    			</tr>
+					    			<tr><td colspan="3"> <br/> </td></tr>
+					    			<tr>
+					    				<td colspan="3">
+					    					<table cellspacing="0" width="100%" style="font-size:12px">
+					    						<t t-foreach="o.line_ids" t-as="line">
+					    							<p t-if="line.category_id.code in ['NET'] and line.total>=0">
+					    								<tr>
+					    									<td width="80%" style="text-align:right;"><span t-field="line.name"/>:</td>
+					    									<td width="20%" style="text-align:right;"><span t-field="line.total"/></td>
+					    								</tr>
+					    							</p>
+					    							<p t-if="line.category_id.code in ['NET'] and 0>line.total">
+					    								<tr>
+					    									<td width="80%" style="text-align:right;"><b>SOBREGIRO:</b></td>
+					    									<td width="20%" style="text-align:right;"><span t-field="line.total"/></td>
+					    								</tr>
+					    							</p>
+					    						</t>
+					    					</table>
+					    				</td>
+					    			</tr>
+					    		</table>
+					    	</td></tr>
+					    	<!--tr>
+					    		<td width="100%" colspan="4"><span t-field="o.payslip_run_id.notes"/></td>
+					    	</tr-->
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr>
+					    		<th width="100%" colspan="4" height="50px" style="text-align:center;"><br/>____________________<br/>EMPLEADO</th>
+					    	</tr>
+					    </table>
+				    </center>
+				</div>
+				<div class="footer"/>
+			</t>
+		</t>
+    </t>
+</template>
+</data>
+</openerp>

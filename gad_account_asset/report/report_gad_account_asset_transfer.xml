@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+<template id="account_asset_transfer">
+	<t t-call="report.html_container">
+		<t t-foreach="docs" t-as="o">
+			<t t-call="report.external_layout">
+				<div class="header"/>
+				<div class="page">
+					<center>
+					    <table cellspacing="0" width="100%" style="font-size:12px;vertical-align:top;">
+
+					    	<tr>
+					    		<td colspan="4" style="font-size:18px;vertical-align:top;" width="100%">ACTA DE ENTREGA/RECEPCIÓN DE BIENES #<span t-field="o.code"/><br/></td>
+					    	</tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+                            <tr>
+					    		<th width="30%" style="text-align:left;" colspan="1">Fecha:</th>
+					    		<td width="70%" style="text-align:left;" colspan="3"><span t-field="o.create_date"/></td>
+					    	</tr>
+					    	<tr>
+					    		<th width="30%" style="text-align:left;" colspan="1">Descripción:</th>
+					    		<td width="70%" style="text-align:left;" colspan="3"><span t-field="o.name"/></td>
+					    	</tr>
+					    	<tr><td colspan="8"> <br/> </td></tr>
+					    	<tr>
+					    		<th width="30%" style="text-align:left;" colspan="1">Responsable/Custodio Origen:</th>
+							    <td width="70%" style="text-align:left;" colspan="3"><span t-field="o.employee_origen_id.name_related"/></td>
+					    	</tr>
+					    	<tr>
+					    		<th width="30%" style="text-align:left;" colspan="1">Responsable/Custodio Destino:</th>
+							    <td width="70%" style="text-align:left;" colspan="3"><span t-field="o.employee_destino_id.name_related"/></td>
+					    	</tr>
+					    	<tr>
+					    		<th width="30%" style="text-align:left;" colspan="1">Dpto./Unidad Operativa Destino:</th>
+							    <td width="70%" style="text-align:left;" colspan="3"><span t-field="o.department_destino_id.name"/></td>
+					    	</tr>
+                            <tr><td colspan="4"> <br/> </td></tr>
+					    	<tr>
+					    		<th width="30%" style="text-align:left;" colspan="1">Observaciones:</th>
+							    <td width="70%" style="text-align:left;" colspan="3"><span t-field="o.observaciones"/></td>
+					    	</tr>
+
+					    	<tr><th colspan="4"> <br/> DETALLE DE ACTIVOS FIJOS </th></tr>
+						<tr>
+							<td colspan="4">
+								<table  cellspacing="0" width="100%">
+									<tr>
+				    						<th width="15%" style="text-align:left;">Código</th>
+				    						<th width="30%" style="text-align:left;">Descripción</th>
+				    						<th width="25%" style="text-align:left;">Categoría</th>
+				    						<th width="10%" style="text-align:left;">Tipo</th>
+				    						<th width="10%" style="text-align:left;">Fecha</th>
+				    						<th width="10%" style="text-align:center;">Valor</th>
+									</tr>
+					    				<t t-foreach="o.transfer_activos_ids" t-as="line">
+										<tr>
+				    							<td width="15%" style="text-align:left;"><span t-field="line.code"/></td>
+				    							<td width="30%" style="text-align:left;"><span t-field="line.name"/></td>
+				    							<td width="25%" style="text-align:left;"><span t-field="line.category_id.name"/></td>
+				    							<td width="10%" style="text-align:left;"><span t-field="line.tipo_ingreso"/></td>
+				    							<td width="10%" style="text-align:left;"><span t-field="line.purchase_date"/></td>
+				    							<td width="10%" style="text-align:right;"><span t-field="line.purchase_value"/></td>
+				    						</tr>
+					    				</t>
+					    			</table>
+							</td>
+						</tr>
+					    	<tr><th colspan="4"> <br/> </th></tr>
+					    	<tr>
+					    		<th width="40%" style="text-align:left;" colspan="1">Estado:</th>
+					    		<p t-if="o.state == 'draft'">
+						    		<td width="60%" style="text-align:left;" colspan="3">Borrador</td>
+					    		</p>
+					    		<p t-if="o.state == 'done'">
+						    		<td width="60%" style="text-align:left;" colspan="3">REALIZADO</td>
+					    		</p>
+					    	</tr>
+
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr>
+					    	   <th width="33%" height="50px" style="text-align:center;"><br/>_____________________________<br/><span t-field="o.employee_origen_id.name_related"/></th>
+					    	   <th width="33%" height="50px" style="text-align:center;"><br/>_____________________________<br/><span t-field="o.employee_destino_id.name_related"/></th>
+					    	   <th width="34%" height="50px" style="text-align:center;"><br/>_____________________________<br/><span t-field="o.employee_autoriza_id.name_related"/></th>
+					    	</tr>
+					    </table>
+				    </center>
+				</div>
+				<div class="footer"/>
+			</t>
+		</t>
+    </t>
+</template>
+</data>
+</openerp>

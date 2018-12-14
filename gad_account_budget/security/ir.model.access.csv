@@ -1,0 +1,15 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+gad_budget_account_budget_post,account.budget.post,model_account_budget_post,group_gad_budget,1,1,1,1
+gad_budget_crossovered_budget_expense,crossovered.budget.expense,model_crossovered_budget_expense,group_gad_budget,1,1,1,1
+gad_budget_crossovered_budget,crossovered.budget,model_crossovered_budget,group_gad_budget,1,1,1,1
+gad_budget_crossovered_budget_lines,crossovered.budget.lines,model_crossovered_budget_lines,group_gad_budget,1,1,1,1
+gad_budget_crossovered_budget_doc,crossovered.budget.doc,model_crossovered_budget_doc,group_gad_budget,1,1,1,1
+gad_budget_crossovered_budget_doc_line,crossovered.budget.doc.line,model_crossovered_budget_doc_line,group_gad_budget,1,1,1,1
+gad_budget_crossovered_budget_reform,crossovered.budget.reform,model_crossovered_budget_reform,group_gad_budget,1,1,1,1
+gad_budget_crossovered_budget_reform_line,crossovered.budget.reform.line,model_crossovered_budget_reform_line,group_gad_budget,1,1,1,1
+gad_budget_project_project,project.project,project.model_project_project,group_gad_budget,1,1,0,0
+gad_budget_project_task,project.task,project.model_project_task,group_gad_budget,1,1,0,0
+gad_budget_account_period,account.period,account.model_account_period,group_gad_budget,1,0,0,0
+gad_budget_account_fiscalyear,account.fiscalyear,account.model_account_fiscalyear,group_gad_budget,1,0,0,0
+gad_budget_hr_employee,hr.employee,hr.model_hr_employee,group_gad_budget,1,0,0,0
+

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+
+    <record id="group_project_contratos" model="res.groups">
+        <field name="name">Contratos</field>
+        <field name="category_id" ref="base.module_category_project_management"/>
+    </record>
+
+    <record id="group_project_garantias_contratos" model="res.groups">
+        <field name="name">Garantías Contratos</field>
+        <field name="category_id" ref="base.module_category_project_management"/>
+        <!--field name="users" eval="[(4, ref('base.group_user'))]"/-->
+    </record>
+
+  </data>
+</openerp>

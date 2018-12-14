@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+		
+		<!-- ASIENTO ROL GENERAL en excel-->
+		
+		<record id="view_wizard_exportar_asiento" model="ir.ui.view">
+			<field name="name">Exportar Asiento de Rol</field>
+			<field name="model">exportar.asiento</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Exportar Rol">
+					<label colspan="4" nolabel="1" string="Este asistente le permite exportar el asiento de rol de pagos en una hoja de excel (.xls)"/>
+					<group>
+						<field name="structure_id" required="1"/>
+						<field name="datas" filename="datas_fname" readonly="1"/>
+						<field name="datas_fname" readonly="1" invisible="1"/>
+					</group>
+					<group>
+						<button name="generar_archivo_rol" string="Generar" type="object" icon="gtk-execute"/>
+						<button special="cancel" string="Cancelar" type="object" icon="gtk-cancel"/>
+					</group>
+				</form>
+			</field>
+		</record>
+		
+		<act_window
+			id="act_exportar_asiento"
+			name="Archivo Asiento Contable (XLS)"
+			res_model="exportar.asiento"
+			target="new"
+			view_mode="form"
+			src_model="hr.payslip.line"/>
+			
+		<!--delete model="ir.actions.actions" search="[('name','=','Archivo Asiento Contable (XLS)')]"/-->
+
+	</data>
+</openerp>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+<menuitem id="menu_sri" parent="hr.menu_hr_configuration" name="SRI" sequence="10"/>
+
+<!-- gastos personales para el impuesto a la renta -->
+
+<record model="ir.ui.view" id="l10n_ec_view_hr_expenses_form">
+  <field name="name">hr.expenses.form</field>
+  <field name="model">hr.expenses</field>
+  <field name="type">form</field>
+  <field name="arch" type="xml">
+    <form string="Tipos de gastos personales">
+      <field name="name" colspan="4"/>
+      <group string="Descripción" colspan="4">
+	<field name="description" nolabel="1"/>
+      </group>
+    </form>
+  </field>
+</record>
+
+<record model="ir.ui.view" id="l10n_ec_view_hr_expenses_tree">
+  <field name="name">hr.expenses.tree</field>
+  <field name="model">hr.expenses</field>
+  <field name="type">tree</field>
+  <field name="arch" type="xml">
+    <tree string="Tipos de gastos personales">
+      <field name="name" select="1"/>
+      <field name="description" select="1"/>
+    </tree>
+  </field>
+</record>
+
+<record id="l10n_ec_action_hr_expenses" model="ir.actions.act_window">
+  <field name="name">Tipos de gastos personales</field>
+  <field name="res_model">hr.expenses</field>
+  <field name="view_type">form</field>
+  <field name="view_mode">tree,form</field>
+</record>
+
+<menuitem action="l10n_ec_action_hr_expenses" id="menu_hr_expenses" parent="menu_sri" string="Tipos de gastos personales"/>
+
+
+<!-- BASE IMPONIBLE IMPUESTO A LA RENTA -->
+
+<record model="ir.ui.view" id="l10n_ec_view_hr_sri_taxable_form">
+  <field name="name">hr.sri.taxable.form</field>
+  <field name="model">hr.sri.taxable</field>
+  <field name="type">form</field>
+  <field name="arch" type="xml">
+    <form string="Tabla de Base Imponible">
+      <field name="name" colspan="4"/>
+      <group colspan="2">
+        <field name="date_start"/>
+      </group>
+      <group colspan="2">
+        <field name="date_stop"/>
+      </group>
+      <notebook colspan="4">
+	<page string="Base Imponible">
+	  <field name="taxable_lines" nolabel="1">
+	    <tree editable="bottom" string="Detalle">
+	      <field name="basic_fraction"/>
+	      <field name="excess_to"/>
+	      <field name="basic_fraction_tax"/>
+	      <field name="excess_fraction_percent"/>
+	    </tree>
+	  </field>
+	</page>
+	<page string="Maximos deducibles">
+	  <field name="expense_lines" nolabel="1">
+	    <tree editable="bottom" string="Detalle">
+	      <field name="name"/>
+	      <field name="max_value"/>
+	    </tree>
+	  </field>
+	</page>
+      </notebook>
+    </form>
+  </field>
+</record>
+
+<record model="ir.ui.view" id="l10n_ec_view_hr_sri_taxable_tree">
+  <field name="name">hr.sri.taxable.tree</field>
+  <field name="model">hr.sri.taxable</field>
+  <field name="type">tree</field>
+  <field name="arch" type="xml">
+    <tree string="Tablas de Base Imponible">
+      <field name="name" select="1"/>
+      <field name="date_start" select="1"/>
+      <field name="date_stop" select="1"/>
+    </tree>
+  </field>
+</record>
+
+<record id="l10n_ec_action_hr_sri_taxable" model="ir.actions.act_window">
+  <field name="name">Tabla de base imponible</field>
+  <field name="res_model">hr.sri.taxable</field>
+  <field name="view_type">form</field>
+  <field name="view_mode">tree,form</field>
+</record>
+
+<menuitem action="l10n_ec_action_hr_sri_taxable" id="menu_hr_sri_taxable" parent="menu_sri" string="Tabla de base imponible"/>
+
+
+    </data>
+</openerp>

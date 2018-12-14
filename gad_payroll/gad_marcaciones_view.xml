@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<!--menuitem id="menu_hr_he_root" name="Horas Extra" groups="base.group_hr_manager"/-->
+		<menuitem id="menu_hr_he_marcaciones" parent="hr.menu_hr_root" name="Marcaciones"/>
+		<menuitem id="menu_hr_he_configuracion" parent="hr.menu_hr_configuration" name="Marcaciones"/>
+		
+		<!-- Marcaciones -->
+		<record model="ir.ui.view" id="ec_view_tree_hr_mark">
+			<field name="name">hr.mark.tree</field>
+			<field name="model">hr.mark</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Marcaciones" colors="black:state == 'draft';blue:state == 'send';green:state == 'paid';grey:state == 'cancel'" editable="bottom">
+					<field name="employee_id" required="1"/>
+					<!--field name="datetime_start"/>
+					<field name="datetime_stop"/-->
+					<field name="datetime_mark" required="1"/>
+					<field name="reloj" required="1"/>
+					<field name="state" readonly="1"/>
+				</tree>
+			</field>
+		</record>
+		
+		<record id="ec_action_hr_mark" model="ir.actions.act_window">
+			<field name="name">Marcaciones</field>
+			<field name="res_model">hr.mark</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree</field>
+		</record>
+		
+		<menuitem id="menu_hr_he_mark" parent="menu_hr_he_marcaciones" action="ec_action_hr_mark" name="Marcaciones Individuales"/>
+		
+		<!-- Marcaciones por empleado -->
+		
+		<record id="ec_action_resource_calendar" model="ir.actions.act_window">
+			<field name="name">Horarios de Trabajo</field>
+			<field name="res_model">resource.calendar</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+		
+		<menuitem id="menu_hr_resource_calendar" parent="menu_hr_he_configuracion" action="ec_action_resource_calendar" name="Horarios de Trabajo"/>
+		
+		<!-- Marcaciones por empleado -->
+		<record model="ir.ui.view" id="ec_view_tree_hr_mark_day">
+			<field name="name">hr.mark.day.tree</field>
+			<field name="model">hr.mark.day</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Marcaciones por empleado" editable="top" colors="black:state == 'draft';blue:state == 'send';green:state == 'paid';grey:state == 'cancel'">
+					<field name="employee_id"/>
+					<field name="date"/>
+					<field name="calendar_id"/>
+					<field name="h25" widget="float_time" invisible="1"/>
+					<field name="h50" widget="float_time"/>
+					<field name="h100" widget="float_time"/>
+					<field name="val_h50" widget="float_time"/>
+					<field name="val_h100" widget="float_time"/>
+					<!--field name="description"/-->
+					<button name="send_to_draft" states="send" type="object" string="Regresar a Borrador" icon="gtk-undo" confirm="Seguro de regresar a borrador?"/>
+					<button name="draft_to_send" states="draft" type="object" string="APROBAR" icon="gtk-apply" confirm="Está seguro de aprobar los valores?"/>
+					<field name="state"/>
+					<field name="marcaciones"/>
+				</tree>
+			</field>
+		</record>
+		
+		<record model="ir.ui.view" id="ec_view_search_hr_mark_day">
+			<field name="name">hr.mark.day.search</field>
+			<field name="model">hr.mark.day</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="Marcaciones por empleado">
+					<field name="employee_id"/>
+					<field name="date"/>
+					<field name="state"/>
+					<filter string="Empleado" name="group_employee" domain="[]" context="{'group_by':'employee_id'}"/>
+					<filter string="Estado" name="group_state" domain="[]" context="{'group_by':'state'}"/>
+				</search>
+			</field>
+		</record>
+		
+		<record id="ec_action_hr_mark_day" model="ir.actions.act_window">
+			<field name="name">Marcaciones por Empleado</field>
+			<field name="res_model">hr.mark.day</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree</field>
+		</record>
+		
+		<menuitem id="menu_hr_he_mark_day" parent="menu_hr_he_marcaciones" action="ec_action_hr_mark_day" name="Marcaciones por Empleado"/>
+			
+		<!-- Marcaciones por empleado para aprobar -->
+		<!--record model="ir.ui.view" id="ec_view_tree_hr_mark_head">
+			<field name="name">hr.mark.head.tree</field>
+			<field name="model">hr.mark.head</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Marcaciones por empleado" colors="black:state == 'draft';blue:state == 'send';green:state == 'paid';grey:state == 'cancel'">
+					<field name="date"/>
+					<field name="state"/>
+				</tree>
+			</field>
+		</record>
+		
+		<record model="ir.ui.view" id="ec_view_form_hr_mark_head">
+			<field name="name">hr.mark.head.form</field>
+			<field name="model">hr.mark.head</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Marcaciones por empleado" version="7.0">
+					<header>
+						<button name="cargar_marcaciones" states="draft" string="Cargar Marcaciones" type="object" icon="gtk-execute"/>
+						<field name="state" widget="statusbar" statusbar_colors='{"draft":"black","send":"blue","paid":"green","cancel":"grey"}'/>
+					</header>
+					<sheet>
+						<group>
+							<field name="user_id" readonly="1"/>
+							<field name="date" readonly="1"/>
+							<field name="max_week_h50" widget="float_time" groups="base.group_hr_manager"/>
+						</group>
+						<field name="day_ids" nolabel="1" context="{'search_default_group_employee':1,'group_by':['employee_id']}"/>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		
+		<record id="ec_action_hr_mark_head" model="ir.actions.act_window">
+			<field name="name">Aprobación de Marcaciones</field>
+			<field name="res_model">hr.mark.head</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+		
+		<menuitem id="menu_hr_he_mark_head" parent="menu_hr_he_marcaciones" action="ec_action_hr_mark_head" name="Aprobación de Marcaciones"/-->
+			
+		<record model="ir.ui.view" id="ec_view_form_hr_mark_check">
+			<field name="name">hr.mark.check.form</field>
+			<field name="model">hr.mark.check</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Marcaciones por empleado" version="7.0">
+					<header>
+						<button name="cargar_marcaciones" string="Cargar Marcaciones" type="object" icon="gtk-execute"/>
+					</header>
+					<sheet>
+						<group>
+							<field name="user_id"/>
+							<field name="period_id" domain="[('state','!=','draft')]"/>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		
+		<record id="ec_action_hr_mark_check" model="ir.actions.act_window">
+			<field name="name">Aprobación de Marcaciones</field>
+			<field name="res_model">hr.mark.check</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+		</record>
+		
+		<menuitem id="menu_hr_he_mark_check" parent="menu_hr_he_marcaciones" action="ec_action_hr_mark_check" name="Aprobación de Marcaciones"/>
+		
+		<!-- configuración de marcaciones -->
+		
+		<record model="ir.ui.view" id="ec_view_tree_hr_mark_config">
+			<field name="name">hr.mark.config.tree</field>
+			<field name="model">hr.mark.config</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Configuración de marcaciones">
+					<!--field name="date_start"/>
+					<field name="date_stop"/-->
+					<!--field name="max_week_h50" widget="float_time"/-->
+					<field name="h100_start" widget="float_time"/>
+					<field name="h100_stop" widget="float_time"/>
+				</tree>
+			</field>
+		</record>
+		
+		<record model="ir.ui.view" id="ec_view_form_hr_mark_config">
+			<field name="name">hr.mark.config.form</field>
+			<field name="model">hr.mark.config</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Configuración de marcaciones" version="7.0">
+					<header/>
+					<sheet>
+						<group>
+							<!--field name="date_start"/>
+							<field name="date_stop"/-->
+							<!--field name="max_week_h50" widget="float_time"/-->
+							<field name="h100_start" widget="float_time"/>
+							<field name="h100_stop" widget="float_time"/>
+							<field name="rule_h50"/>
+							<field name="rule_h100"/>
+							<field name="rule_falta"/>
+						</group>
+						<notebook>
+						  <page string="Periodos">
+						    <field name="period_ids" nolabel="1">
+						      <tree editable="top">
+						      	<field name="date"/>
+						      	<field name="date_start"/>
+						      	<field name="date_stop"/>
+						      	<field name="state"/>
+						      	<button name="draft_to_active" states="draft" type="object" string="Activar periodo" icon="gtk-execute" confirm="Está seguro de colocar el periodo como activo?"/>
+						      	<button name="active_to_draft" states="active" type="object" string="Regresar a Borrador" icon="gtk-undo" confirm="Está seguro de regresar el periodo a estado borrador?"/>
+						      	<button name="active_to_closed" states="active" type="object" string="Cerrar Periodo" icon="gtk-apply" confirm="Está seguro de cerrar el periodo activo?"/>
+						      </tree>
+						    </field>
+						  </page>
+						  <page string="Feriados">
+						    <field name="holiday_ids" nolabel="1">
+						      <tree editable="top">
+							<field name="day"/>
+							<field name="description"/>
+						      </tree>
+						    </field>
+						  </page>
+						  <!--page string="Rubros">
+						    <field name="io_ids" nolabel="1" readonly="1"/>
+						  </page-->
+						</notebook>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		
+		<record id="ec_action_hr_mark_config" model="ir.actions.act_window">
+			<field name="name">Configuración de marcaciones</field>
+			<field name="res_model">hr.mark.config</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+		
+		<menuitem id="menu_hr_he_mark_config" parent="menu_hr_he_configuracion" action="ec_action_hr_mark_config" name="Configuración marcaciones"/>
+
+		<!-- configuración de empleados -->
+		
+		<!--record model="ir.ui.view" id="ec_view_tree_hr_mark_employee">
+			<field name="name">hr.employee.mark.tree</field>
+			<field name="model">hr.employee</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Configuración de empleados">
+					<field name="name" readonly="1"/>
+					<field name="name_related" readonly="1"/>
+					<field name="registrado" readonly="1"/>
+				</tree>
+			</field>
+		</record>
+		
+		<record id="ec_action_hr_mark_employee" model="ir.actions.act_window">
+			<field name="name">Configuración de empleados</field>
+			<field name="res_model">hr.employee</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree</field>
+			<field name="priority" eval="2"/>
+		</record-->
+		
+		<!--record id="ec_action_hr_mark_employee_tree" model="ir.actions.act_window.view">
+			<field eval="1" name="sequence"/>
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="ec_view_tree_hr_mark_employee"/>
+			<field name="act_window_id" ref="ec_action_hr_mark_employee"/>
+		</record-->
+		
+		<!--record id="ec_action_hr_mark_employee_form" model="ir.actions.act_window.view">
+			<field eval="2" name="sequence"/>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="view_doc_expedient_form"/>
+			<field name="act_window_id" ref="action_doc_expedient_form_draft"/>
+		</record-->
+		
+		<!--menuitem id="menu_hr_he_mark_employee" parent="l10n_ec_hr_payroll.menu_hr_he_configuracion" action="ec_action_hr_mark_employee" name="Empleados"/-->
+		
+    </data>
+</openerp>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+<template id="report_contrato_garantia_oficio_ejecucion">
+	<t t-call="report.html_container">
+		<t t-foreach="docs" t-as="o">
+			<t t-call="report.external_layout">
+				<div class="header"/>
+				<div class="page">
+					<center>
+					    <table cellspacing="0" width="100%" style="font-size:12px;vertical-align:top;">
+
+					    	<tr>
+					    		<td colspan="8" style="vertical-align:top;text-align:left;" width="100%">Oficio Nro. <span t-field="o.num_oficio"/><br/></td>
+					    	</tr>
+					    	<tr><td colspan="8"> <br/> </td></tr>
+					    	<tr>
+					    		<td colspan="8" style="vertical-align:top;text-align:left;" width="100%"><span t-field="o.fecha"/><br/></td>
+					    	</tr>
+					    	<tr><td colspan="8"> <br/> </td></tr>
+					    	<tr><td colspan="8"> <br/> </td></tr>
+					    	<tr><td colspan="8">Señores</td></tr>
+					    	<tr>
+					    		<td colspan="8" style="vertical-align:top;text-align:left;" width="100%"><span t-field="o.partner_id.name"/><br/></td>
+					    	</tr>
+					    	<tr>
+					    		<td colspan="8" style="vertical-align:top;text-align:left;" width="100%"><span t-field="o.ciudad_aseguradora"/><br/></td>
+					    	</tr>
+					    	<tr><td colspan="8"> <br/> </td></tr>
+					    	<tr><td colspan="8"> <br/> </td></tr>
+					    	<tr><td colspan="8">De mi consideración:</td></tr>
+					    	<tr><td colspan="8"> <br/> </td></tr>
+					    	<tr><td colspan="8"> <br/> </td></tr>
+					    	<tr><td colspan="8" style="vertical-align:top;text-align:justify;">Por medio del presente solicito se realice de manera urgente e inmediata la ejecución de las siguientes garantías:</td></tr>
+					    	<tr><td colspan="8"> <br/> </td></tr>
+
+                            <tr>
+							<td colspan="8" col="4">
+								<table  cellspacing="0" width="100%" style="font-size:10px;vertical-align:top;border:thin solid black;" colspan="4">
+									<tr colspan="4" col="10">
+				    						<th width="25%" style="text-align:center;border:thin solid black;" colspan="2">CONTRATISTA</th>
+				    						<th width="16%" style="text-align:center;border:thin solid black;" colspan="2">GARANTÍA No.</th>
+				    						<th width="16%" style="text-align:center;border:thin solid black;" colspan="2">VENCIMIENTO</th>
+				    						<th width="18%" style="text-align:center;border:thin solid black;" colspan="2">RAMO</th>
+				    						<th width="25%" style="text-align:center;border:thin solid black;" colspan="2">ASEGURADORA</th>
+									</tr>
+					    				<t t-foreach="o.garantias_ids" t-as="line">
+										    <tr colspan="4" col="10">
+				    							<td width="25%" style="text-align:left;border:thin solid black;" colspan="2"><span t-field="line.contrato_id.partner_id.name"/></td>
+				    							<td width="16%" style="text-align:left;border:thin solid black;" colspan="2"><span t-field="line.name"/></td>
+				    							<td width="16%" style="text-align:left;border:thin solid black;" colspan="2"><span t-field="line.fecha_fin"/></td>
+				    							<td width="18%" style="text-align:left;border:thin solid black;" colspan="2"><span t-field="line.tipo_id.name"/></td>
+				    							<td width="25%" style="text-align:left;border:thin solid black;" colspan="2"><span t-field="line.partner_id.name"/></td>
+				    						</tr>
+					    				</t>
+					    			</table>
+							</td>
+						    </tr>
+
+					    	<tr><td colspan="8"> <br/> </td></tr>
+					    	<tr><td colspan="8" style="text-align:justify;">Por lo expuesto anteriormente y en base a las normas de control interno de las Instituciones del Sector Público Art. 403-12 "Control y custodia de garantías" solicito que en el caso de que las garantías solicitadas no sean renovadas en los cinco días antes de su vencimiento se proceda a la ejecución de las mismas.  </td></tr>
+					    	<tr><td colspan="8"> <br/> </td></tr>
+					    	<tr><td colspan="8"> <br/> </td></tr>
+					    	<tr><td colspan="8">Atentamente,</td></tr>
+					    	<tr><td colspan="8"> <br/> </td></tr>
+					    	<tr><td colspan="8"> <br/> </td></tr>
+					    	<tr><td colspan="8"> <br/> </td></tr>
+					    	<tr><td colspan="8"> <br/> </td></tr>
+					    	<tr><td colspan="8"><span t-field="o.responsable_id.name_related"/></td></tr>
+					    	<tr><td colspan="8"><span t-field="o.cargo_responsable"/></td></tr>
+					    	<tr><td colspan="8"> <br/> </td></tr>
+					    	<tr><td colspan="8"> <br/> </td></tr>
+					    	<tr><td colspan="8">Elaborador Por: <span t-field="o.elaborado_id.name_related"/></td></tr>
+					    	<tr><td colspan="8"> <br/> </td></tr>
+					    	<tr><td colspan="8">Firma </td></tr>
+					    
+					    </table>
+				    </center>
+				</div>
+				<div class="footer"/>
+			</t>
+		</t>
+    </t>
+</template>
+</data>
+</openerp>

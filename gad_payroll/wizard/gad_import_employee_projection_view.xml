@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+    <record id="view_wizard_import_employee_projection" model="ir.ui.view">
+      <field name="name">Importar Gastos Personales</field>
+      <field name="model">wizard.import.employee.projection</field>
+      <field name="type">form</field>
+      <field name="arch" type="xml">
+	<form string="Importar Proyeccion de gastos">	 
+	    <label colspan="4" string="Este Asistente le permite importar una hoja de excel (.xls) de Ingresos/Egresos. El formato debe ser: Nombre - Cedula - VIVIENDA - EDUCACION - SALUD - VESTIMENTA - ALIMENTACION"/>
+	    <group col="4" colspan="4">
+	      <field name="archivo" colspan="4"/>
+	      <field name="date_start" colspan="2"/>
+	      <field name="date_stop" colspan="2"/>
+	    </group>  
+	    <group col="4" colspan="4">
+	      <button icon="gtk-cancel" special="cancel" string="Cancelar" colspan="2"/>
+	      <button name="import_sheet" string="Importar" colspan="2" type="object" icon="gtk-execute"/>
+	    </group>
+	</form>
+      </field>
+    </record>
+
+     <record id="l10n_ec_action_wizard_import_employee_projection" model="ir.actions.act_window">
+		<field name="name">Importar Gastos Personales</field>
+		<field name="res_model">wizard.import.employee.projection</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">form</field>
+		<field name="target">new</field>
+      </record>
+
+    <menuitem parent="menu_hr_misc" id="menu_wizard_import_employee_projection" action="l10n_ec_action_wizard_import_employee_projection"/>
+
+
+    </data>
+</openerp>

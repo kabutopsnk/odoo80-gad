@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		
+		<menuitem id="menu_main_user" name="Usuario"/>
+		<menuitem id="menu_user_configuracion" name="Configuracion" parent="menu_main_user"/>
+		
+		<menuitem name="Extras" id="menu_extras" parent="base.menu_administration" sequence="901"/>
+		
+	</data>
+</openerp>

@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+    	
+    	<menuitem name="Talento Humano"
+            id="hr.menu_hr_root"
+            groups="base.group_hr_manager,base.group_hr_user,base.group_user"
+            sequence="90"/>
+
+        <!-- MENU DE MISCELANEOS -->
+
+        <menuitem parent="hr.menu_hr_configuration" id="menu_hr_misc" name="Varios"/>
+
+        <!-- MENU CONTABILIDAD -->
+	  
+        <menuitem parent="hr.menu_hr_configuration" id="menu_hr_contabilidad" name="Contabilidad"/>
+
+        <!-- MIGRACION -->
+
+        <!--menuitem parent="hr.menu_hr_configuration" id="menu_hr_migracion" name="MIGRACION"/-->
+
+        <!--record id="action_migracion_employee_academic" model="ir.actions.act_window">
+            <field name="name">Migracion - Estudios</field>
+            <field name="res_model">hr.employee.academic</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem parent="menu_hr_migracion" id="hr_migracion_employee_academic" action="action_migracion_employee_academic"/>
+
+        <record id="action_migracion_employee_courses" model="ir.actions.act_window">
+            <field name="name">Migracion - Cursos</field>
+            <field name="res_model">hr.employee.courses</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem parent="menu_hr_migracion" id="hr_migracion_employee_courses" action="action_migracion_employee_courses"/>
+
+        <record id="action_migracion_employee_family" model="ir.actions.act_window">
+            <field name="name">Migracion - Familiares</field>
+            <field name="res_model">hr.employee.family</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem parent="menu_hr_migracion" id="hr_migracion_employee_family" action="action_migracion_employee_family"/>
+
+        <record id="action_migracion_employee_experience" model="ir.actions.act_window">
+            <field name="name">Migracion - Experiencia</field>
+            <field name="res_model">hr.employee.experience</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem parent="menu_hr_migracion" id="hr_migracion_employee_experience" action="action_migracion_employee_experience"/-->
+
+        <!-- HR.JOB - PUESTOS DE TRABAJO -->
+
+        <record id="ec_inherit_view_hr_job_form" model="ir.ui.view">
+            <field name="name">hr.job.form</field>
+            <field name="model">hr.job</field>
+            <field name="inherit_id" ref="hr.view_hr_job_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="/form/header" position="replace">
+                    	<header>
+                    	    <field name="state" widget="statusbar" statusbar_visible="recruit,open" invisible="1"/>
+                        </header>
+                    </xpath>
+                    <xpath expr="/form/sheet/group[@name='employee_data']/field[@name='department_id']" position="replace">
+                    	<field name="active"/>
+                    	<field name="company_id"/>
+                    	<field name="department_id" invisible="1"/>
+                    </xpath>
+                    <xpath expr="/form/sheet/group[@name='employee_data']/div" position="replace">
+                    </xpath>
+                    <xpath expr="/form/sheet/div/label[@for='description']" position="replace">
+                    </xpath>
+                    <xpath expr="/form/sheet/div/field[@name='description']" position="replace">
+                    </xpath>
+                    <xpath expr="/form/sheet/group[@name='employee_data']" position="after">
+                        <div>
+                            <label for="description"/>
+                            <field name="description"/>
+                        </div>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+
+        <record id="ec_inherit_view_hr_job_tree" model="ir.ui.view">
+            <field name="name">hr.job.tree</field>
+            <field name="model">hr.job</field>
+            <field name="inherit_id" ref="hr.view_hr_job_tree"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="/tree/field[@name='department_id']" position="replace">
+                        <field name="department_id" invisible="1"/>
+                    </xpath>
+                    <xpath expr="/tree/field[@name='no_of_recruitment']" position="replace">
+                        <field name="no_of_recruitment" invisible="1"/>
+                    </xpath>
+                    <xpath expr="/tree/field[@name='expected_employees']" position="replace">
+                        <field name="expected_employees" invisible="1"/>
+                    </xpath>
+                    <xpath expr="/tree/field[@name='no_of_hired_employee']" position="replace">
+                        <field name="no_of_hired_employee" invisible="1"/>
+                    </xpath>
+                    <xpath expr="/tree/field[@name='state']" position="replace">
+                        <field name="state" invisible="1"/>
+                        <field name="company_id"/>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+        
+        <record id="ec_view_job_filter" model="ir.ui.view">
+            <field name="name">hr.job.search</field>
+            <field name="model">hr.job</field>
+            <field name="inherit_id" ref="hr.view_job_filter"/>
+            <field name="arch" type="xml">
+                <data>
+                   <xpath expr="//field[@name='department_id']" position="before">
+                       <filter string="Inactivos" domain="[('active','=',False)]"/>
+                   </xpath>
+                </data>
+            </field>
+        </record>
+        
+        <menuitem name="Puestos de Trabajo" id="menu_config_hr_job" parent="hr.menu_hr_configuration" groups="base.group_hr_user" action="hr.action_hr_job"/>
+        
+        <!-- HR.DEPARTMENT - DEPARTAMENTOS -->
+
+        <record id="ec_view_department_form" model="ir.ui.view">
+            <field name="name">hr.department.form</field>
+            <field name="model">hr.department</field>
+            <field name="inherit_id" ref="hr.view_department_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="/form/sheet/group/field[@name='manager_id']" position="before">
+                    	<field name="active"/>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+        
+        <record id="ec_view_department_filter" model="ir.ui.view">
+            <field name="name">hr.department.search</field>
+            <field name="model">hr.department</field>
+            <field name="inherit_id" ref="hr.view_department_filter"/>
+            <field name="arch" type="xml">
+                <data>
+                   <xpath expr="//field[@name='name']" position="after">
+                       <filter string="Inactivos" domain="[('active','=',False)]"/>
+                   </xpath>
+                </data>
+            </field>
+        </record>
+
+        <!-- GRUPOS DE CUENTAS CONTABLES -->
+    	<record model="ir.ui.view" id="view_form_hr_grupos_cuentas">
+    		<field name="name">hr.grupos_cuentas.form</field>
+    		<field name="model">hr.grupos_cuentas</field>
+    		<field name="type">form</field>
+    		<field name="arch" type="xml">
+    			<form string="Grupo de cuentas">
+    				<group>
+    					<field name="name"/>
+    					<field name="account_id"/>
+    				</group>
+    				<field name="line_ids" colspan="4" nolabel="1">
+    					<tree string="Detalle" editable="bottom">
+    						<field name="budget_line_id"/>
+    						<field name="account_id"/>
+    						<!--field name="cuenta_haber"/-->
+    					</tree>
+    				</field>
+    			</form>
+    		</field>
+    	</record>
+    	
+    	<record model="ir.ui.view" id="view_tree_hr_grupos_cuentas">
+    		<field name="name">hr.grupos_cuentas.tree</field>
+    		<field name="model">hr.grupos_cuentas</field>
+    		<field name="type">tree</field>
+    		<field name="arch" type="xml">
+    			<tree string="Grupo de cuentas">
+    				<!--field name="code"/-->
+    				<field name="name"/>
+    			</tree>
+    		</field>
+    	</record>
+    	
+    	<record model="ir.ui.view" id="view_search_hr_grupos_cuentas">
+    		<field name="name">hr.grupos_cuentas.search</field>
+    		<field name="model">hr.grupos_cuentas</field>
+    		<field name="type">search</field>
+    		<field name="arch" type="xml">
+    			<search string="Grupo de cuentas">
+    				<field name="name"/>
+    			</search>
+    		</field>
+    	</record>
+    	
+    	<record id="action_hr_grupos_cuentas" model="ir.actions.act_window">
+            <field name="name">Grupo de cuentas</field>
+            <field name="res_model">hr.grupos_cuentas</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem parent="menu_hr_contabilidad" id="menu_hr_grupos_cuentas" action="action_hr_grupos_cuentas"/>
+
+
+
+        
+    </data>
+</openerp>

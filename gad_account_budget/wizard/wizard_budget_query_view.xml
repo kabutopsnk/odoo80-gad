@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		
+	
+		<!--CONSULTAR PRESUPUESTO-->
+		<record id="view_wizard_budget_query_form" model="ir.ui.view">
+			<field name="name">view.wizard.budget.query</field>
+			<field name="model">wizard.budget.query</field>
+			<field name="type">form</field>
+			<field name="target">new</field>
+			<field name="arch" type="xml">
+				<form string="Consulta de Presupuesto">
+					<sheet>
+						<group>
+							<field name="budget_id" widget="selection"/>
+							<button name="action_budgets" string="Consultar" type="object" icon="gtk-execute"/>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		
+		<record id="action_wizard_budget_query" model="ir.actions.act_window">
+			<field name="name">Consulta de Presupuesto</field>
+			<field name="res_model">wizard.budget.query</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+		</record>
+		
+		<menuitem parent="menu_presupuesto_presupuesto" id="menu_wizard_budget_query" action="action_wizard_budget_query" sequence="20" />
+
+
+		<!--CEDULAS PRESUPUESTARIAS-->
+		<record id="view_wizard_budget_cedula_form" model="ir.ui.view">
+			<field name="name">Wizard - Cédula Presupuestaria</field>
+			<field name="model">wizard.budget.cedula</field>
+			<field name="type">form</field>
+			<field name="target">new</field>
+			<field name="arch" type="xml">
+				<form string="Cédula Presupuestaria">
+					<group colspan="4" col="8">
+			          <field name="fecha" colspan="2"/>
+	            	  <group colspan="6"/>
+			          <field name="budget_type" colspan="2" on_change="onchange_type(budget_type)"/>
+	            	  <group colspan="6"/>
+			          <field name="budget_id" colspan="4" domain="[('budget_type','=',budget_type)]"/>
+	            	  <group colspan="4"/>
+			          <field name="niveles" colspan="2"/>
+	            	  <group colspan="6"/>
+                    </group>
+                    <footer>
+                        <button name="check_report" string="Imprimir" type="object" default_focus="1" class="oe_highlight"/>
+                        o
+                        <button string="Cancelar" class="oe_link" special="cancel" />
+                    </footer>
+				</form>
+			</field>
+		</record>
+		
+		<record id="action_wizard_budget_cedula" model="ir.actions.act_window">
+			<field name="name">Cédula Presupuestaria</field>
+            <field name="type">ir.actions.act_window</field>
+			<field name="res_model">wizard.budget.cedula</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+            <field name="target">new</field>
+		</record>
+
+		<menuitem parent="menu_presupuesto_presupuesto" id="menu_wizard_budget_cedula" action="action_wizard_budget_cedula" sequence="30" />
+
+
+
+		<!--ESTADO DE EJECUCIÓN PRESUPUESTARIA-->
+		<record id="view_wizard_budget_estado_ejecucion_form" model="ir.ui.view">
+			<field name="name">Wizard - Estado de Ejecución Presupuestaria</field>
+			<field name="model">wizard.budget.estado_ejecucion</field>
+			<field name="type">form</field>
+			<field name="target">new</field>
+			<field name="arch" type="xml">
+				<form string="Estado de Ejecución Presupuestaria">
+					<group colspan="4" col="8">
+			          <field name="fecha" colspan="2"/>
+	            	  <group colspan="6"/>
+			          <field name="budget_type" colspan="2" on_change="onchange_type(budget_type)"/>
+	            	  <group colspan="6"/>
+			          <field name="budget_id" colspan="4" domain="[('budget_type','=',budget_type)]"/>
+	            	  <group colspan="4"/>
+                    </group>
+                    <footer>
+                        <button name="check_report" string="Imprimir" type="object" default_focus="1" class="oe_highlight"/>
+                        o
+                        <button string="Cancelar" class="oe_link" special="cancel" />
+                    </footer>
+				</form>
+			</field>
+		</record>
+		
+		<record id="action_wizard_budget_estado_ejecucion" model="ir.actions.act_window">
+			<field name="name">Estado Ejec. Presupuestaria</field>
+            <field name="type">ir.actions.act_window</field>
+			<field name="res_model">wizard.budget.estado_ejecucion</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+            <field name="target">new</field>
+		</record>
+
+		<menuitem parent="menu_presupuesto_presupuesto" id="menu_wizard_budget_estado_ejecucion" action="action_wizard_budget_estado_ejecucion" sequence="40" />
+
+
+
+		<!-- E-SIGEF -->
+		<record id="view_wizard_esigef_form" model="ir.ui.view">
+			<field name="name">Wizard / E-SIGEF</field>
+			<field name="model">wizard.esigef</field>
+			<field name="type">form</field>
+			<field name="target">new</field>
+			<field name="arch" type="xml">
+				<form string="Archivos Planos E-SIGEF">
+					<group colspan="4" col="8">
+			          <field name="documento" colspan="4"/>
+	            	  <group colspan="4"/>
+			          <field name="fy_id" colspan="2" on_change="onchange_fy(fy_id)"/>
+	            	  <group colspan="6"/>
+			          <field name="period_id" domain="[('fiscalyear_id','=',fy_id)]" attrs="{'required':[('documento','in',['con_balance','con_transfer','pre_cedula'])], 'invisible':[('documento','in',['pre_inicial','con_inicial'])]}" colspan="2"/>
+	            	  <group colspan="6"/>
+                      <field name="datas" filename="datas_fname" readonly="1" colspan="4"/>
+	            	  <group colspan="4"/>
+                      <field name="datas_fname" readonly="1" invisible="1" colspan="4"/>
+	            	  <group colspan="4"/>
+                    </group>
+                    <footer>
+                        <button name="generar" context="{'documento':documento, 'fy_id':fy_id, 'period_id':period_id}" string="Generar" type="object" default_focus="1" icon="gtk-execute"/>
+                        o
+                        <button string="Cancelar" class="oe_link" special="cancel" icon="gtk-cancel"/>
+                    </footer>
+				</form>
+			</field>
+		</record>
+		
+		<record id="action_wizard_esigef" model="ir.actions.act_window">
+			<field name="name">Archivos E-SIGEF</field>
+            <field name="type">ir.actions.act_window</field>
+			<field name="res_model">wizard.esigef</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+            <field name="target">new</field>
+		</record>
+
+		<menuitem parent="menu_presupuesto_esigef" id="menu_esigef" action="action_wizard_esigef" sequence="10" />
+
+		
+	</data>
+</openerp>

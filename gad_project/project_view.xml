@@ -1,0 +1,1068 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <!-- MENU PRINCIPAL -->
+        <menuitem name="Proyectos" id="base.menu_main_pm" groups="project.group_project_manager,project.group_project_user,group_project_garantias_contratos,group_project_contratos" sequence="40"/>
+        <menuitem name="Proyecto" id="project.menu_project_management" parent="base.menu_main_pm" sequence="1" groups="project.group_project_manager,project.group_project_user"/>
+        <menuitem name="Contrato" id="menu_main_project_contrato" parent="base.menu_main_pm" groups="group_project_contratos,group_project_garantias_contratos" sequence="55"/>
+        <menuitem name="Configuración" id="base.menu_definitions" parent="base.menu_main_pm" groups="project.group_project_manager,group_project_contratos" sequence="60"/>
+        <menuitem name="Contratos" id="menu_configuracion_project_contratos" parent="base.menu_definitions" groups="group_project_contratos" sequence="50"/>
+
+	<!-- OCULTAR MENUS -->
+	<menuitem id="menu_otros" name="Otros" parent="base.menu_administration" sequence="999"/>
+	<menuitem id="project.menu_tasks_config" name="GTD" parent="menu_otros" sequence="1"/>
+        <menuitem id="base.menu_project_config_project" name="Stages" parent="menu_otros" sequence="2" groups="base.group_no_one"/>
+        <menuitem action="project.open_task_type_form" name="Task Stages" id="project.menu_task_types_view" parent="menu_otros" sequence="3"/>
+        <menuitem action="project.action_view_task" id="project.menu_action_view_task" parent="menu_otros" sequence="4"/>
+        <menuitem action="project.project_category_action" id="project.menu_project_category_act" parent="menu_otros" sequence="5" groups="base.group_no_one"/>
+
+	<!-- *** EJE / COMPONENTE *** -->
+	<!--ACTION-->
+        <record model="ir.actions.act_window" id="action_project_axis">
+			<field name="name">Componentes Estratégicos</field>
+			<field name="res_model">project.axis</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="context">{}</field>
+	</record>
+	<!--FORM-->
+	<record model="ir.ui.view" id="view_form_project_axis">
+            <field name="name">project.axis.form</field>
+            <field name="model">project.axis</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Mantenimiento de Componentes">
+			<group colspan="4" string = "Datos Generales" col="8">
+				<field name="name" colspan="4" />
+				<group colspan= "4"/>
+				<field name="sequence" colspan="2" />
+				<group colspan= "6"/>
+				<field name="active" colspan="2" />
+				<group colspan= "6"/>
+			</group>
+                </form>
+            </field>
+        </record>	
+	<!--TREE-->
+	<record model="ir.ui.view" id="view_tree_project_axis">
+            <field name="name">project.axis.tree</field>
+            <field name="model">project.axis</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+		<tree string="Listado de Componentes">
+			<field name="name"/>
+			<field name="sequence"/>
+			<field name="active"/>
+                </tree>
+            </field>			
+        </record>
+	<!--SEARCH-->
+	<record id="view_search_project_axis" model="ir.ui.view">
+            <field name="name">project.axis.search</field>
+            <field name="model">project.axis</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Buscar Componentes">
+                   <group>
+			<field name="name" />
+                   </group>
+                   <newline />
+               </search>
+            </field>
+        </record>
+	<!-- MENU -->
+	<menuitem name="Componentes" id="menu_project_axis" parent="base.menu_definitions" sequence="11" action="action_project_axis" groups="project.group_project_manager"/>
+
+
+
+	<!-- *** AREAS *** -->
+	<!--ACTION-->
+        <record model="ir.actions.act_window" id="action_project_estrategy">
+			<field name="name">Áreas</field>
+			<field name="res_model">project.estrategy</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="context">{}</field>
+	</record>
+	<!--FORM-->
+	<record model="ir.ui.view" id="view_form_project_estrategy">
+            <field name="name">project.estrategy.form</field>
+            <field name="model">project.estrategy</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Mantenimiento de Áreas">
+			<group colspan="4" string = "Datos Generales" col="8">
+				<field name="axis_id" colspan="4" />
+				<group colspan= "4"/>
+				<field name="name" colspan="4" />
+				<group colspan= "4"/>
+				<field name="sequence" colspan="2" />
+				<group colspan= "6"/>
+				<field name="active" colspan="2" />
+				<group colspan= "6"/>
+			</group>
+                </form>
+            </field>
+        </record>	
+	<!--TREE-->
+	<record model="ir.ui.view" id="view_tree_project_estrategy">
+            <field name="name">project.estrategy.tree</field>
+            <field name="model">project.estrategy</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+		<tree string="Listado de Áreas">
+			<field name="axis_id"/>			
+			<field name="name"/>
+			<field name="sequence"/>
+			<field name="active"/>
+                </tree>
+            </field>			
+        </record>
+	<!--SEARCH-->
+	<record id="view_search_project_estrategy" model="ir.ui.view">
+            <field name="name">project.estrategy.search</field>
+            <field name="model">project.estrategy</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Buscar Áreas">
+                   <group>
+			<field name="axis_id" />
+			<field name="name" />
+                   </group>
+		   <newline />
+		   <group expand="1" string="Agrupar por...">
+		  	<filter string="Componente" name="g_axis_id" context="{'group_by': 'axis_id'}"/>          
+		   </group>
+               </search>
+            </field>
+        </record>
+	<!-- MENU -->
+	<menuitem name="Áreas" id="menu_project_estrategy" parent="base.menu_definitions" sequence="12" action="action_project_estrategy" groups="project.group_project_manager"/>
+
+
+
+	<!-- *** PROGRAMAS *** -->
+	<!--ACTION-->
+        <record model="ir.actions.act_window" id="action_project_program">
+			<field name="name">Programas</field>
+			<field name="res_model">project.program</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="context">{}</field>
+	</record>
+	<!--FORM-->
+	<record model="ir.ui.view" id="view_form_project_program">
+            <field name="name">project.program.form</field>
+            <field name="model">project.program</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Mantenimiento de Programas">
+			<group colspan="4" string = "Datos Generales" col="8">
+				<field name="axis_id" colspan="4" on_change="onchange_axis(axis_id)"/>
+				<group colspan= "4"/>
+				<field name="estrategy_id" colspan="4" domain="[('axis_id','=',axis_id)]"/>
+				<group colspan= "4"/>
+				<field name="name" colspan="4" />
+				<group colspan= "4"/>
+				<field name="sequence" colspan="2" />
+				<group colspan= "6"/>
+				<field name="active" colspan="2" />
+				<group colspan= "6"/>
+			</group>
+                </form>
+            </field>
+        </record>	
+	<!--TREE-->
+	<record model="ir.ui.view" id="view_tree_project_program">
+            <field name="name">project.program.tree</field>
+            <field name="model">project.program</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+		<tree string="Listado de Programas">
+			<field name="axis_id"/>			
+			<field name="estrategy_id"/>	
+			<field name="name"/>
+			<field name="sequence"/>
+			<field name="active"/>
+                </tree>
+            </field>			
+        </record>
+	<!--SEARCH-->
+	<record id="view_search_project_program" model="ir.ui.view">
+            <field name="name">project.program.search</field>
+            <field name="model">project.program</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Buscar Programas">
+                   <group>
+			<field name="axis_id" />
+			<field name="estrategy_id" />
+			<field name="name" />
+                   </group>
+                   <newline />
+		   <group expand="1" string="Agrupar por...">
+		  	<filter string="Componente" name="g_axis_id" context="{'group_by': 'axis_id'}"/>          
+		  	<filter string="Área" name="g_estrategy_id_id" context="{'group_by': 'estrategy_id'}"/>          
+		   </group>
+
+               </search>
+            </field>
+        </record>
+	<!-- MENU -->
+	<menuitem name="Programas" id="menu_project_program" parent="base.menu_definitions" sequence="13" action="action_project_program" groups="project.group_project_manager"/>
+
+
+
+	<!-- *** MODALIDAD EJECUCION *** -->
+	<!--ACTION-->
+        <record model="ir.actions.act_window" id="action_project_modalidad">
+			<field name="name">Modalidad de Ejecución</field>
+			<field name="res_model">project.modalidad</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="context">{}</field>
+	</record>
+	<!--FORM-->
+	<record model="ir.ui.view" id="view_form_project_modalidad">
+            <field name="name">project.modalidad.form</field>
+            <field name="model">project.modalidad</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Mantenimiento de Modalidad de Ejecución">
+			<group colspan="4" string = "Datos Generales" col="8">
+				<field name="name" colspan="4" />
+				<group colspan= "4"/>
+				<field name="sequence" colspan="2" />
+				<group colspan= "6"/>
+			</group>
+                </form>
+            </field>
+        </record>	
+	<!--TREE-->
+	<record model="ir.ui.view" id="view_tree_project_modalidad">
+            <field name="name">project.modalidad.tree</field>
+            <field name="model">project.modalidad</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+		<tree string="Listado de Modalidad de Ejecución">
+			<field name="name"/>
+			<field name="sequence"/>
+                </tree>
+            </field>			
+        </record>
+	<!--SEARCH-->
+	<record id="view_search_project_modalidad" model="ir.ui.view">
+            <field name="name">project.modalidad.search</field>
+            <field name="model">project.modalidad</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Buscar Modalidad">
+                   <group>
+			<field name="name" />
+                   </group>
+               </search>
+            </field>
+        </record>
+	<!-- MENU -->
+	<menuitem name="Modalidad Ejecución" id="menu_project_modalidad" parent="base.menu_definitions" sequence="21" action="action_project_modalidad" groups="project.group_project_manager"/>
+
+
+
+	<!-- *** DECLARACION DE PROYECTOS *** -->
+	<!--ACTION-->
+        <record model="ir.actions.act_window" id="action_project_object">
+			<field name="name">Declaracion de Proyectos</field>
+			<field name="res_model">project.object</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="context">{}</field>
+	</record>
+	<!--FORM-->
+	<record model="ir.ui.view" id="view_form_project_object">
+            <field name="name">project.object.form</field>
+            <field name="model">project.object</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Mantenimiento Proyectos Objeto">
+			<group colspan="4" string = "Datos Generales" col="8">
+				<field name="code" colspan="2" />
+				<group colspan= "6"/>
+				<field name="name" colspan="8" />
+				<field name="active" colspan="2" />
+				<group colspan= "6"/>
+			</group>
+			<group colspan="4" string="Contratos Relacionados">
+				<field name="contrato_ids" colspan="4" nolabel="1" readonly="1" string="Contratos Relacionados">
+				      <tree string="Contratos" colors="black:state == 'draft'; blue:state == 'exec'; green:state == 'done'; grey:state == 'cancelled'">
+					<field name="fecha"/>
+					<field name="code"/>
+					<field name="name"/>
+					<field name="partner_id"/>
+					<field name="monto"/>
+					<field name="plazo"/>
+					<field name="state"/>
+				      </tree>
+				</field>
+			</group>
+                </form>
+            </field>
+        </record>	
+	<!--TREE-->
+	<record model="ir.ui.view" id="view_tree_project_object">
+            <field name="name">project.object.tree</field>
+            <field name="model">project.object</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+		<tree string="Listado de Proyectos Objeto">
+			<field name="code"/>
+			<field name="name"/>
+			<field name="active"/>
+                </tree>
+            </field>			
+        </record>
+	<!--SEARCH-->
+	<record id="view_search_project_object" model="ir.ui.view">
+            <field name="name">project.object.search</field>
+            <field name="model">project.object</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Buscar Proyectos Objeto">
+                   <group>
+			<field name="code" />
+			<field name="name" />
+			<field name="active" />
+                   </group>
+                   <newline />
+               </search>
+            </field>
+        </record>
+	<!-- MENU -->
+	<menuitem name="Declaración de Proyectos" id="menu_project_object" parent="base.menu_definitions" sequence="10" action="action_project_object" groups="project.group_project_manager"/>
+
+
+
+	<!-- *** PROYECTOS *** -->
+	<!--ACTION-->
+        <record id="project.open_view_project_all" model="ir.actions.act_window">
+            <field name="name">Projects</field>
+            <field name="res_model">project.project</field>
+            <field name="view_type">form</field>
+            <field name="domain">[]</field>
+            <field name="view_mode">tree,form,kanban,gantt</field>
+            <field name="view_id" ref="project.view_project"/>
+            <field name="search_view_id" ref="project.view_project_project_filter"/>
+            <field name="context">{'search_default_Current': 1}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                  Click to start a new project.
+                </p><p>
+                  Projects are used to organize your activities; plan
+                  tasks, track issues, invoice timesheets. You can define
+                  internal projects (R&amp;D, Improve Sales Process),
+                  private projects (My Todos) or customer ones.
+                </p><p>
+                  You will be able collaborate with internal users on
+                  projects or invite customers to share your activities.
+                </p>
+            </field>
+        </record>
+	<!--FORM-->
+	<record model="ir.ui.view" id="project.edit_project">
+            <field name="name">project.project.form</field>
+            <field name="model">project.project</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Definición de Proyecto">
+			<header>
+				<button name="estado_exec" states="open,done,cancelled" string="Poner en Ejecución" confirm="Desea poner EN EJECUCIÓN el Proyecto?" type="object" icon="gtk-yes" colspan="2"/>
+				<button name="estado_open" states="exec" string="Regresar a Planificación" confirm="Desea poner en PLANIFICACIÓN el Proyecto?" type="object" icon="gtk-execute" colspan="2"/>
+				<button name="estado_done" states="exec" string="Finalizar Proyecto" confirm="Desea FINALIZAR el Proyecto?" type="object" icon="terp-check" colspan="2"/>
+				<button name="estado_cancelled" states="exec" string="Cancelar Proyecto" confirm="Desea CANCELAR el Proyecto?" type="object" icon="terp-gtk-stop" colspan="2"/>
+				<field name="state" nolabel="1" widget="statusbar" statusbar_colors='{"open":"black","exec":"blue","done":"green","cancelled":"grey"}' statusbar_visible="open,exec,done,cancelled" select="1" readonly="1"/>
+			</header>
+			<group colspan="4" col="8">
+				<group colspan="4" string = "Datos Generales" col="6">
+					<field name="crossovered_budget_id" colspan="6" domain="[('state','in',['confirm','validate'])]" attrs="{'readonly': [('state','!=','open')]}"/>
+					<field name="project_object_id" colspan="6" on_change="onchange_project(project_object_id)" attrs="{'readonly': [('state','!=','open')]}"/>
+					<field name="date_start" colspan="2" attrs="{'readonly': [('state','!=','open')]}" required="1"/>
+					<field name="date" colspan="2" string="Fecha Fin" attrs="{'readonly': [('state','!=','open')]}" required="1"/>
+					<group colspan="2"/>
+					<field name="user_id" colspan="6" attrs="{'readonly': [('state','!=','open')]}" required="1"/>
+					<field name="avance" widget="progressbar" colspan="4"/>
+					<group colspan="2"/>
+					<button name="calcular_avance" states="exec" string="Calcular" type="object" icon="gtk-execute" colspan="2"/>
+					<field name="analytic_account_id" colspan="2" invisible="1" required="0"/>
+					<field name="fy_id" colspan="2" readonly="1" invisible="1"/>
+					<field name="code_project" colspan="2" readonly="1" invisible="1"/>
+				</group>
+				<group colspan="4" string="Estructura" col="4">
+					<field name="axis_id" colspan="4" on_change="onchange_axis_project(axis_id)" attrs="{'readonly': [('state','!=','open')]}"/>
+					<field name="estrategy_id" colspan="4" on_change="onchange_estrategy_project(estrategy_id)" domain="[('axis_id','=',axis_id)]" attrs="{'readonly': [('state','!=','open')]}"/>
+					<field name="program_id" colspan="4" domain="[('estrategy_id','=',estrategy_id)]" attrs="{'readonly': [('state','!=','open')]}"/>
+					<field name="department_id" colspan="4" attrs="{'readonly': [('state','!=','open')]}"/>
+					<field name="modalidad_id" colspan="4" attrs="{'readonly': [('state','!=','open')]}"/>
+					<field name="seguimiento_senplades" colspan="4" attrs="{'readonly': [('state','!=','open')]}"/>
+					<field name="name" colspan="2" invisible="1"/>
+					<field name="code" colspan="2" invisible="1"/>
+
+				</group>
+			</group>
+		        <notebook>
+				<page string="Actividades / Presupuesto">
+					<group colspan="4" string="Detalle de Actividades">
+						<field name="tasks" colspan="4" nolabel="1" attrs="{'readonly': [('state','!=','open')]}" string="Actividades">
+						     <tree string="Actividades" colors="red:available_amount and (available_amount&lt;0)">
+							    <field name="code"/>
+							    <field name="name" string="Actividad"/>
+							    <field name="date_start" string="Fecha Inicio"/>
+							    <field name="date_end" string="Fecha Fin"/>
+							    <field name="planned_amount" string="INICIAL" sum="INICIAL"/>
+							    <field name="transfer_amount" sum="Reformas"/>
+							    <field name="coded_amount" sum="CODIFICADO"/>
+							    <field name="used_amount" sum="Utilizado"/>
+							    <field name="available_amount" sum="DISPONIBLE"/>
+				                <field name="weight" sum="Peso"/>
+						        <field name="avance" widget="progressbar"/>
+						        <field name="state" invisible="1"/>
+							    <button name="%(action_wizard_project_task_avance)d" icon="gtk-execute" states="exec" type="action" help="Registrar Avance"/>
+						     </tree>
+						</field>
+					</group>
+
+				</page>
+				<page string="Información Adicional">
+					<group colspan="4" string="Descripción de Proyecto">
+						<field name="description" nolabel="1" attrs="{'readonly': [('state','!=','open')]}"/>
+					</group>
+					<group colspan="4" string="Indicadores de Desempeño">
+						<field name="indicadores_desempeno" nolabel="1"  attrs="{'readonly': [('state','!=','open')]}"/>
+					</group>
+				</page>
+				<page string="Contratos Relacionados">
+					<group colspan="4" string="Contratos Relacionados">
+						<field name="contrato_ids" colspan="4" nolabel="1" readonly="1" string="Contratos Relacionados">
+						      <tree string="Contratos" colors="black:state == 'draft'; blue:state == 'exec'; green:state == 'done'; grey:state == 'cancelled'">
+							<field name="fecha"/>
+							<field name="code"/>
+							<field name="name"/>
+							<field name="partner_id"/>
+							<field name="monto"/>
+							<field name="plazo"/>
+							<field name="state"/>
+						      </tree>
+						</field>
+					</group>
+				</page>
+			</notebook>
+                </form>
+            </field>
+        </record>	
+	<!--TREE-->
+	<record model="ir.ui.view" id="project.view_project">
+            <field name="name">project.project.tree</field>
+            <field name="model">project.project</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+		<tree string="Proyectos" colors="black:state == 'open'; blue:state == 'exec'; green:state == 'done'; grey:state == 'cancelled'">
+			<field name="crossovered_budget_id"/>
+			<field name="code_project" invisible="1"/>
+			<field name="project_object_id"/>
+			<field name="axis_id" invisible="1"/>
+		  	<field name="estrategy_id" invisible="1"/>
+			<field name="department_id"/>
+			<field name="user_id"/>
+			<field name="seguimiento_senplades"/>
+			<field name="state"/>
+			<field name="avance" widget="progressbar"/>
+                </tree>
+            </field>			
+        </record>
+	<!--SEARCH-->
+	<record id="project.view_project_project_filter" model="ir.ui.view">
+	    <field name="name">project.project.select</field>
+	    <field name="model">project.project</field>
+	    <field name="type">search</field>
+	    <field name="arch" type="xml">
+	      <search string="Buscar Proyectos">
+		<group>
+		  <separator orientation="vertical"/>
+		  <field name="crossovered_budget_id"/>
+		  <field name="code_project"/>
+		  <field name="project_object_id" string="Proyecto"/>
+		  <field name="axis_id"/>
+		  <field name="estrategy_id"/>
+		  <field name="user_id"/>
+		  <field name="seguimiento_senplades"/>
+		  <field name="state" string="Estado"/>          
+		</group>
+		<newline />
+		<group expand="0" string="Agrupar Por...">
+		  <filter string="Responsable" name="Manager"  icon="terp-personal" domain="[]" context="{'group_by':'user_id'}"/>
+		  <separator orientation="vertical"/>
+		  <filter string="Componente" help="Eje" icon="terp-folder-blue" domain="[]" context="{'group_by':'axis_id'}"/>
+		  <filter string="Política pública" domain="[]" icon="terp-folder-blue" context="{'group_by': 'estrategy_id'}"/>
+		  <separator orientation="vertical"/>
+		  <filter string="Estado" domain="[]" context="{'group_by':'state'}" icon="terp-folder-blue"/>
+		</group>
+	      </search>
+	    </field>
+	  </record>
+
+
+	<!--ACTIVIDADES-->
+	<!--FORM-->
+	<record id="project.view_task_form2" model="ir.ui.view">
+            <field name="name">project.task.form</field>
+            <field name="model">project.task</field>
+            <field eval="2" name="priority"/>
+            <field name="arch" type="xml">
+                <form string="Project">
+			<group colspan="4" string = "Datos Generales" col="8">
+				<field name="project_id" colspan="4" readonly="1"/>
+				<group colspan="4"/>
+				<field name="code" colspan="2"/>
+				<group colspan="6"/>
+				<field name="name" string="Actividad" colspan="6"/>
+				<group colspan="2"/>
+				<field name="date_start" string="Fecha Inicio" colspan="2"/>
+				<field name="date_end" string="Fecha Fin" colspan="2"/>
+				<group colspan="4"/>
+				<field name="weight" colspan="2"/>
+				<field name="avance" readonly="1" colspan="2"/>
+				<group colspan="4"/>
+
+			</group>
+			<notebook>
+				<page string="Líneas Presupuestarias">
+					<field name="budget_lines_ids" colspan="4" nolabel="1" context="{'default_crossovered_budget_id': parent.crossovered_budget_id, 'default_analytic_account_id': parent.analytic_account_id}">
+					      <tree string="Detalle Presupuestario" colors="red:available_amount and (available_amount&lt;0)">
+		                                <field name="general_budget_id" string="Partida"/>
+		                                <field name="name"/>
+		                                <field name="planned_amount" string="INICIAL" sum="INICIAL"/>
+		                                <field name="transfer_amount" sum="Reformas"/>
+		                                <field name="coded_amount" sum="CODIFICADO"/>
+		                                <field name="used_amount" sum="Utilizado"/>
+		                                <field name="available_amount" sum="DISPONIBLE"/>
+					      </tree>
+					</field>
+				</page>
+				<page string="Documentos Presupuestarios">
+					<field name="doc_line_ids" colspan="4" nolabel="1" domain="[('state','in',['certified','commited'])]" readonly="1">
+					      <tree string="Documentos Presupuestarios" colors="black:state == 'draft'; blue:state == 'certified'; green:state == 'commited'; grey:state == 'cancelled'">
+		                                <field name="budget_doc_id" string="Documento Presupuestario"/>
+		                                <field name="budget_line_id" string="Partida"/>
+		                                <field name="certified_amount" string="Certificado" sum="Certificado"/>
+		                                <field name="commited_amount" string="Comprometido" sum="Comprometido"/>
+		                                <field name="state"/>
+					      </tree>
+					</field>
+				</page>
+				<page string="Reformas Presupuestarias">
+					<notebook>
+						<page string="Aumento">
+							<field name="reform_line2_ids" colspan="4" domain="[('state','=',['done'])]" readonly="1">
+							      <tree string="Reformas Origen" colors="black:state == 'draft'; green:state == 'done'; grey:state == 'cancelled'">
+						                <field name="budget_reform_id" string="Reforma Presupuestaria"/>
+						                <field name="budget2_id" string="Partida"/>
+						                <field name="amount" string="Valor" sum="Valor"/>
+						                <field name="state"/>
+							      </tree>
+							</field>
+						</page>
+						<page string="Disminución">
+							<field name="reform_line1_ids" colspan="4" domain="[('state','=',['done'])]" readonly="1">
+							      <tree string="Reformas Origen" colors="black:state == 'draft'; green:state == 'done'; grey:state == 'cancelled'">
+						                <field name="budget_reform_id" string="Reforma Presupuestaria"/>
+						                <field name="budget1_id" string="Partida"/>
+						                <field name="amount" string="Valor" sum="Valor"/>
+						                <field name="state"/>
+							      </tree>
+							</field>
+						</page>
+					</notebook>
+				</page>
+				<page string="Historial de Avance">
+					<field name="historial_avance_ids" colspan="4" nolabel="1" readonly="1">
+					      <tree string="Historial de Avance">
+		                                <field name="create_date" string="Fecha Registro"/>
+		                                <field name="create_uid" string="Usuario"/>
+		                                <field name="fecha"/>
+		                                <field name="name"/>
+		                                <field name="porcentaje"/>
+		                                <field name="documento"/>
+					      </tree>
+					</field>
+				</page>
+			</notebook>
+                </form>
+            </field>
+        </record>
+
+
+
+	<!-- *** CONTRATOS *** -->
+	<!--ACTION-->
+        <record model="ir.actions.act_window" id="action_project_contrato">
+			<field name="name">Contratos</field>
+			<field name="res_model">project.contrato</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="context">{}</field>
+	</record>
+	<!--FORM-->
+	<record model="ir.ui.view" id="view_form_project_contrato">
+            <field name="name">project.contrato.form</field>
+            <field name="model">project.contrato</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Mantenimiento de Contratos">
+			<header>
+				<button name="estado_exec" states="draft,done,cancelled" string="Poner en Ejecución" confirm="Desea poner EN EJECUCIÓN el Contrato?" type="object" icon="gtk-yes" colspan="2"/>
+				<button name="estado_draft" states="exec" string="Regresar a Borrador" confirm="Desea pasar a BORRADOR el Contrato?" type="object" icon="gtk-execute" colspan="2"/>
+				<button name="estado_done" states="exec" string="Finalizar Contrato" confirm="Desea FINALIZAR el Contrato?" type="object" icon="terp-check" colspan="2"/>
+				<button name="estado_cancelled" states="exec" string="Cancelar Contrato" confirm="Desea CANCELAR el Contrato?" type="object" icon="terp-gtk-stop" colspan="2"/>
+				<field name="state" nolabel="1" widget="statusbar" statusbar_colors='{"draft":"black","exec":"blue","done":"green","cancelled":"grey"}' statusbar_visible="draft,exec,done,cancelled" select="1" readonly="1"/>
+			</header>
+			<group colspan="4" string = "Datos Generales" col="8">
+				<field name="code" colspan="2" attrs="{'readonly': [('state','!=','draft')]}"/>
+				<group colspan= "6"/>
+				<field name="name" colspan="8" attrs="{'readonly': [('state','!=','draft')]}"/>
+				<field name="partner_id" colspan="8" attrs="{'readonly': [('state','!=','draft')]}"/>
+				<field name="fecha" colspan="2" attrs="{'readonly': [('state','!=','draft')]}"/>
+				<field name="plazo" colspan="6" attrs="{'readonly': [('state','!=','draft')]}"/>
+				<field name="monto" colspan="2" attrs="{'readonly': [('state','!=','draft')]}"/>
+				<field name="forma_pago" colspan="4" attrs="{'readonly': [('state','!=','draft')]}"/>
+				<field name="porcentaje_anticipo" colspan="2" attrs="{'readonly': [('state','!=','draft')]}"/>
+				<field name="objeto_id" colspan="4" on_change="onchange_objeto(objeto_id)" attrs="{'readonly': [('state','!=','draft')]}"/>
+				<field name="procedimiento_id" colspan="4" domain="[('objeto_id','=',objeto_id)]" attrs="{'readonly': [('state','!=','draft')]}"/>
+				<field name="ubicacion_archivo" colspan="4" attrs="{'readonly': [('state','!=','draft')]}"/>
+				<field name="codigo_cp" colspan="4" attrs="{'readonly': [('state','!=','draft')]}"/>
+				<field name="project_id" colspan="4" domain="[('state','in',['exec','done'])]" attrs="{'readonly': [('state','!=','draft')]}"/>
+				<field name="delegado_id" colspan="4" attrs="{'readonly': [('state','!=','draft')]}"/>
+                <notebook colspan="8">
+                    <page string="Garantías">
+                        <field name="garantia_ids" readonly="1">
+		                    <tree string="Garantías de Contrato" colors="black:state == 'draft'; green:state == 'done'; grey:state == 'cancelled'; red:rojo == 1; orange:amarillo == 1; blue:state == 'exec'">
+			                    <field name="name"/>
+			                    <field name="partner_id"/>
+			                    <field name="tipo_id"/>
+			                    <field name="fecha_emision"/>
+			                    <field name="fecha_fin"/>
+			                    <field name="monto"/>
+			                    <field name="state"/>
+                                <field name="rojo" invisible="1"/>
+                                <field name="amarillo" invisible="1"/>
+                            </tree>
+                        </field>
+                    </page>
+                    <page string="Administrador">
+                        <group colspan="4" col="4">
+				            <field name="administrador_id" colspan="2" attrs="{'readonly': [('state','!=','draft')]}"/>
+                            <button name="%(action_wizard_actualiza_administrador)d" colspan="2" icon="gtk-execute" states="exec" type="action" string="Actualizar Administrador"/>
+                        </group>
+                        <group>
+                            <field name="administrador_ids" string="Historial" attrs="{'readonly': [('state','!=','draft')]}">
+		                        <tree string="Histórico Administrador">
+			                        <field name="fecha"/>
+			                        <field name="administrador_id"/>
+			                        <field name="observaciones"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </page>
+                    <page string="Fiscalizador">
+                        <group colspan="4" col="4">
+            				<field name="fiscalizador_id" colspan="2" attrs="{'readonly': [('state','!=','draft')]}"/>
+                            <button name="%(action_wizard_actualiza_fiscalizador)d" colspan="2" icon="gtk-execute" states="exec" type="action" string="Actualizar Fiscalizador"/>
+                        </group>
+                        <group>
+                            <field name="fiscalizador_ids" string="Historial" attrs="{'readonly': [('state','!=','draft')]}">
+		                        <tree string="Histórico Fiscalizador">
+			                        <field name="fecha"/>
+			                        <field name="fiscalizador_id"/>
+			                        <field name="observaciones"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </page>
+                    <page string="Líneas de Factura">
+                        <field name="invoice_line_ids" readonly="1">
+                            <tree string="Invoice Lines" editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="account_id"/>
+                                    <field name="quantity"/>
+                                    <field name="uos_id" />
+                                    <field name="price_unit" sum="price_unit"/>
+                                    <field name="invoice_line_tax_id" widget="many2many_tags"/>
+                                    <field name="price_subtotal" string="Total" sum="price_subtotal"/>
+                            </tree>
+                        </field>
+                    </page>
+                    <page string="Observaciones">
+        				<field name="observaciones" colspan="8" />
+                    </page>
+                </notebook>
+			</group>
+                </form>
+            </field>
+        </record>	
+	<!--TREE-->
+	<record model="ir.ui.view" id="view_tree_project_contrato">
+            <field name="name">project.contrato.tree</field>
+            <field name="model">project.contrato</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+		        <tree string="Listado de Contratos" colors="black:state == 'draft'; blue:state == 'exec'; green:state == 'done'; grey:state == 'cancelled'">
+			        <field name="code"/>
+			        <field name="name"/>
+			        <field name="fecha"/>
+			        <field name="partner_id"/>
+			        <field name="monto"/>
+			        <field name="plazo"/>
+			        <field name="project_id"/>
+			        <field name="state"/>
+                </tree>
+            </field>			
+        </record>
+	<!--SEARCH-->
+	<record id="view_search_project_contrato" model="ir.ui.view">
+            <field name="name">project.contrato.search</field>
+            <field name="model">project.contrato</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Buscar Contratos">
+                   <group>
+			            <field name="code"/>
+			            <field name="name"/>
+		                <field name="fecha" string="Fecha Desde" filter_domain="[('fecha','&gt;=',self)]"/>
+		                <field name="fecha" string="Fecha Hasta" filter_domain="[('fecha','&lt;=',self)]"/>
+			            <field name="partner_id"/>
+			            <field name="monto"/>
+			            <field name="plazo"/>
+			            <field name="project_id"/>
+			            <field name="state"/>
+                   </group>
+		   <newline />
+		   <group expand="0" string="Agrupar Por...">
+			  <filter string="Fecha" name="g_fecha"  icon="terp-personal" domain="[]" context="{'group_by':'fecha'}"/>
+			  <filter string="Contratista" name="g_contratista" icon="terp-personal" domain="[]" context="{'group_by':'partner_id'}"/>
+			  <filter string="Proyecto Relacionado" name="g_proyecto" icon="terp-personal" domain="[]" context="{'group_by':'project_id'}"/>
+			  <filter string="Estado" name="g_estado" icon="terp-personal" domain="[]" context="{'group_by':'state'}"/>
+		   </group>
+               </search>
+            </field>
+        </record>
+	<!-- MENU -->
+	<menuitem name="Contratos" id="menu_project_contrato" parent="menu_main_project_contrato" sequence="10" action="action_project_contrato" groups="group_project_contratos,group_project_garantias_contratos"/>
+
+
+
+	<!-- *** OBJETO CONTRATACION *** -->
+	<!--ACTION-->
+        <record model="ir.actions.act_window" id="action_project_contrato_objeto">
+			<field name="name">Objeto de Contratación</field>
+			<field name="res_model">project.contrato.objeto</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="context">{}</field>
+	</record>
+	<!--FORM-->
+	<record model="ir.ui.view" id="view_form_project_contrato_objeto">
+            <field name="name">project.contrato_objeto.form</field>
+            <field name="model">project.contrato.objeto</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Mantenimiento de Objetos de Contratación">
+			<group colspan="4" string = "Datos Generales" col="8">
+				<field name="fy_id" colspan="2" />
+				<group colspan= "6"/>
+				<field name="name" colspan="6" />
+				<group colspan= "2"/>
+				<field name="sequence" colspan="2" />
+				<group colspan= "6"/>
+				<field name="active" colspan="2" />
+				<group colspan= "6"/>
+			</group>
+                </form>
+            </field>
+        </record>	
+	<!--TREE-->
+	<record model="ir.ui.view" id="view_tree_project_contrato_objeto">
+            <field name="name">project.contrato_objeto.tree</field>
+            <field name="model">project.contrato.objeto</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+		<tree string="Listado de Objetos de Contratación">
+			<field name="fy_id"/>
+			<field name="name"/>
+			<field name="sequence"/>
+			<field name="active"/>
+                </tree>
+            </field>			
+        </record>
+	<!--SEARCH-->
+	<record id="view_search_project_contrato_objeto" model="ir.ui.view">
+            <field name="name">project.contrato_objeto.search</field>
+            <field name="model">project.contrato.objeto</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Buscar Objetos de Contratación">
+                   <group>
+			<field name="fy_id"/>
+			<field name="name"/>
+                   </group>
+                   <newline />
+               </search>
+            </field>
+        </record>
+	<!-- MENU -->
+	<menuitem name="Objeto de Contratación" id="menu_project_contrato_objeto" parent="menu_configuracion_project_contratos" sequence="10" action="action_project_contrato_objeto" />
+
+
+
+	<!-- *** PROCEDIMIENTO CONTRATACION *** -->
+	<!--ACTION-->
+        <record model="ir.actions.act_window" id="action_project_contrato_procedimiento">
+			<field name="name">Procedimientos Contrato</field>
+			<field name="res_model">project.contrato.procedimiento</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="context">{}</field>
+	</record>
+	<!--FORM-->
+	<record model="ir.ui.view" id="view_form_project_contrato_procedimiento">
+            <field name="name">project.contrato_procedimiento.form</field>
+            <field name="model">project.contrato.procedimiento</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Mantenimiento de Procedimientos de Contratación">
+			<group colspan="4" string = "Datos Generales" col="8">
+				<field name="objeto_id" colspan="4" />
+				<group colspan= "4"/>
+				<field name="name" colspan="4" />
+				<group colspan= "4"/>
+				<field name="valor_min" colspan="2" />
+				<field name="valor_max" colspan="2" />
+				<group colspan= "4"/>
+				<field name="sequence" colspan="2" />
+				<group colspan= "6"/>
+				<field name="active" colspan="2" />
+				<group colspan= "6"/>
+			</group>
+                </form>
+            </field>
+        </record>	
+	<!--TREE-->
+	<record model="ir.ui.view" id="view_tree_project_contrato_procedimiento">
+            <field name="name">project.contrato_procedimiento.tree</field>
+            <field name="model">project.contrato.procedimiento</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+		<tree string="Listado de Procedimientos de Contratación">
+			<field name="objeto_id"/>			
+			<field name="name"/>
+			<field name="valor_min"/>
+			<field name="valor_max"/>
+			<field name="sequence"/>
+			<field name="active"/>
+                </tree>
+            </field>			
+        </record>
+	<!--SEARCH-->
+	<record id="view_search_project_contrato_procedimiento" model="ir.ui.view">
+            <field name="name">project.contrato_procedimiento.search</field>
+            <field name="model">project.contrato.procedimiento</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Buscar Procedimientos de Contratación">
+                   <group>
+			<field name="objeto_id" />
+			<field name="name" />
+                   </group>
+		   <newline />
+		   <group expand="1" string="Agrupar por...">
+		  	<filter string="Objeto" name="g_objeto_id" context="{'group_by': 'objeto_id'}"/>          
+		   </group>
+               </search>
+            </field>
+        </record>
+	<!-- MENU -->
+	<menuitem name="Procedimientos Contratación" id="menu_project_contrato_procedimiento" parent="menu_configuracion_project_contratos" sequence="20" action="action_project_contrato_procedimiento" />
+
+
+
+	<!-- *** TIPO DE GARANTÍA *** -->
+	<!--ACTION-->
+        <record model="ir.actions.act_window" id="action_project_contrato_tipo_garantia">
+			<field name="name">Tipo de Garantía</field>
+			<field name="res_model">project.contrato.tipo.garantia</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="context">{}</field>
+	</record>
+	<!--FORM-->
+	<record model="ir.ui.view" id="view_form_project_contrato_tipo_garantia">
+            <field name="name">project.contrato.tipo.garantia.form</field>
+            <field name="model">project.contrato.tipo.garantia</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Mantenimiento de Tipos de Garantía">
+			<group colspan="4" string = "Datos Generales" col="8">
+				<field name="name" colspan="4" />
+				<group colspan= "4"/>
+				<field name="sequence" colspan="2" />
+				<group colspan= "6"/>
+			</group>
+                </form>
+            </field>
+        </record>	
+	<!--TREE-->
+	<record model="ir.ui.view" id="view_tree_project_contrato_tipo_garantia">
+            <field name="name">project.contrato_tipo_garantia.tree</field>
+            <field name="model">project.contrato.tipo.garantia</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+        		<tree string="Listado de Tipos de Garantía">
+        			<field name="name"/>
+        			<field name="sequence"/>
+                </tree>
+            </field>			
+        </record>
+	<!--SEARCH-->
+	<record id="view_search_project_contrato_tipo_garantia" model="ir.ui.view">
+            <field name="name">project.contrato_tipo_garantia.search</field>
+            <field name="model">project.contrato.tipo.garantia</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Buscar Tipos de Garantía">
+                    <group>
+			            <field name="name" />
+                    </group>
+		            <newline />
+                </search>
+            </field>
+        </record>
+	<!-- MENU -->
+	<menuitem name="Tipos de Garantía" id="menu_project_contrato_tipo_garantia" parent="menu_configuracion_project_contratos" sequence="30" action="action_project_contrato_tipo_garantia" />
+
+
+
+	<!-- *** GARANTÍAS *** -->
+	<!--ACTION-->
+        <record model="ir.actions.act_window" id="action_project_contrato_garantia">
+			<field name="name">Garantías de Contratos</field>
+			<field name="res_model">project.contrato.garantia</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="context">{'search_default_state_exec':1}</field>
+	</record>
+	<!--FORM-->
+	<record model="ir.ui.view" id="view_form_project_contrato_garantia">
+            <field name="name">project.contrato.garantia.form</field>
+            <field name="model">project.contrato.garantia</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Mantenimiento de Garantías de Contratos">
+			        <header>
+				        <button name="estado_exec" states="draft,done,cancelled" string="Poner en Ejecución" confirm="Desea poner EN EJECUCIÓN la Garantía?" type="object" icon="gtk-yes" colspan="2"/>
+				        <button name="estado_draft" states="exec" string="Regresar a Borrador" confirm="Desea pasar a BORRADOR la Garantía?" type="object" icon="gtk-execute" colspan="2"/>
+				        <button name="estado_done" states="exec" string="Finalizar Garantía" confirm="Desea FINALIZAR la Garantía?" type="object" icon="terp-check" colspan="2"/>
+				        <button name="estado_cancelled" states="exec" string="Cancelar Garantía" confirm="Desea CANCELAR la Garantía?" type="object" icon="terp-gtk-stop" colspan="2"/>
+				        <field name="state" nolabel="1" widget="statusbar" statusbar_colors='{"draft":"black","exec":"blue","done":"green","cancelled":"grey"}' statusbar_visible="draft,exec,done,cancelled" select="1" readonly="1"/>
+			        </header>
+			        <group colspan="4" string = "Datos Generales" col="8">
+				        <field name="name" colspan="2" attrs="{'readonly': [('state','!=','draft')]}"/>
+				        <group colspan= "6"/>
+				        <field name="contrato_id" colspan="8" domain="[('state','in',['exec','done'])]" attrs="{'readonly': [('state','!=','draft')]}"/>
+				        <field name="partner_id" colspan="8" attrs="{'readonly': [('state','!=','draft')]}"/>
+				        <field name="tipo_id" colspan="4" attrs="{'readonly': [('state','!=','draft')]}"/>
+				        <group colspan= "4"/>
+				        <field name="fecha_emision" colspan="2" attrs="{'readonly': [('state','!=','draft')]}"/>
+                        <button name="%(action_wizard_garantia_renovacion)d" colspan="2" icon="gtk-execute" states="exec" type="action" string="Registrar Renovación"/>
+				        <group colspan= "4"/>
+				        <field name="fecha_fin" colspan="2" attrs="{'readonly': [('state','!=','draft')]}"/>
+				        <group colspan= "6"/>
+				        <field name="monto" string="Monto (sin IVA)" colspan="2" attrs="{'readonly': [('state','!=','draft')]}"/>
+				        <group colspan= "6"/>
+				        <field name="observaciones" colspan="8"/>
+				        <field name="renovaciones_ids" colspan="8" attrs="{'readonly': [('state','!=','draft')]}">
+                            <tree string="Renovaciones">
+					            <field name="fecha_emision"/>
+					            <field name="fecha_fin"/>
+					            <field name="monto"/>
+					            <field name="observaciones"/>
+				            </tree>
+                        </field>
+			        </group>
+                </form>
+            </field>
+        </record>	
+	<!--TREE-->
+	<record model="ir.ui.view" id="view_tree_project_contrato_garantia">
+            <field name="name">project.contrato.garantia.tree</field>
+            <field name="model">project.contrato.garantia</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+		        <tree string="Listado de Garantías de Contratos" colors="black:state == 'draft'; green:state == 'done'; grey:state == 'cancelled'; red:rojo == 1; orange:amarillo == 1; blue:state == 'exec'">
+			        <field name="name"/>
+			        <field name="contrato_id"/>
+			        <field name="partner_id"/>
+			        <field name="tipo_id"/>
+			        <field name="fecha_emision"/>
+			        <field name="fecha_fin"/>
+			        <field name="monto"/>
+			        <field name="state"/>
+                    <field name="amarillo" invisible="1"/>
+                    <field name="rojo" invisible="1"/>
+                </tree>
+            </field>			
+        </record>
+	<!--SEARCH-->
+	<record id="view_search_project_contrato_garantia" model="ir.ui.view">
+            <field name="name">project.contrato.garantia.search</field>
+            <field name="model">project.contrato.garantia</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Buscar Garantías de Contratos">
+                   <group>
+			            <field name="name"/>
+		                <field name="fecha_emision" string="Emisión Desde" filter_domain="[('fecha_emision','&gt;=',self)]"/>
+		                <field name="fecha_emision" string="Emisión Hasta" filter_domain="[('fecha_emision','&lt;=',self)]"/>
+		                <field name="fecha_fin" string="Vencimiento Desde" filter_domain="[('fecha_fin','&gt;=',self)]"/>
+		                <field name="fecha_fin" string="Vencimiento Hasta" filter_domain="[('fecha_fin','&lt;=',self)]"/>
+			            <field name="contrato_id"/>
+			            <field name="partner_id"/>
+			            <field name="tipo_id"/>
+			            <field name="state"/>
+			            <field name="amarillo" string="Amarillo"/>
+			            <field name="rojo" string="Rojo"/>
+                        <group string="Mostrar">
+                            <filter name="state_exec" string="En Ejecución" icon="gtk-add" domain="[('state','=','exec')]"/>
+                        </group>
+                   </group>
+		   <newline />
+		   <group expand="0" string="Agrupar Por...">
+			  <filter string="Contrato" name="g_proyecto" icon="terp-personal" domain="[]" context="{'group_by':'contrato_id'}"/>
+			  <filter string="Aseguradora" name="g_aseguradora" icon="terp-personal" domain="[]" context="{'group_by':'partner_id'}"/>
+			  <filter string="Tipo" name="g_tipo" icon="terp-personal" domain="[]" context="{'group_by':'tipo_id'}"/>
+			  <filter string="Estado" name="g_estado" icon="terp-personal" domain="[]" context="{'group_by':'state'}"/>
+		   </group>
+               </search>
+            </field>
+        </record>
+	<!-- MENU -->
+	<menuitem name="Garantías de Contratos" id="menu_project_contrato_garantia" parent="menu_main_project_contrato" sequence="20" action="action_project_contrato_garantia" groups="group_project_garantias_contratos"/>
+
+
+
+	<!--MENU WIZARD REPORT OFICIO RENOVACION-->
+	<menuitem name="Oficio Renovación" action="action_contrato_garantia_oficio_renovacion" id="menu_contrato_garantia_oficio_renovacion" parent="menu_main_project_contrato" sequence="30" groups="group_project_garantias_contratos"/>
+
+	<!--MENU WIZARD REPORT OFICIO EJECUCION-->
+	<menuitem name="Oficio Ejecución" action="action_contrato_garantia_oficio_ejecucion" id="menu_contrato_garantia_oficio_ejecucion" parent="menu_main_project_contrato" sequence="40" groups="group_project_garantias_contratos"/>
+
+
+    </data>
+</openerp>
+

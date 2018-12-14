@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+		
+		<!-- Partner -->
+
+		<record id="view_hr_partner_form" model="ir.ui.view">
+			<field name="name">res.partner.hr.form</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="base.view_partner_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='title']" position="after">
+					<field name="estado_civil"/>
+					<field name="nombre_conyuge"/>
+					<field name="separacion_bienes"/>
+				</xpath>
+			</field>
+		</record>
+		
+		
+	</data>
+</openerp>

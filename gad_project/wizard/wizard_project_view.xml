@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+	<!--REGISTRAR AVANCE-->
+	<record id="view_wizard_project_task_avance" model="ir.ui.view">
+            <field name="name">Wizard Registra Avance Actividad</field>
+            <field name="model">wizard.project_task_avance</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Registrar Avance">
+		   <group colspan="4" col="8">
+			<field name="task_id" colspan="6" readonly="1"/>
+			<group colspan="2"/>
+			<field name="fecha" colspan="2" required="1"/>
+			<group colspan="6"/>
+			<field name="name" colspan="6" required="1"/>
+			<group colspan="2"/>
+			<field name="porcentaje" colspan="2" required="1"/>
+			<group colspan="6"/>
+			<field name="documento" colspan="8" />
+			<newline/>
+	                <group colspan="4">
+        	                <button icon="gtk-apply" name="registra_avance" confirm="Seguro desea Registrar el Avance %?"  string="Registrar Avance" type="object" default_focus="1" colspan="2"/>
+				<group colspan="2"/>
+	                </group>
+                    </group>
+                </form>
+            </field>
+        </record>
+        <record id="action_wizard_project_task_avance" model="ir.actions.act_window">
+            <field name="name">Registrar Avance de Actividad</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">wizard.project_task_avance</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>	
+
+
+
+    <!--ACTUALIZA ADMINISTRADOR-->
+	<record id="view_wizard_contrato_actualiza_administrador" model="ir.ui.view">
+            <field name="name">Wizard Actualiza Administrador de Contrato</field>
+            <field name="model">wizard.contrato.actualiza_administrador</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Actualiza Administrador de Contrato">
+		           <group colspan="4" col="8">
+			        <field name="contrato_id" colspan="6" readonly="1"/>
+			        <group colspan="2"/>
+			        <field name="administrador_id" colspan="4" required="1"/>
+			        <group colspan="4"/>
+			        <field name="fecha" colspan="2" required="1"/>
+			        <group colspan="6"/>
+			        <field name="observaciones" colspan="8" />
+			        <newline/>
+	                <group colspan="4">
+                	    <button icon="gtk-apply" name="actualiza_administrador" confirm="Seguro desea Actualizar el Administrador del Contrato?"  string="Actualiza Administrador" type="object" default_focus="1" colspan="2"/>
+				        <group colspan="2"/>
+	                </group>
+                    </group>
+                </form>
+            </field>
+        </record>
+        <record id="action_wizard_actualiza_administrador" model="ir.actions.act_window">
+            <field name="name">Actualiza Administrador de Contrato</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">wizard.contrato.actualiza_administrador</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>	
+
+
+
+    <!--ACTUALIZA FISCALIZADOR-->
+	<record id="view_wizard_contrato_actualiza_fiscalizador" model="ir.ui.view">
+            <field name="name">Wizard Actualiza Fiscalizador de Contrato</field>
+            <field name="model">wizard.contrato.actualiza_fiscalizador</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Actualiza Fiscalizador de Contrato">
+		           <group colspan="4" col="8">
+			        <field name="contrato_id" colspan="6" readonly="1"/>
+			        <group colspan="2"/>
+			        <field name="fiscalizador_id" colspan="4" required="1"/>
+			        <group colspan="4"/>
+			        <field name="fecha" colspan="2" required="1"/>
+			        <group colspan="6"/>
+			        <field name="observaciones" colspan="8" />
+			        <newline/>
+	                <group colspan="4">
+                	    <button icon="gtk-apply" name="actualiza_fiscalizador" confirm="Seguro desea Actualizar el Fiscalizador del Contrato?"  string="Actualiza Fiscalizador" type="object" default_focus="1" colspan="2"/>
+				        <group colspan="2"/>
+	                </group>
+                    </group>
+                </form>
+            </field>
+        </record>
+        <record id="action_wizard_actualiza_fiscalizador" model="ir.actions.act_window">
+            <field name="name">Actualiza Fiscalizador de Contrato</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">wizard.contrato.actualiza_fiscalizador</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>	
+
+
+
+    <!--RENOVACIÓN DE GARANTÍA-->
+	<record id="view_wizard_garantia_renovacion" model="ir.ui.view">
+            <field name="name">Wizard Renovación de Garantía</field>
+            <field name="model">wizard.garantia_renovacion</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Renovación de Garantía">
+		           <group colspan="4" col="8">
+			        <field name="garantia_id" colspan="6" readonly="1"/>
+			        <group colspan="2"/>
+			        <field name="fecha_emision" colspan="2" required="1"/>
+			        <group colspan="6"/>
+			        <field name="fecha_fin" colspan="2" required="1"/>
+			        <group colspan="6"/>
+			        <field name="monto" colspan="2" required="1"/>
+			        <group colspan="6"/>
+			        <field name="observaciones" colspan="8" />
+			        <newline/>
+	                <group colspan="4">
+                	    <button icon="gtk-apply" name="registra_renovacion" confirm="Seguro desea Registrar la Renovación de la Garantía?"  string="Registrar Renovación" type="object" default_focus="1" colspan="2"/>
+				        <group colspan="2"/>
+	                </group>
+                    </group>
+                </form>
+            </field>
+        </record>
+        <record id="action_wizard_garantia_renovacion" model="ir.actions.act_window">
+            <field name="name">Registrar Renovación de Garantía</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">wizard.garantia_renovacion</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>	
+
+
+
+	<!--CONTRATO GARANTÍA OFICIO RENOVACIÓN-->
+	<record id="view_wizard_contrato_garantia_oficio_renovacion" model="ir.ui.view">
+            <field name="name">Wizard - Report Contrato Garantía Oficio Renovación</field>
+            <field name="model">wizard.contrato.garantia.oficio_renovacion</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Contrato Garantía Oficio Renovación">
+			        <group colspan="4" col="8">
+			          <field name="num_oficio" colspan="4"/>
+	            	  <group colspan="4"/>
+			          <field name="fecha" colspan="4"/>
+	            	  <group colspan="4"/>
+			          <field name="partner_id" colspan="4"/>
+	            	  <group colspan="4"/>
+			          <field name="ciudad_aseguradora" colspan="2"/>
+	            	  <group colspan="6"/>
+			          <field name="responsable_id" colspan="4"/>
+	            	  <group colspan="4"/>
+			          <field name="cargo_responsable" colspan="4"/>
+	            	  <group colspan="4"/>
+			          <field name="elaborado_id" colspan="4"/>
+	            	  <group colspan="4"/>
+                    </group>
+			        <group colspan="8">
+			        	<field name="garantias_ids" colspan="4" domain="[('state','=','exec')]">
+					        	<tree string="Listado de Garantías">
+					        		<field name="name"/>
+					        		<field name="contrato_id"/>
+					        		<field name="fecha_emision"/>
+					        		<field name="fecha_fin"/>
+					        		<field name="partner_id"/>
+					        		<field name="tipo_id"/>
+					        		<field name="monto"/>
+				        		</tree>
+					    </field>
+			        </group>
+                    <footer>
+                        <button name="check_report" context="{'garantias_ids':garantias_ids}" string="Imprimir" type="object" default_focus="1" class="oe_highlight"/>
+                        o
+                        <button string="Cancelar" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <record id="action_contrato_garantia_oficio_renovacion" model="ir.actions.act_window">
+            <field name="name">Contrato Garantía Oficio Renovación</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">wizard.contrato.garantia.oficio_renovacion</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+
+
+	<!--CONTRATO GARANTÍA OFICIO EJECUCIÓN-->
+	<record id="view_wizard_contrato_garantia_oficio_ejecucion" model="ir.ui.view">
+            <field name="name">Wizard - Report Contrato Garantía Oficio Ejecución</field>
+            <field name="model">wizard.contrato.garantia.oficio_ejecucion</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Contrato Garantía Oficio Ejecución">
+			        <group colspan="4" col="8">
+			          <field name="num_oficio" colspan="4"/>
+	            	  <group colspan="4"/>
+			          <field name="fecha" colspan="4"/>
+	            	  <group colspan="4"/>
+			          <field name="partner_id" colspan="4"/>
+	            	  <group colspan="4"/>
+			          <field name="ciudad_aseguradora" colspan="2"/>
+	            	  <group colspan="6"/>
+			          <field name="responsable_id" colspan="4"/>
+	            	  <group colspan="4"/>
+			          <field name="cargo_responsable" colspan="4"/>
+	            	  <group colspan="4"/>
+			          <field name="elaborado_id" colspan="4"/>
+	            	  <group colspan="4"/>
+                    </group>
+			        <group colspan="8">
+			        	<field name="garantias_ids" colspan="4" domain="[('state','=','exec')]">
+					        	<tree string="Listado de Garantías">
+					        		<field name="name"/>
+					        		<field name="contrato_id"/>
+					        		<field name="fecha_emision"/>
+					        		<field name="fecha_fin"/>
+					        		<field name="partner_id"/>
+					        		<field name="tipo_id"/>
+					        		<field name="monto"/>
+				        		</tree>
+					    </field>
+			        </group>
+                    <footer>
+                        <button name="check_report" context="{'garantias_ids':garantias_ids}" string="Imprimir" type="object" default_focus="1" class="oe_highlight"/>
+                        o
+                        <button string="Cancelar" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <record id="action_contrato_garantia_oficio_ejecucion" model="ir.actions.act_window">
+            <field name="name">Contrato Garantía Oficio Ejecución</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">wizard.contrato.garantia.oficio_ejecucion</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+	
+ </data>
+</openerp>

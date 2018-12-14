@@ -1,0 +1,614 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+	<!-- *** MENU PRINCIPAL *** -->
+	<menuitem name="Activos Fijos" id="menu_main_activosfijos" web_icon="images/porcentaje_color.png" web_icon_hover="images/porcentaje_negro.png" sequence="52"
+		groups="gad_account_asset.group_gad_asset_manager,gad_account_asset.group_gad_asset_consulta"/>
+	<!--SUBMENUS-->
+	<menuitem name="Activos Fijos" id="menu_activosfijos_activosfijos" parent="menu_main_activosfijos" sequence="10" 		
+		groups="gad_account_asset.group_gad_asset_manager,gad_account_asset.group_gad_asset_consulta"/>		
+	<menuitem name="Reportes" id="menu_activosfijos_reportes" parent="menu_main_activosfijos" sequence="80" 
+		groups="gad_account_asset.group_gad_asset_manager,gad_account_asset.group_gad_asset_consulta"/>
+	<menuitem name="Interfaces Contables" id="menu_activosfijos_contables" parent="menu_main_activosfijos" sequence="85" 
+		groups="gad_account_asset.group_gad_asset_manager"/>
+	<menuitem name="Configuración" id="menu_activosfijos_configuracion" parent="menu_main_activosfijos" sequence="90" 
+		groups="gad_account_asset.group_gad_asset_manager"/>
+
+	<!-- OCULTAR MENUS -->
+	<menuitem id="account_asset.menu_finance_assets" name="Activos Fijos" parent="gad_project.menu_otros" sequence="11" groups="base.group_no_one"/>
+        <menuitem id="account_asset.menu_finance_config_assets" name="Configurar Activos" parent="gad_project.menu_otros" sequence="12" groups="base.group_no_one"/>
+
+
+	<!-- *** ACCOUNT.ASSET.ASSET *** -->
+	<!--FORM-->
+	<record id="view_account_asset_asset_form_2" model="ir.ui.view">
+	    	<field name="name">view.account.asset.asset.form</field>
+	    	<field name="model">account.asset.asset</field>
+	    	<field name="type">form</field>
+	    	<field name="arch" type="xml">
+	    	    <form string="Activos Fijos">
+		        <header>
+		            <button name="validate" states="draft" string="Confirm Asset" confirm="Seguro que desea CONFIRMAR el Activo Fijo?" type="object" class="oe_highlight"/>
+			    <!--button name="%(action_account_asset_baja)d" states="open" string="Dar de Baja" type="action" class="oe_highlight"/-->
+		            <button name="set_to_draft" states="open" string="Pasar a Borrador" confirm="Seguro que desea PASAR A BORRADOR?" type="object" />
+		            <field name="state" widget="statusbar" statusbar_visible="draft,open,close"/>
+		        </header>
+		            <div class="oe_button_box oe_right">
+		                <button class="oe_inline oe_stat_button" name="open_entries"  type="object" icon="fa-pencil">
+		                <field string="Entries" name="entry_count" widget="statinfo" />
+		            </button>
+		            </div>
+			    <group col="6">
+			    	<field name="code" string="Código" colspan="2" readonly="1"/>
+			    	<field name="numero_ingreso" colspan="2" readonly="1"/>
+          			<!--button name="action_print_baja" string="Imprimir Baja" type="object" states="close" icon="gtk-print" colspan="2"/-->
+			    	<field name="baja_date" colspan="2" readonly="1" attrs="{'invisible':[('state','!=','close')]}" />
+				    <field name="name" string="Descripción" colspan="6"/>
+			    	<field name="clasificador" colspan="2" required="1" on_change="onchange_clasificador()" attrs="{'readonly': ['|',('code','!=','/'),('state','!=','draft')]}"/>
+				<field name="category_id" string="Categoría" colspan="4" domain="[('clasificador','=',clasificador)]" attrs="{'readonly': ['|',('code','!=','/'),('state','!=','draft')]}" on_change="onchange_categoria(category_id)"/>
+			    </group>
+		            <group col="8">
+		                    <field name="tipo_ingreso" colspan="2" attrs="{'readonly': [('state','!=','draft')]}" on_change="onchange_tipo_ingreso(tipo_ingreso)"/>
+		                    <field name="tipo_gasto" colspan="2" attrs="{'readonly': [('state','!=','draft')]}" required="1"/>
+		                    <field name="purchase_date" string="Fecha de Adquisición" colspan="2" attrs="{'readonly': [('state','!=','draft')]}"/>
+		                    <field name="doc_ref" colspan="2" attrs="{'readonly': [('state','!=','draft')], 'required':[('tipo_ingreso','=','compra')]}"/>		                    
+		                    <field name="partner_id" string="Proveedor" attrs="{'readonly': [('state','!=','draft')], 'required':[('tipo_ingreso','=','compra')]}" colspan="6"/>
+			    	        <field name="invoice_state" attrs="{'readonly': ['|',('state','!=','draft'),('invoice_state','=','invoiced')]}" colspan="2"/>
+		            </group>
+		            <group colspan="4" col="8">
+				          <field name="purchase_value" string="Valor de Adquisición" widget="monetary" options="{'currency_field': 'currency_id'}" colspan="2" /> <!--onchange="onchange_purchase_value(purchase_value,method_number)" /-->
+		                  <field name="tiene_iva" colspan="2" on_change="onchange_iva_check(tiene_iva)" attrs="{'readonly': [('state','!=','draft')]}"/>
+		                  <field name="porcentaje_iva" colspan="2" attrs="{'readonly': [('state','!=','draft')]}"/>
+		                  <field name="valor_iva" colspan="2"/>
+		                  <field name="salvage_value" widget="monetary" options="{'currency_field': 'currency_id'}" colspan="2" readonly="1"/>
+		                  <field name="value_residual" widget="monetary" options="{'currency_field': 'currency_id'}" colspan="2"/>
+			    	  <group colspan="2"/>
+		                  <field name="valor_subtotal" colspan="2"/>
+		            </group>
+
+			    <notebook colspan="4">
+				<page string="Propiedades">
+					<group colspan="4" col="8">
+					    <field name="department_id" colspan="6" required="1" attrs="{'readonly': [('state','!=','draft')]}"/>
+					    <group colspan="2"/>
+				            <field name="employee_id" colspan="4" required="1" attrs="{'readonly': [('state','!=','draft')]}"/>
+					    <group colspan="4"/>
+  					    <field name="estado" attrs="{'readonly': [('state','!=','draft')]}"/>
+			    		    <button name="%(action_account_asset_estado_bien)d" states="open" string="Cambiar Estado del Bien" type="action"/>
+		                            <field name="method_number" attrs="{'invisible':[('method_time','=','end')], 'required':[('method_time','=','number')]}" readonly="1"/>
+		                            <field name="prorata" attrs="{'invisible': [('method_time','=','end')]}" readonly="1"/>
+					</group>
+					<group colspan="4">
+						<field name="propiedades_ids" colspan="4" nolabel="1" attrs="{'readonly': [('state','=','close')]}">
+						      <tree string="Propiedades x Categoría" editable="bottom">
+							   <field name="category_propiedades_id"/>
+							   <field name="obligatorio"/>
+			  				   <field name="valor" attrs="{'required': [('obligatorio','=',True)]}"/>
+						      </tree>
+						</field>
+					</group>
+					<group>
+						<field name="propiedades_adicionales" colspan="4" attrs="{'readonly': [('state','=','close')]}"/>
+					</group>
+				            <group colspan="4" col="6">
+				                    <field name="method" invisible="1"/>
+				                    <field name="method_progress_factor" invisible="1" attrs="{'invisible':[('method','=','linear')], 'required':[('method','=','degressive')]}"/>
+				                    <label for="method_time" invisible="1"/>
+				                        <field name="method_time" on_change="onchange_method_time(method_time)" class="oe_inline" invisible="1"/>
+				                        <button name="%(account_asset.action_asset_modify)d" states="open" string="Change Duration" type="action" icon="terp-stock_effects-object-colorize" class="oe_inline" colspan="1"  invisible="1"/>
+				                    <field name="method_period" invisible="1"/>
+				                    <field name="method_end" attrs="{'required': [('method_time','=','end')], 'invisible':[('method_time','=','number')]}" invisible="1"/>
+				            </group>
+		                </page>
+				<page string="Componentes">
+					<group colspan="4">
+						<field name="componentes_ids" colspan="4" nolabel="1" attrs="{'readonly': [('state','=','close')]}">
+						      <tree string="Componentes" editable="bottom">
+							   <field name="name"/>
+			  				   <field name="cantidad"/>
+			  				   <field name="descripcion"/>
+						      </tree>
+						</field>
+					</group>
+				</page>
+		                <page string="Depreciation Board">
+		                    <field name="depreciation_line_ids" mode="tree">
+		                        <tree string="Depreciation Lines" colors="blue:(move_check == False);black:(move_check == True)">
+		                            <field name="depreciation_date"/>
+		                            <field name="sequence" invisible="1"/>
+		                            <field name="depreciated_value" readonly="1"/>
+		                            <field name="amount"/>
+		                            <field name="remaining_value" readonly="1"/>
+		                            <field name="move_check"/>
+		                            <field name="parent_state" invisible="1"/>
+		                            <!--button name="create_move" attrs="{'invisible':['|',('move_check','!=',False),('parent_state','!=','open')]}" icon="gtk-execute" string="Create Move" type="object"/-->
+		                        </tree>
+		                        <form string="Depreciation Lines"> 
+		                            <group>
+		                                <group>
+		                                    <field name="parent_state" invisible="1"/>
+		                                    <field name="name"/>
+		                                    <field name="amount"/>
+		                                    <field name="move_id"/>
+		                                    <field name="move_check"/>
+		                                    <field name="parent_state" invisible="1"/>
+		                                </group>
+		                                <group>
+		                                    <field name="sequence"/>
+		                                    <field name="depreciation_date"/>
+		                                    <field name="depreciated_value"/>
+		                                    <field name="remaining_value"/>
+		                                </group>
+		                            </group>
+		                        </form>
+		                    </field>
+		                    <button type="object" name="compute_depreciation_board" string="Compute" icon="terp-stock_format-scientific" colspan="2" attrs="{'invisible':[('state','in',('close','open'))]}"/>
+		                </page>
+		                <page string="Movimientos Contables">
+		                    <field name="account_move_line_ids" readonly="1"/>
+		                    <field name="history_ids" readonly="1"/>
+		                </page>
+		                <page string="Historial">
+				    <field name="historial_ids" mode="tree" readonly="1">
+		                        <tree string="Historial">
+		                            <field name="fecha_hora"/>
+		                            <field name="user_id"/>
+		                            <field name="name"/>
+		                            <field name="department_id"/>
+		                            <field name="employee_id"/>
+		                            <field name="estado"/>
+		                            <field name="state"/>
+		                            <field name="descripcion"/>
+		                        </tree>
+		                    </field>
+		                </page>
+		                <page string="Observaciones">
+		                    <field name="note" placeholder="Add an internal note here..." attrs="{'readonly': [('state','=','close')]}"/>
+		                </page>
+		            </notebook>
+		    </form>
+	    	</field>
+	</record>
+	<!--TREE-->
+    	<record id="view_account_asset_asset_tree" model="ir.ui.view">
+	    	<field name="name">view.account.asset.asset.tree</field>
+	    	<field name="model">account.asset.asset</field>
+	    	<field name="type">tree</field>
+	    	<field name="arch" type="xml">
+	    		<tree string="Listado de Activos Fijos" colors="blue:state == 'open';grey:state == 'close'">
+	    			<field name="clasificador"/>
+	    			<field name="code" string="Código"/>
+	    			<field name="name"/>
+	    			<field name="category_id" string="Categoría"/>
+	    			<field name="tipo_ingreso" string="Tipo"/>
+	    			<field name="partner_id" string="Proveedor"/>
+	    			<field name="purchase_date" string="Fecha C."/>
+	    			<field name="purchase_value" sum="purchase_value" string="Valor"/>
+	    			<field name="doc_ref" invisible="1"/>
+	    			<field name="employee_id" string="Custodio"/>
+	    			<field name="department_id" string="Dpto./Unidad Op." invisible="1"/>
+	    			<field name="baja_date" invisible="1"/>
+	    			<field name="state"/>
+	    			<field name="invoice_state" string="Control"/>
+	    			<field name="baja_contabilizada" string="Baja"/>
+	    			<field name="baja_date" string="Fecha B."/>
+	    		</tree>
+	    	</field>
+	</record>
+	<!--SEARCH-->
+	<record id="view_account_asset_asset_search" model="ir.ui.view">
+	    	<field name="name">view.account.asset.asset.search</field>
+	    	<field name="model">account.asset.asset</field>
+	    	<field name="type">search</field>
+	    	<field name="arch" type="xml">
+	    	    <search string="Activos Fijos">
+	    	        <group>
+	    			<field name="clasificador"/>
+				<field name="code"/>
+				<field name="name"/>
+				<field name="category_id"/>
+				<field name="tipo_ingreso"/>
+				<field name="partner_id"/>
+			    	    <field name="purchase_date" string="F. Compra Desde" filter_domain="[('purchase_date','&gt;=',self)]"/>
+				    <field name="purchase_date" string="F. Compra Hasta" filter_domain="[('purchase_date','&lt;=',self)]"/>
+				<field name="doc_ref"/>
+	    			<field name="employee_id" string="Responsable/Custodio"/>
+	    			<field name="department_id" string="Dpto./Unidad Op." invisible="1"/>
+			    	    <field name="baja_date" string="F. Compra Desde" filter_domain="[('baja_date','&gt;=',self)]"/>
+				    <field name="baja_date" string="F. Compra Hasta" filter_domain="[('baja_date','&lt;=',self)]"/>
+				<field name="state"/>
+				<field name="invoice_state"/>
+				<field name="baja_contabilizada"/>
+	    		</group>
+			<newline/> 
+			<group expand="1"  string="Agrupar por...">
+			    <filter string="Clasificador" icon="terp-gtk-jump-to-ltr" domain="[]" context="{'group_by':'clasificador'}"/>
+	    		    <separator orientation="vertical"/>
+ 			    <filter string="Categoría" icon="terp-gtk-jump-to-ltr" domain="[]" context="{'group_by':'category_id'}"/>
+	    		    <separator orientation="vertical"/>
+	    		    <filter string="Tipo Ingreso" icon="terp-gtk-jump-to-ltr" domain="[]" context="{'group_by':'tipo_ingreso'}"/>
+	    		    <separator orientation="vertical"/>
+	    		    <filter string="Proveedor" icon="terp-gtk-jump-to-ltr" domain="[]" context="{'group_by':'partner_id'}"/>
+	    		    <separator orientation="vertical"/>
+	    		    <filter string="Responsable/Custodio" icon="terp-gtk-jump-to-ltr" domain="[]" context="{'group_by':'employee_id'}"/>
+	    		    <separator orientation="vertical"/>
+	    		    <filter string="Dpto./Unidad Op." icon="terp-gtk-jump-to-ltr" domain="[]" context="{'group_by':'department_id'}"/>
+	    		    <separator orientation="vertical"/>
+	    		    <filter string="Estado" icon="terp-gtk-jump-to-ltr" domain="[]" context="{'group_by':'state'}"/>
+	    		    <separator orientation="vertical"/>
+		        </group>
+	    	    </search>
+	    	</field>
+	</record>
+	<!--ACTION-->
+	<record id="action_account_asset_asset" model="ir.actions.act_window">
+	      <field name="name">Activos Fijos</field>
+	      <field name="res_model">account.asset.asset</field>
+	      <field name="type">ir.actions.act_window</field>
+	      <field name="view_type">form</field>
+              <field name="view_id" ref="view_account_asset_asset_tree"/>
+              <field name="search_view_id" ref="view_account_asset_asset_search"/>
+	</record>	    
+	<record id="view_asset_tree" model="ir.actions.act_window.view">
+		<field eval="1" name="sequence"/>
+		<field name="view_mode">tree</field>
+		<field name="view_id" ref="view_account_asset_asset_tree"/>
+		<field name="act_window_id" ref="action_account_asset_asset"/>
+	</record>
+	<record id="view_asset_form" model="ir.actions.act_window.view">
+		<field eval="2" name="sequence"/>
+		<field name="view_mode">form</field>
+		<field name="view_id" ref="view_account_asset_asset_form_2"/>
+		<field name="act_window_id" ref="action_account_asset_asset"/>
+	</record>	   
+
+	<!--MENU-->
+	<menuitem name="Activos Fijos" action="action_account_asset_asset" id="menu_gad_account_asset_asset" parent="menu_activosfijos_activosfijos" sequence="10"/>
+
+
+
+
+	<!-- *** ACCOUNT.ASSET.CATEGORY *** -->
+	<!--FORM-->
+	<!--record id="view_account_asset_category_form_2" model="ir.ui.view"-->
+	<record id="account_asset.view_account_asset_category_form" model="ir.ui.view">
+	    	<field name="name">view.account.asset.category.form</field>
+	    	<field name="model">account.asset.category</field>
+	    	<field name="type">form</field>
+	    	<field name="arch" type="xml">
+	    	    <form string="Categorías de Activos Fijos">
+			    <group col="8">
+			    	<field name="code" string="Código" colspan="2" required="1"/>
+			    	<group colspan="6"/>
+			    	<field name="name" string="Descripción" colspan="4"/>
+			    	<group colspan="4"/>
+			    </group>
+			    <group string="Configuración Contable" col="4">
+			    	<field name="clasificador" colspan="2" required="1"/>
+			    	<field name="journal_id" colspan="2"/>
+			    	<field name="account_asset_id" colspan="2"/>
+                    <group colspan="2"/>
+			    	<field name="account_asset_io_id" colspan="2"/>
+			    	<field name="account_asset_ip_id" colspan="2"/>
+			    	<field name="account_ctaxpagar_id" colspan="2"/>
+			    	<field name="account_ctaxpagar_inv_id" colspan="2"/>
+			    	<field name="account_depreciation_id" colspan="2"/>
+			    	<field name="account_expense_depreciation_id" string="Cuenta Gastos Amortización" colspan="2"/>
+			    	<field name="account_patrimonio_id" colspan="2" required="1"/>
+			    	<field name="account_donaciones_acc_id" colspan="2"/>
+			    	<field name="account_comodato_deb_id" colspan="2"/>
+			    	<field name="account_comodato_acc_id" colspan="2"/>
+			    	<field name="account_complemento_deb_id" colspan="2" attrs="{'invisible':[('clasificador','!=','bsc')]}"/>
+			    	<field name="account_complemento_acc_id" colspan="2" attrs="{'invisible':[('clasificador','!=','bsc')]}"/>
+			    </group>
+			    <group col="8">
+                            	<field name="method_time" invisible="1"/>		
+	                        <field name="method_number" attrs="{'invisible':[('method_time','=','end')], 'required':[('method_time','=','number')]}" colspan="2"/>
+	                        <field name="prorata" colspan="2"/>
+ 		    	        <group colspan="2"/>
+   		    	    </group>
+
+    			        <button icon="gtk-apply" name="generar_producto" string="Generar Producto" confirm="Seguro que desea Generar Producto?" type="object"/>
+
+		            <group string="Propiedades" col="4">
+				    <field name="propiedades_ids" colspan="2" nolabel="1" >
+		                        <tree string="Propiedades x Categoría" editable="bottom">
+		                            <field name="name" string="Nombre"/>
+		                            <field name="obligatorio"/>
+		                            <field name="prioridad"/>
+		                        </tree>
+		                    </field>
+			    	    <group colspan="2"/>
+		            </group>
+		    </form>
+	    	</field>
+	</record>
+	<!--TREE-->
+    	<record id="view_account_asset_category_tree" model="ir.ui.view">
+	    	<field name="name">view.account.asset.category.tree</field>
+	    	<field name="model">account.asset.category</field>
+	    	<field name="type">tree</field>
+	    	<field name="arch" type="xml">
+	    		<tree string="Listado de Categorías">
+	    			<field name="clasificador"/>
+	    			<field name="code"/>
+	    			<field name="name"/>
+	    			<field name="journal_id"/>
+	    			<field name="account_asset_id"/>
+	    			<field name="account_asset_io_id"/>
+	    			<field name="account_asset_ip_id"/>
+	    		</tree>
+	    	</field>
+	</record>
+	<!--SEARCH-->
+	<record id="view_account_asset_category_search" model="ir.ui.view">
+	    	<field name="name">view.account.asset.category.search</field>
+	    	<field name="model">account.asset.category</field>
+	    	<field name="type">search</field>
+	    	<field name="arch" type="xml">
+	    		<search string="Categorías de Activos Fijos">
+	    			<group>
+		    			<field name="clasificador"/>
+		    			<field name="code"/>
+		    			<field name="name"/>
+	    			</group>
+	    		</search>
+	    	</field>
+	</record>
+	<!--ACTION-->
+	<record id="action_account_asset_category" model="ir.actions.act_window">
+	      <field name="name">Activos Fijos</field>
+	      <field name="res_model">account.asset.category</field>
+	      <field name="type">ir.actions.act_window</field>
+	      <field name="view_type">form</field>
+              <field name="view_id" ref="view_account_asset_category_tree"/>
+              <field name="search_view_id" ref="view_account_asset_category_search"/>
+	</record>	    
+	<record id="view_asset_category_tree" model="ir.actions.act_window.view">
+		<field eval="1" name="sequence"/>
+		<field name="view_mode">tree</field>
+		<field name="view_id" ref="view_account_asset_category_tree"/>
+		<field name="act_window_id" ref="action_account_asset_category"/>
+	</record>
+	<record id="view_asset_category_form" model="ir.actions.act_window.view">
+		<field eval="2" name="sequence"/>
+		<field name="view_mode">form</field>
+		<field name="view_id" ref="account_asset.view_account_asset_category_form"/>
+		<field name="act_window_id" ref="action_account_asset_category"/>
+	</record>	
+	<!-- MENU -->
+	<menuitem name="Categorías" action="action_account_asset_category" id="menu_gad_account_asset_category" parent="menu_activosfijos_configuracion" sequence="10"/>
+
+
+
+	<!-- TRANSFERENCIAS -->
+	<!--ACTION-->
+	<record id="action_account_asset_transfer" model="ir.actions.act_window">
+	      <field name="name">Transferencias</field>
+	      <field name="res_model">account.asset.transfer</field>
+	      <field name="type">ir.actions.act_window</field>
+	      <field name="view_type">form</field>
+	      <field name="view_mode">tree,form</field>
+	</record>
+	<!--FORM-->
+	<record id="view_account_asset_transfer_form" model="ir.ui.view">
+	    	<field name="name">view.account_asset_transfer.form</field>
+	    	<field name="model">account.asset.transfer</field>
+	    	<field name="type">form</field>
+	    	<field name="arch" type="xml">
+	    		<form string="Transferencias de Activos Fijos">
+				<header>
+				    <button name="done" states="draft" string="Realizar Transferencia" confirm="Seguro que desea Realizar la TRANSFERENCIA de Activos Fijos?" type="object" class="oe_highlight"/>
+				    <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+			        </header>
+	    			<group col="8" colspan="4">
+		    			<field name="create_date" string="Fecha Creación" colspan="2"/>
+					<group colspan="6"/>
+		    			<field name="code" colspan="2"/>
+					<group colspan="6"/>
+		    			<field name="name" colspan="6" attrs="{'readonly': [('state','!=','draft')]}"/>
+					<group colspan="2"/>
+					<group colspan="8" col="4">
+			    			<field name="employee_origen_id" colspan="2" on_change="onchange_origen()" attrs="{'readonly': [('state','!=','draft')]}"/>
+						<group colspan="2"/>
+			    			<field name="employee_destino_id" colspan="2" attrs="{'readonly': [('state','!=','draft')]}"/>
+						<group colspan="2"/>
+			    			<field name="department_destino_id" colspan="2" attrs="{'readonly': [('state','!=','draft')]}"/>
+						<group colspan="2"/>
+			    			<field name="employee_autoriza_id" colspan="2" attrs="{'readonly': [('state','!=','draft')]}"/>
+						<group colspan="2"/>
+			    		<field name="observaciones" colspan="4" attrs="{'readonly': [('state','!=','draft')]}"/>
+			    	    <field name="transfer_activos_ids" colspan="4" domain="[('state','=','open'),('employee_id','=',employee_origen_id)]" attrs="{'readonly': [('state','!=','draft')]}">
+					    		<tree string="Listado de Activos Fijos">
+					    			<field name="code" string="Código"/>
+					    			<field name="name"/>
+					    			<field name="category_id" string="Categoría"/>
+					    			<field name="tipo_ingreso"/>
+					    			<field name="purchase_date" string="Fecha Adquisición"/>
+					    			<field name="purchase_value" sum="purchase_value" string="Valor Adquisición"/>
+					    			<field name="state" invisible="1"/>
+				    			</tree>
+						</field>
+					</group>
+	    			</group>
+	    		</form>
+	    	</field>
+	</record>
+	<!--TREE-->
+    	<record id="view_account_asset_transfer_tree" model="ir.ui.view">
+	    	<field name="name">view.account_asset_transfer.tree</field>
+	    	<field name="model">account.asset.transfer</field>
+	    	<field name="type">tree</field>
+	    	<field name="arch" type="xml">
+	    		<tree string="Transferencias de Activos Fijos" colors="blue:state == 'done';black:state == 'draft'">
+	    			<field name="code"/>
+	    			<field name="name"/>
+	    			<field name="employee_origen_id"/>
+	    			<field name="employee_destino_id"/>
+	    			<field name="department_destino_id"/>
+	    			<field name="state"/>
+	    		</tree>
+	    	</field>
+	</record>
+	<!--SEARCH-->
+	<record id="view_account_asset_transfer_search" model="ir.ui.view">
+	    	<field name="name">account_asset_transfer.search</field>
+	    	<field name="model">account.asset.transfer</field>
+	    	<field name="type">search</field>
+	    	<field name="arch" type="xml">
+	    		<search string="Transferencias de Activos Fijos">
+	    			<group>
+	    				<field name="code"/>
+	    				<field name="name"/>
+	    				<field name="employee_origen_id"/>
+	    				<field name="employee_destino_id"/>
+	    				<field name="department_destino_id"/>
+	    				<field name="state"/>
+	    			</group>
+	    		</search>
+	    	</field>
+	</record>
+	<!--MENU-->
+	<menuitem name="Transferencias" action="action_account_asset_transfer" id="menu_gad_account_asset_transfer" parent="menu_activosfijos_activosfijos" sequence="30"/>
+
+
+
+	<!-- BAJAS -->
+	<!--ACTION-->
+	<record id="action_account_asset_bajas" model="ir.actions.act_window">
+	      <field name="name">Bajas</field>
+	      <field name="res_model">account.asset.bajas</field>
+	      <field name="type">ir.actions.act_window</field>
+	      <field name="view_type">form</field>
+	      <field name="view_mode">tree,form</field>
+	</record>
+	<!--FORM-->
+	<record id="view_account_asset_bajas_form" model="ir.ui.view">
+	    	<field name="name">view.account_asset_bajas.form</field>
+	    	<field name="model">account.asset.bajas</field>
+	    	<field name="type">form</field>
+	    	<field name="arch" type="xml">
+	    	  <form string="Bajas de Activos Fijos">
+				<header>
+				    <button name="done" states="draft" string="Realizar Baja" confirm="Seguro que desea Realizar la BAJA de Activos Fijos?" type="object" class="oe_highlight"/>
+				    <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+			    </header>
+	    		<group col="8" colspan="4">
+		    			<field name="create_date" string="Fecha Creación" colspan="2"/>
+					<group colspan="6"/>
+		    		<field name="code" colspan="2"/>
+					<group colspan="6"/>
+		    		<field name="name" colspan="6" attrs="{'readonly': [('state','!=','draft')]}"/>
+					<group colspan="2"/>
+		    		<field name="fecha_baja" colspan="2" attrs="{'readonly': [('state','!=','draft')]}"/>
+			    	<field name="contabilizar_baja" colspan="2" attrs="{'readonly': [('state','!=','draft')]}"/>
+					<group colspan="4"/>
+					<group colspan="8" col="4">
+			    	    <field name="employee_autoriza_id" colspan="2" attrs="{'readonly': [('state','!=','draft')]}"/>
+					    <group colspan="2"/>
+			    		<field name="baja_activos_ids" colspan="4" domain="[('state','=','open')]" attrs="{'readonly': [('state','!=','draft')]}">
+					   		<tree string="Listado de Activos Fijos">
+					   			<field name="code" string="Código"/>
+					   			<field name="name"/>
+					   			<field name="category_id" string="Categoría"/>
+					   			<field name="tipo_ingreso"/>
+					  			<field name="purchase_date" string="Fecha Adquisición"/>
+					   			<field name="purchase_value" sum="purchase_value" string="Valor Adquisición"/>
+					   			<field name="state" invisible="1"/>
+				    		</tree>
+					    </field>
+					</group>
+		    		<field name="observaciones" colspan="4" attrs="{'readonly': [('state','!=','draft')]}"/>
+	    		</group>
+	    	  </form>
+	    	</field>
+	</record>
+	<!--TREE-->
+    	<record id="view_account_asset_bajas_tree" model="ir.ui.view">
+	    	<field name="name">view.account_asset_bajas.tree</field>
+	    	<field name="model">account.asset.bajas</field>
+	    	<field name="type">tree</field>
+	    	<field name="arch" type="xml">
+	    		<tree string="Bajas de Activos Fijos" colors="blue:state == 'done';black:state == 'draft'">
+	    			<field name="code"/>
+	    			<field name="name"/>
+	    			<field name="fecha_baja"/>
+	    			<field name="state"/>
+	    		</tree>
+	    	</field>
+	</record>
+	<!--SEARCH-->
+	<record id="view_account_asset_bajas_search" model="ir.ui.view">
+	    	<field name="name">account_asset_bajas.search</field>
+	    	<field name="model">account.asset.bajas</field>
+	    	<field name="type">search</field>
+	    	<field name="arch" type="xml">
+	    		<search string="Bajas de Activos Fijos">
+	    			<group>
+	    				<field name="code"/>
+	    				<field name="name"/>
+			    	    <field name="fecha_baja" string="Fecha Desde" filter_domain="[('fecha_baja','&gt;=',self)]"/>
+				    <field name="fecha_baja" string="Fecha Hasta" filter_domain="[('fecha_baja','&lt;=',self)]"/>
+	    				<field name="state"/>
+	    			</group>
+	    		</search>
+	    	</field>
+	</record>
+	<!--MENU-->
+	<menuitem name="Bajas" action="action_account_asset_bajas" id="menu_gad_account_asset_bajas" parent="menu_activosfijos_activosfijos" sequence="40"/>
+
+
+
+	<!--HR.EMPLOYEE-->
+	<record id="view_hr_employee_form" model="ir.ui.view">
+	      <field name="name">Bienes a Cargo</field>
+	      <field name="model">hr.employee</field>
+	      <field name="inherit_id" ref="gad_payroll.l10n_ec_inherit_view_employee_form"/>
+	      <field name="arch" type="xml">
+	      	<xpath expr="/form/sheet/notebook/page[@string='Experiencia Laboral']" position="after">
+		  <page string="Bienes a Cargo">
+		    <field name="account_asset_ids" nolabel="1">
+	    		<tree string="Listado de Activos Fijos" colors="blue:state == 'open';grey:state == 'close'">
+	    			<field name="clasificador"/>
+	    			<field name="code" string="Código"/>
+	    			<field name="name"/>
+	    			<field name="category_id" string="Categoría"/>
+	    			<field name="purchase_date" string="Fecha de Adquisición"/>
+	    			<field name="purchase_value" sum="purchase_value"/>
+	    			<field name="baja_date"/>
+	    			<field name="state"/>
+	    		</tree>
+		     </field>
+		  </page>	    		       
+		</xpath>
+	      </field>
+	</record> 
+
+
+	<!--MENU WIZARD DUPLICAR-->
+	<menuitem name="Duplicar Activos" action="action_account_asset_duplicar" id="menu_gad_account_asset_duplicar" parent="menu_activosfijos_activosfijos" sequence="20" groups="gad_account_asset.group_gad_asset_manager"/>
+
+	<!--MENU WIZARD GENERAR FACTURA-->
+	<menuitem name="Generar Factura" action="action_account_asset_generar_factura" id="menu_gad_account_asset_generar_factura" parent="menu_activosfijos_contables" sequence="10" groups="gad_account_asset.group_gad_asset_manager"/>
+
+	<!--MENU WIZARD GENERAR ASIENTO-->
+	<menuitem name="Generar Asiento" action="action_account_asset_generar_asiento" id="menu_gad_account_asset_generar_asiento" parent="menu_activosfijos_contables" sequence="20" groups="gad_account_asset.group_gad_asset_manager"/>
+
+	<!--MENU WIZARD GENERAR BAJA-->
+	<menuitem name="Generar Baja" action="action_account_asset_generar_baja" id="menu_gad_account_asset_generar_baja" parent="menu_activosfijos_contables" sequence="30" groups="gad_account_asset.group_gad_asset_manager"/>
+
+	<!--MENU WIZARD GENERAR DEPRECIACIONES-->
+	<menuitem name="Generar Depreciaciones" action="action_account_asset_generar_depreciaciones" id="menu_gad_account_asset_generar_depreciaciones" parent="menu_activosfijos_contables" sequence="40" groups="gad_account_asset.group_gad_asset_manager"/>
+
+	<!--MENU WIZARD REPORT INGRESO-->
+	<menuitem name="Ingreso de Activos" action="action_account_asset_report_ingreso" id="menu_gad_account_asset_report_ingreso" parent="menu_activosfijos_reportes" sequence="10" groups="gad_account_asset.group_gad_asset_manager,gad_account_asset.group_gad_asset_consulta"/>
+
+	<!--MENU WIZARD REPORT TARJETA-->
+	<menuitem name="Tarjeta de Bienes" action="action_account_asset_report_tarjeta_bienes" id="menu_gad_account_asset_report_tarjeta_bienes" parent="menu_activosfijos_reportes" sequence="20" groups="gad_account_asset.group_gad_asset_manager,gad_account_asset.group_gad_asset_consulta"/>
+
+	<!--MENU WIZARD REPORT CERTIFICADO NO TENER BIENES-->
+	<menuitem name="Certificado No Bienes" action="action_account_asset_report_certificado_no" id="menu_gad_account_asset_report_certificado_no" parent="menu_activosfijos_reportes" sequence="30" groups="gad_account_asset.group_gad_asset_manager,gad_account_asset.group_gad_asset_consulta"/>
+
+
+    </data>
+</openerp>

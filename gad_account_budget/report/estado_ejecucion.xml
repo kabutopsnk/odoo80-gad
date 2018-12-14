@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+<template id="estado_ejecucion">
+	<t t-call="report.html_container">
+		<t t-foreach="docs" t-as="o">
+			<t t-call="report.external_layout">
+				<div class="header"/>
+				<div class="page">
+					<center>
+						<table cellspacing="0" width="100%">
+					    	<tr>
+					    		<td colspan="4" style="font-size:18px;vertical-align:top;" width="100%">ESTADO DE EJECUCIÓN PRESUPUESTARIA<br/></td>
+					    	</tr>
+					    	<tr>
+                                <td colspan="4"> <br/> </td></tr>
+					    	<tr>
+					    		<th width="20%" style="font-size:12px;text-align:left;vertical-align:top;">Presupuesto:</th>
+					    		<td width="80%" style="font-size:12px;text-align:left;vertical-align:top;" colspan="3"><span t-esc="budget_name"/></td>
+					    	</tr>
+					    	<tr>
+					    		<th width="20%" style="font-size:12px;text-align:left;vertical-align:top;">Fecha de Corte:</th>
+					    		<td width="80%" style="font-size:12px;text-align:left;vertical-align:top;" colspan="3" ><span t-esc="fecha"/></td>
+					    	</tr>
+					    	<tr>
+                                <th colspan="4"> <br/></th></tr>
+					    	<tr>
+							<td colspan="8" width="100%">
+						    	<table cellspacing="0" style="font-size:10px;vertical-align:top;" width="100%" border="1">
+									<tr>
+										<th width="10%" style="font-size:10px;text-align:left;vertical-align:top;">Código</th>
+										<th width="51%" style="font-size:10px;text-align:left;vertical-align:top;">Denominación</th>
+										<th width="13%" style="font-size:10px;text-align:center;vertical-align:top;">Codificado</th>
+										<th width="13%" style="font-size:10px;text-align:center;vertical-align:top;">Ejecutado</th>
+										<th width="13%" style="font-size:10px;text-align:center;vertical-align:top;">Diferencia</th>
+									</tr>
+						    		<t t-foreach="obtener_datos()" t-as="line">
+									    <tr>
+                                          <t t-if="line[5] not in ('4','5')">
+						        			<th width="10%" style="font-size:10px;vertical-align:top;"><span t-esc="line[0]"/></th>
+						        			<th width="51%" style="font-size:10px;vertical-align:top;"><span t-esc="line[1]"/></th>
+						        			<th width="13%" style="font-size:10px;text-align:right;vertical-align:top;"><span t-esc="line[2]"/></th>
+						        			<th width="13%" style="font-size:10px;text-align:right;vertical-align:top;"><span t-esc="line[3]"/></th>
+						        			<th width="13%" style="font-size:10px;text-align:right;vertical-align:top;"><span t-esc="line[4]"/></th>
+                                          </t>
+                                          <t t-if="line[5] in ('4','5')">
+						        			<td width="10%" style="font-size:10px;vertical-align:top;"><span t-esc="line[0]"/></td>
+						        			<td width="51%" style="font-size:10px;vertical-align:top;"><span t-esc="line[1]"/></td>
+						        			<td width="13%" style="font-size:10px;text-align:right;vertical-align:top;"><span t-esc="line[2]"/></td>
+						        			<td width="13%" style="font-size:10px;text-align:right;vertical-align:top;"><span t-esc="line[3]"/></td>
+						        			<td width="13%" style="font-size:10px;text-align:right;vertical-align:top;"><span t-esc="line[4]"/></td>
+                                          </t>
+						        		</tr>
+						    		</t>
+						    	</table>
+						    </td>
+						    </tr>
+					    </table>
+				    </center>
+				</div>
+				<div class="footer"/>
+			</t>
+		</t>
+    </t>
+</template> 
+
+</data>
+</openerp>

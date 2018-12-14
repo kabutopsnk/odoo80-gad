@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="l10n_ec_view_hr_payslip_by_employees" model="ir.ui.view">
+            <field name="name">hr_payroll_payslip_employees_inherit</field>
+            <field name="model">hr.payslip.employees</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="hr_payroll.view_hr_payslip_by_employees"/>
+            <field name="arch" type="xml">
+                <data>
+                    <field name="employee_ids" position="replace">
+            			<field name="employee_ids" colspan="4" nolabel="1" attrs="{'invisible':[('payroll_type','!=','utilidades')]}"/>
+            			<field name="contract_ids" colspan="4" nolabel="1" attrs="{'invisible':[('payroll_type','=','utilidades')]}" domain="[('activo','=',True),('date_start','&lt;=',date_end),'|',('date_end','&gt;=',date_start),('date_end','=',False)]"/>
+            			<newline/>
+            			<field name="date_start" colspan="2" readonly="1" invisible="1"/>
+            			<field name="date_end" colspan="2" readonly="1" invisible="1"/>
+            			<field name="payroll_type" colspan="1" readonly="1"/>
+            			<field name="rule_category_ids" colspan="1" readonly="1" widget="many2many_tags"/>
+            			<field name="different_structure" colspan="1" attrs="{'required':[('payroll_type','!=','monthly')],'invisible':[('payroll_type','==','monthly')]}"/>
+                    </field>
+                </data>
+            </field>
+        </record>
+
+
+    </data>
+</openerp>

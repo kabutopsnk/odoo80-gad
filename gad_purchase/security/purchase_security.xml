@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+
+    <record model="ir.module.category" id="module_category_solicitudes_compra">
+      <field name="name">Solicitudes de Compra</field>
+      <field name="description">Gestión de Solicitudes de Compra</field>
+      <field name="sequence">5</field>
+      <field name="users" eval="[(4, ref('base.user_root'))]"/>
+    </record> 
+
+    <record id="group_purchase_aprobar" model="res.groups">
+        <field name="name">Aprobar</field>
+        <field name="category_id" ref="module_category_solicitudes_compra"/>
+    </record>
+
+    <record id="group_purchase_certificar" model="res.groups">
+        <field name="name">Certificar</field>
+        <field name="category_id" ref="module_category_solicitudes_compra"/>
+    </record>
+
+    <record id="group_purchase_autorizar" model="res.groups">
+        <field name="name">Autorizar</field>
+        <field name="category_id" ref="module_category_solicitudes_compra"/>
+    </record>
+
+    <record id="group_purchase_finalizar" model="res.groups">
+        <field name="name">Finalizar</field>
+        <field name="category_id" ref="module_category_solicitudes_compra"/>
+    </record>
+
+  </data>
+</openerp>

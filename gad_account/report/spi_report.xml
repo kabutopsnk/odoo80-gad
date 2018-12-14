@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<report
+			id="action_spi_report"
+			model="account.spi"
+			string="Imprimir"
+			report_type="qweb-pdf"
+			name="gad_account.spi_report"
+			file="gad_account.spi_report"
+			/>
+		
+		<template id="spi_report">
+			<t t-call="report.html_container">
+				<t t-foreach="docs" t-as="o">
+					<t t-call="report.external_layout">
+						<div class="header"/>
+						<div class="page">
+							<center>
+								<table cellspacing="0" width="100%" style="font-size:12px;vertical-align:top;">
+									<tr>
+										<td colspan="2"><br/>REPORTE DE CONTROL  *** TRASFERENICAS SPI-SP ***</td>
+									</tr>
+									<tr>
+										<!--th width="30%">Asiento Contable:</th-->
+										<td width="25%">INSTITUCION:</td>
+										<td width="75%"><span t-field="company.name"/></td>
+									</tr>
+									<tr>
+										<td width="25%">FECHA REPORTE:</td>
+										<td width="75%"><span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/></td>
+									</tr>
+									<tr>
+										<td width="25%">FECHA AFECTACION:</td>
+										<td width="75%"><span t-field="o.date" t-field-options='{"format": "yyyy-MM-dd"}'/></td>
+									</tr>
+									<tr>
+										<td colspan="2"> <br/> <br/> <br/> </td>
+									</tr>
+									<tr>
+										<td colspan="2">
+											<table cellspacing="0" width="100%">
+												<tr>
+													<th colspan="2" style="text-align:left;">INSTITUCION PAGADORA</th>
+													<th style="text-align:left;"># PAGOS</th>
+													<th style="text-align:left;">USD MONTO</th>
+												</tr>
+												<t t-set="var_cantidad" t-value="0"/>
+												<t t-set="var_total" t-value="0"/>
+												<t t-foreach="o.file_resume" t-as="resume">
+													<tr>
+														<td width="20%" style="text-align:right;"><t t-esc="resume.number"/></td>
+														<td width="45%" style="text-align:left;"><t t-esc="resume.name"/></td>
+														<td width="15%" style="text-align:right;"><t t-esc="resume.qty"/></td>
+														<td width="20%" style="text-align:right;"><t t-esc="resume.amount"/></td>
+														<t t-set="var_cantidad" t-value="var_cantidad + resume.qty"/>
+														<t t-set="var_total" t-value="var_total + resume.amount"/>
+													</tr>
+												</t>
+												<tr>
+													<td colspan="4"> <br/> </td>
+												</tr>
+												<tr>
+													<td colspan="2" style="text-align:left;">TOTALES:</td>
+													<td style="text-align:right;"><t t-esc="var_cantidad"/></td>
+													<td style="text-align:right;"><t t-esc="var_total"/></td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+									<tr>
+										<td colspan="2"> <br/> Número de control: <span t-field="o.file_dig"/> </td>
+									</tr>
+									<tr>
+										<td colspan="2"> <br/> <br/> <br/> </td>
+									</tr>
+									<tr>
+										<td colspan="2">
+											<table cellspacing="0" width="100%">
+												<tr>
+													<th width="50%" style="text-align:center;">DIRECTOR FINANCIERO</th>
+													<th width="50%" style="text-align:center;">TESORERO</th>
+												</tr>
+											</table>
+										</td>
+									</tr>
+									<tr>
+										<td colspan="2"> <br/><br/> PARA USO INTERNO DE LA INSTITUCIÓN ORDENANTE </td>
+									</tr>
+								</table>
+							</center>
+						</div>
+						<div class="footer"/>
+					</t>
+				</t>
+			</t>
+		</template>
+		
+	</data>
+</openerp>

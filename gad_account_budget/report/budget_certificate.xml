@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+<template id="budget_certificate">
+	<t t-call="report.html_container">
+		<t t-foreach="docs" t-as="o">
+			<t t-call="report.external_layout">
+				<div class="header"/>
+				<div class="page">
+					<center>
+						<table cellspacing="0" width="100%" style="font-size:12px;vertical-align:top;">
+					    	<tr>
+					    		<td colspan="4" style="font-size:20px;vertical-align:top;text-align:center;" width="100%">DIRECCIÓN DE GESTIÓN FINANCIERA<br/></td>
+					    	</tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr>
+					    		<td colspan="4" style="font-size:18px;vertical-align:top;text-align:center;" width="100%">CERTIFICACIÓN PRESUPUESTARIA #<span t-field="o.name"/><br/></td>
+					    	</tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr>
+					    		<td colspan="4" style="font-size:18px;vertical-align:top;text-align:center;" width="100%">DIRECTOR(A) FINANCIERO(A)<br/></td>
+					    	</tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr>
+					    		<td colspan="4" style="font-size:18px;vertical-align:top;text-align:center;" width="100%">CERTIFICA<br/></td>
+					    	</tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr>
+					    		<td colspan="4" style="vertical-align:top;text-align:left;" width="100%">Que en el ejercicio económico del año - <span t-field="o.period_id.fiscalyear_id.name"/>-, se encuentra registrado el siguiente detalle de Partidas Presupuestarias:<br/></td>
+					    	</tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr>
+							<td colspan="8" width="100%">
+						    		<table cellspacing="0" width="100%" border="1">
+									<tr>
+										<th width="60%">Partida Presupuestaria</th>
+										<th width="30%">Descripción</th>
+										<th width="10%">Valor</th>
+									</tr>
+						    			<t t-foreach="o.line_ids" t-as="line">
+
+										<tr>
+						    					<td width="60%"><span t-field="line.budget_line_id.display_name"/></td>
+						    					<td width="30%"><span t-field="line.name"/></td>
+						    					<td width="10%"><span t-field="line.certified_amount"/></td>
+						    				</tr>
+						    			</t>
+						    		</table>
+						    	</td>
+						</tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr>
+					    		<td colspan="4" style="vertical-align:top;text-align:left;" width="100%">Es todo cuanto puedo certificar en mérito a la verdad, pudiendo dar al presente documento, el uso que se estime necesario.<br/></td>
+					    	</tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+						<tr>
+					    		<td colspan="4" style="vertical-align:top;text-align:right;" width="100%">Macas, <span t-field="o.date_certified"/><br/></td>
+					    	</tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+						<tr>
+					    		<td colspan="4" style="vertical-align:top;text-align:center;" width="100%">Atentamente,<br/></td>
+					    	</tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr>
+					    	   <th width="100%" colspan="4" height="100px" style="text-align:center;"><br/>_____________________________<br/>DIRECTOR(A) FINANCIERO(A)</th>
+					    	</tr>
+					    </table>
+				    </center>
+				</div>
+				<div class="footer"/>
+			</t>
+		</t>
+    </t>
+</template>
+</data>
+</openerp>

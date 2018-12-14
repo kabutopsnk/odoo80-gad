@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!--Elimina Reportes de Linea Base-->
+        <report 
+            string="Call for Bids" 
+            id="purchase_requisition.action_report_purchase_requisitions" 
+            model="purchase.requisition" 
+            report_type="qweb-pdf"
+            name="purchase_requisition.report_purchaserequisitions" 
+            file="purchase_requisition.report_purchaserequisitions"
+            menu="False"
+         />
+        <report 
+            string="Request for Quotation" 
+            id="purchase.report_purchase_quotation" 
+            model="purchase.order" 
+            report_type="qweb-pdf"
+            name="purchase.report_purchasequotation" 
+            file="purchase.report_purchasequotation"
+            menu="False"
+        />
+
+
+
+    <!--Solicitud de Compra-->
+	<report 
+		id="action_report_solicitud_compra"
+		model="purchase.requisition"
+		string="Solicitud de Compra"
+		report_type="qweb-pdf"
+		name="gad_purchase.report_solicitud_compra"
+		file="gad_purchase.report_solicitud_compra"
+		/>
+
+                 
+    </data>
+</openerp>

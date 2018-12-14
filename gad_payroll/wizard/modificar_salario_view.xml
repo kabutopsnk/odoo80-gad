@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+    <record id="view_wizard_modificar_contract_wage_view" model="ir.ui.view">
+      <field name="name">Modificar Salario</field>
+      <field name="model">wizard.modificar.contract.wage</field>
+      <field name="type">form</field>
+      <field name="arch" type="xml">
+	<form string="Modificar Salario">	 
+	    <label colspan="4" string="Este Asistente le permite importar una hoja de excel (.xls) de nuevos salarios. El formato debe ser: Nombre - Cedula - Salario"/>
+	    <group col="4" colspan="4">
+	      <field name="archivo" colspan="4"/>
+	      <field name="date" colspan="2"/>
+	    </group>  
+	    <group col="4" colspan="4">
+	      <button icon="gtk-cancel" special="cancel" string="Cancelar" colspan="2"/>
+	      <button name="import_sheet" string="Importar" colspan="2" type="object" icon="gtk-execute"/>
+	    </group>
+	</form>
+      </field>
+    </record>
+
+     <record id="action_wizard_modificar_contract_wage" model="ir.actions.act_window">
+		<field name="name">Modificar Salario</field>
+		<field name="res_model">wizard.modificar.contract.wage</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">form</field>
+		<field name="target">new</field>
+      </record>
+
+    <menuitem parent="menu_hr_misc" id="menu_wizard_modificar_contract_wage" action="action_wizard_modificar_contract_wage"/>
+
+
+    </data>
+</openerp>

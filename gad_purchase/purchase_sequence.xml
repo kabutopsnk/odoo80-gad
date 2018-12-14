@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+
+        <!-- Sequences for purchase.requisition --> 
+        <record id="purchase_requisition.seq_type_purchase_requisition" model="ir.sequence.type">
+            <field name="name">Solicitud de Compra</field>
+            <field name="code">purchase.order.requisition</field>
+        </record>
+        <record id="purchase_requisition.seq_purchase_requisition" model="ir.sequence">
+            <field name="name">Solicitud de Compra</field>
+            <field name="code">purchase.order.requisition</field>
+            <field name="prefix">SC/%(year)s/</field>
+            <field name="padding">5</field>
+        </record>
+
+
+        <!-- Sequences for purchase.order --> 
+        <record id="purchase.seq_type_purchase_order" model="ir.sequence.type">
+            <field name="name">Orden de Compra</field>
+            <field name="code">purchase.order</field>
+        </record>
+        <record id="seq_purchase_order" model="ir.sequence">
+            <field name="name">Orden de Compra</field>
+            <field name="code">purchase.order</field>
+            <field name="prefix">OC/%(year)s/</field>
+            <field name="padding">5</field>
+        </record>
+
+    </data>
+</openerp>

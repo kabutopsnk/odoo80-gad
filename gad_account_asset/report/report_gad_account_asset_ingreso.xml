@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+<template id="account_asset_ingreso">
+	<t t-call="report.html_container">
+		<t t-foreach="docs" t-as="o">
+			<t t-call="report.external_layout">
+				<div class="header"/>
+				<div class="page">
+					<center>
+					    <table cellspacing="0" width="100%" style="font-size:12px;vertical-align:top;">
+
+					    	<tr>
+					    		<th colspan="6" style="font-size:18px;vertical-align:top;" width="100%">INGRESO DE ACTIVOS FIJOS<br/></th>
+					    	</tr>
+					    	<tr><td colspan="6"> <br/> </td></tr>
+					    	<tr>
+					    		<th width="10%" style="text-align:left;" colspan="2">Fecha:   <span t-field="o.fecha"/></th>
+					    	</tr>
+					    	<tr>
+					    		<th width="10%" style="text-align:left;" colspan="2">Proveedor:   <span t-field="o.partner_id"/></th>
+					    	</tr>
+					    	<tr><td colspan="6"> <br/> </td></tr>
+
+						    <tr>
+							<td colspan="6">
+								<table  cellspacing="0" width="100%">
+									<tr col="8">
+				    						<th width="10%" style="font-size:10px;text-align:left;">Código</th>
+				    						<th width="25%" style="font-size:10px;text-align:left;">Descripción</th>
+				    						<th width="20%" style="font-size:10px;text-align:left;">Categoría</th>
+				    						<th width="10%" style="font-size:10px;text-align:left;">Tipo</th>
+				    						<th width="7%" style="font-size:10px;text-align:left;">Ingreso</th>
+				    						<th width="13%" style="font-size:10px;text-align:left;">Doc. Ref.</th>
+				    						<th width="6%" style="font-size:10px;text-align:left;">Fecha</th>
+				    						<th width="9%" style="font-size:10px;text-align:center;">Valor</th>
+									</tr>
+					    				<t t-foreach="o.activos_ids" t-as="line">
+										<tr col="8">
+				    							<td width="10%" style="font-size:10px;text-align:left;"><span t-field="line.code"/></td>
+				    							<td width="25%" style="font-size:10px;text-align:left;"><span t-field="line.name"/></td>
+				    							<td width="20%" style="font-size:10px;text-align:left;"><span t-field="line.category_id.name"/></td>
+				    							<td width="10%" style="font-size:10px;text-align:left;"><span t-field="line.tipo_ingreso"/></td>
+				    							<td width="7%" style="font-size:10px;text-align:left;"><span t-field="line.numero_ingreso"/></td>
+				    							<td width="13%" style="font-size:10px;text-align:left;"><span t-field="line.doc_ref"/></td>
+				    							<td width="6%" style="font-size:10px;text-align:left;"><span t-field="line.purchase_date"/></td>
+				    							<td width="9%" style="font-size:10px;  text-align:right;"><span t-field="line.purchase_value"/></td>
+				    						</tr>
+					    				</t>
+					    			</table>
+							</td>
+						    </tr>
+					    	<tr><th colspan="4"> <br/> </th></tr>
+					    	<tr>
+					    	   <td width="50%" colspan="4" height="50px" style="text-align:center;"><br/>RECIBI CONFORME<br/></td>
+					    	   <td width="50%" colspan="4" height="50px" style="text-align:center;"><br/>VISTO BUENO<br/></td>
+					    	</tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr>
+					    	   <th width="50%" colspan="4" height="50px" style="text-align:center;"><br/>_______________________________________<br/><span t-field="o.elaborado_id.name_related"/></th>
+					    	   <th width="50%" colspan="4" height="50px" style="text-align:center;"><br/>_______________________________________<br/>DIRECTOR FINANCIERO</th>
+					    	</tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr>
+					    	   <td width="100%" colspan="8" height="50px" style="font-size:12px;text-align:left;"><br/>OBSERVACIONES: _______________________________________________________________________________________________________________<br/></td>
+					    	</tr>
+					    	<tr>
+					    	   <td width="100%" colspan="8" height="50px" style="font-size:12px;text-align:left;"><br/> _______________________________________________________________________________________________________________<br/></td>
+					    	</tr>
+					    </table>
+				    </center>
+				</div>
+				<div class="footer"/>
+			</t>
+		</t>
+    </t>
+</template>
+</data>
+</openerp>

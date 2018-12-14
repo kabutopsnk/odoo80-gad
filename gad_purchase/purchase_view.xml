@@ -1,0 +1,342 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+
+        <!-- MENU PRINCIPAL -->
+        <menuitem name="Compras" id="base.menu_purchase_root" groups="purchase.group_purchase_manager,purchase.group_purchase_user" sequence="60"/>
+        <menuitem id="menu_req_bodega_root" name="Requerimientos" parent="base.menu_purchase_root" sequence="10" />
+
+	<!-- OCULTAR MENUS -->
+        <menuitem id="purchase.menu_purchase_rfq" parent="gad_project.menu_otros" sequence="21" groups="base.group_no_one"/>
+        <menuitem id="purchase.menu_purchase_form_action" parent="gad_project.menu_otros" sequence="22" groups="base.group_no_one"/>
+        <menuitem id="purchase_requisition.menu_purchase_requisition_pro_mgt" parent="gad_project.menu_otros" sequence="23" groups="base.group_no_one"/>
+	<menuitem id="base.menu_procurement_management_supplier_name" name="Suppliers" parent="gad_project.menu_otros" sequence="24" groups="base.group_no_one"/>
+        <menuitem id="purchase.menu_procurement_management_inventory" name="Incoming Products" parent="gad_project.menu_otros" sequence="25" groups="base.group_no_one"/>
+        <menuitem id="purchase.menu_procurement_management_invoice" name="Invoice Control" parent="gad_project.menu_otros" sequence="26" groups="base.group_no_one"/>
+        <menuitem id="purchase.menu_procurement_management_product" name="Products" parent="gad_project.menu_otros" sequence="27" groups="base.group_no_one"/>
+        <menuitem id="purchase.menu_product_in_config_purchase" name="Products" parent="gad_project.menu_otros" sequence="28" groups="base.group_no_one"/>
+        <menuitem id="purchase.menu_purchase_partner_cat" name="Address Book" parent="gad_project.menu_otros" sequence="29" groups="base.group_no_one"/>
+
+
+<!-- *** PURCHASE.REQUISITION *** -->
+	<!--FORM-->
+	<record id="purchase_requisition.view_purchase_requisition_form" model="ir.ui.view">
+	    	<field name="name">purchase.requisition.form</field>
+	    	<field name="model">purchase.requisition</field>
+	    	<field name="type">form</field>
+	    	<field name="arch" type="xml">
+	    	    <form string="Solicitud de Compra">
+		        <header>
+		            <button name="%(action_purchase_requisition_regresa_borrador)d" states="in_progress,approved,certified,authorized" string="Regresar a Borrador" type="action"/>
+		            <button name="in_progress" states="draft" string="Procesar" confirm="Seguro que desea PROCESAR la Solicitud de Compra?" type="object" class="oe_highlight"/>
+		            <button name="approved" states="in_progress" string="Aprobar" confirm="Seguro que desea APROBAR la Solicitud de Compra?" type="object" groups="gad_purchase.group_purchase_aprobar" class="oe_highlight"/>
+		            <button name="certified" states="approved" string="Certificar" confirm="Seguro que desea CERTIFICAR la Solicitud de Compra?" type="object" groups="gad_purchase.group_purchase_certificar" class="oe_highlight"/>
+		            <button name="authorized" states="certified" string="Autorizar" confirm="Seguro que desea AUTORIZAR la Solicitud de Compra?" type="object" groups="gad_purchase.group_purchase_autorizar" class="oe_highlight"/>
+		            <button name="done" states="authorized" string="Finalizar" confirm="Seguro que desea FINALIZAR la Solicitud de Compra? [Orden de Compra]" type="object" groups="gad_purchase.group_purchase_finalizar" class="oe_highlight"/>
+		            <button name="%(action_purchase_requisition_cancelar)d" states="draft,in_progress,approved,certified,authorized" string="Cancelar" type="action"/>
+		            <field name="state" widget="statusbar" statusbar_visible="draft,in_progress,approved,certified,authorized,done,cancel"/>
+		        </header>
+			    <group col="6" colspan="4">
+			    	<field name="user_id" string="Elaborado Por" colspan="2" readonly="1"/>
+			    	<field name="create_date" string="Fecha" colspan="2" readonly="1"/>
+			    	<group colspan="2"/>
+			    	<field name="name" string="Código" colspan="2" readonly="1"/>
+			    	<!--field name="origin" colspan="2" attrs="{'readonly': [('state','!=','draft')]}"/-->
+			    	<group colspan="4"/>
+			    	<field name="detalle" colspan="6" attrs="{'readonly': [('state','!=','draft')]}" required="1"/>
+				<field name="solicitant_id" colspan="4" attrs="{'readonly': [('state','!=','draft')]}" required="1"/>
+			    	<group colspan="2"/>
+				<field name="department_id" colspan="4" attrs="{'readonly': [('state','!=','draft')]}" required="1"/>
+			    	<group colspan="2"/>
+				<field name="budget_doc_id" string="Doc. Presupuesto" attrs="{'readonly':[('state','!=','approved')],'invisible': [('state','in',['draft','in_progress','cancel'])]}" colspan="4" domain="[('state','in',['certified','commited'])]"/>
+			    	<group colspan="2"/>
+			    </group>
+			    <notebook colspan="4">
+				<page string="Detalle de Productos">
+					<group colspan="4">
+						<field name="line_ids" colspan="4" nolabel="1" attrs="{'readonly': [('state','!=','draft')]}">
+						      <tree string="Productos" editable="bottom">
+                                <field name="product_id" on_change="onchange_product_id2(product_id,product_uom_id)"/>
+                                <field name="name" attrs="{'required': [('product_id','=',False)]}"/>
+                                <field name="product_qty" required="1"/>
+                                <field name="product_uom_id" groups="product.group_uom" string="Unidad de Medida"/>
+                                <field name="caracteristicas"/>
+                            </tree>
+                            <form string="Productos">
+                                <group>
+                                    <field name="product_id" />
+                                    <field name="name" attrs="{'required': [('product_id','=',False)]}"/>
+                                    <field name="product_qty" required="1"/>
+                                    <field name="product_uom_id" />
+                                    <field name="caracteristicas"/>
+                                </group>
+                            </form>
+						</field>
+					</group>
+				</page>
+		        <page string="Cotizaciones" attrs="{'invisible': [('state','in',['draft','in_progress','approved'])]}">
+   		            <button name="%(action_purchase_requisition_crear_cotizacion)d" states="certified" string="Crear Cotización" type="action"/>
+					<group colspan="4">
+						<field name="purchase_ids" string="Cotizaciones" colspan="4" nolabel="1" attrs="{'readonly': [('state','!=','certified')]}">
+						    <tree string="Cotizaciones" colors="black:state == 'draft';grey:state == 'cancel';green:state == 'done'">
+                                <field name="shipped" string="Seleccionado"/>
+                                <field name="name" string="Código"/>
+                                <field name="partner_id"/>
+                                <field name="date_order" string="Fecha de Registro"/>
+                                <field name="amount_untaxed" string="Subtotal"/>
+                                <field name="amount_tax"/>
+                                <field name="amount_total"/>
+                                <field name="state"/>
+                            </tree>
+                            <form string="Cotizaciones">
+                                <group>
+                                    <field name="state" readonly="1" widget="statusbar" statusbar_visible="draft,in_progress,approved,certified,authorized,done,cancel"/>
+                                    <field name="shipped" string="Seleccionado" attrs="{'readonly': [('state','!=','draft')]}"/>
+                                    <field name="name" readonly="1" string="Código"/>
+                                    <field name="partner_id" attrs="{'readonly': [('state','!=','draft')]}"/>
+                                    <field name="date_order" attrs="{'readonly': [('state','!=','draft')]}" string="Fecha de Registro"/>
+                                    <field name="order_line" string="Detalle de Productos" attrs="{'readonly': [('state','!=','draft')]}">
+                                        <tree string="Detalle de Productos" editable="bottom">
+		                                        <field name="product_id" readonly="1"/>
+		                                        <field name="name" readonly="1"/>
+		                                        <field name="product_qty" readonly="1"/>
+		                                        <field name="product_uom" readonly="1" string="U. Medida"/>
+		                                        <field name="price_unit" string="Precio Unit."/>
+		                                        <field name="taxes_id" string="Líneas de Impuestos"/>
+		                                        <field name="price_subtotal"/>
+		                               </tree>
+                                    </field>
+                                    <field name="amount_untaxed" string="Subtotal"/>
+                                    <field name="amount_tax"/>
+                                    <field name="amount_total"/>
+                                    <field name="notes" string="Observaciones"/>
+                                </group>
+                            </form>
+						</field>
+					</group>
+		        </page>
+		        <page string="Observaciones">
+		               <field name="description" placeholder="Add an internal note here..."/>
+		        </page>
+		        <page string="Historial">
+				    <field name="historial_ids" mode="tree" readonly="1">
+		                   <tree string="Historial">
+		                            <field name="create_date" string="Fecha"/>
+		                            <field name="create_uid" string="Usuario"/>
+		                            <field name="accion"/>
+		                            <field name="descripcion"/>
+		                   </tree>
+		            </field>
+		        </page>
+		        </notebook>
+		    </form>
+	    	</field>
+	</record>
+	<!--TREE-->
+    	<record id="purchase_requisition.view_purchase_requisition_tree" model="ir.ui.view">
+	    	<field name="name">view.purchase.requisition.tree</field>
+	    	<field name="model">purchase.requisition</field>
+	    	<field name="type">tree</field>
+	    	<field name="arch" type="xml">
+	    		<tree string="Listado de Solicitudes de Compra" colors="black:state == 'draft';grey:state == 'cancel';green:state == 'done';blue:state == 'in_progress';blue:state == 'approved';blue:state == 'certified';blue:state == 'authorized'">
+	    			<field name="create_date" string="Fecha"/>
+	    			<field name="user_id" string="Elaborado Por"/>
+	    			<field name="name" string="Código"/>
+	    			<field name="detalle"/>
+	    			<field name="solicitant_id"/>
+	    			<field name="department_id"/>
+	    			<field name="budget_doc_id"/>
+	    			<field name="state"/>
+	    		</tree>
+	    	</field>
+	</record>
+	<!--SEARCH-->
+	<record id="view_purchase_requisition_search" model="ir.ui.view">
+	    	<field name="name">purchase.requisition.search</field>
+	    	<field name="model">purchase.requisition</field>
+	    	<field name="type">search</field>
+	    	<field name="arch" type="xml">
+	    	    <search string="Buscar Solicitudes de Compra">
+	    	    <group>
+	    			<field name="name" string="Código"/>
+				    <field name="detalle"/>
+				    <field name="user_id"/>
+				    <field name="solicitant_id"/>
+				    <field name="department_id"/>
+				    <field name="budget_doc_id"/>
+				    <field name="state"/>
+	    		</group>
+			<newline/> 
+			<group expand="1"  string="Agrupar por...">
+	    		    <filter string="Solicitante" icon="terp-gtk-jump-to-ltr" domain="[]" context="{'group_by':'solicitant_id'}"/>
+	    		    <filter string="Departamento" icon="terp-gtk-jump-to-ltr" domain="[]" context="{'group_by':'department_id'}"/>
+	    		    <filter string="Estado" icon="terp-gtk-jump-to-ltr" domain="[]" context="{'group_by':'state'}"/>
+		        </group>
+	    	    </search>
+	    	</field>
+	</record>
+	<!--ACTION-->
+	<record model="ir.actions.act_window" id="action_purchase_requisition">
+	  <field name="name">Solicitudes de Compra</field>
+	  <field name="type">ir.actions.act_window</field>
+	  <field name="res_model">purchase.requisition</field>
+	  <field name="view_type">form</field>
+	  <field name="view_mode">tree,form</field>
+	  <field name="search_view_id" ref="view_purchase_requisition_search"/>
+	</record>
+	<!--MENU-->
+	<menuitem name="Solicitudes de Compra" action="action_purchase_requisition" id="menu_purchase_requisition" parent="purchase.menu_procurement_management" sequence="11"/>
+
+	<!--ACTION / APROBAR-->
+	<record model="ir.actions.act_window" id="action_purchase_requisition_aprobar">
+	  <field name="name">Aprobar</field>
+	  <field name="type">ir.actions.act_window</field>
+	  <field name="res_model">purchase.requisition</field>
+	  <field name="view_type">form</field>
+	  <field name="view_mode">tree,form</field>
+	  <field name="domain">[('state','=','in_progress')]</field>
+	  <field name="search_view_id" ref="view_purchase_requisition_search"/>
+	</record>
+	<!--MENU / APROBAR-->
+	<menuitem name="Aprobar" action="action_purchase_requisition_aprobar" id="menu_purchase_requisition_aprobar" parent="purchase.menu_procurement_management" groups="gad_purchase.group_purchase_aprobar" sequence="12"/>
+
+	<!--ACTION / CERTIFICAR-->
+	<record model="ir.actions.act_window" id="action_purchase_requisition_certificar">
+	  <field name="name">Certificar</field>
+	  <field name="type">ir.actions.act_window</field>
+	  <field name="res_model">purchase.requisition</field>
+	  <field name="view_type">form</field>
+	  <field name="view_mode">tree,form</field>
+	  <field name="domain">[('state','=','approved')]</field>
+	  <field name="search_view_id" ref="view_purchase_requisition_search"/>
+	</record>
+	<!--MENU / CERTIFICAR-->
+	<menuitem name="Certificar" action="action_purchase_requisition_certificar" id="menu_purchase_requisition_certificar" parent="purchase.menu_procurement_management" groups="gad_purchase.group_purchase_certificar" sequence="13"/>
+
+	<!--ACTION / AUTORIZAR-->
+	<record model="ir.actions.act_window" id="action_purchase_requisition_autorizar">
+	  <field name="name">Autorizar</field>
+	  <field name="type">ir.actions.act_window</field>
+	  <field name="res_model">purchase.requisition</field>
+	  <field name="view_type">form</field>
+	  <field name="view_mode">tree,form</field>
+	  <field name="domain">[('state','=','certified')]</field>
+	  <field name="search_view_id" ref="view_purchase_requisition_search"/>
+	</record>
+	<!--MENU / AUTORIZAR-->
+	<menuitem name="Autorizar" action="action_purchase_requisition_autorizar" id="menu_purchase_requisition_autorizar" parent="purchase.menu_procurement_management" groups="gad_purchase.group_purchase_autorizar" sequence="14"/>
+
+	<!--ACTION / FINALIZAR-->
+	<record model="ir.actions.act_window" id="action_purchase_requisition_finalizar">
+	  <field name="name">Finalizar</field>
+	  <field name="type">ir.actions.act_window</field>
+	  <field name="res_model">purchase.requisition</field>
+	  <field name="view_type">form</field>
+	  <field name="view_mode">tree,form</field>
+	  <field name="domain">[('state','=','authorized')]</field>
+	  <field name="search_view_id" ref="view_purchase_requisition_search"/>
+	</record>
+	<!--MENU / FINALIZAR-->
+	<menuitem name="Finalizar" action="action_purchase_requisition_finalizar" id="menu_purchase_requisition_finalizar" parent="purchase.menu_procurement_management" groups="gad_purchase.group_purchase_finalizar" sequence="15"/>
+
+
+
+<!-- *** PARAMETROS *** -->
+	<!--ACTION-->
+        <record model="ir.actions.act_window" id="action_purchase_requisition_parametros">
+			<field name="name">Parámetros</field>
+			<field name="res_model">purchase.requisition.parametros</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="context">{}</field>
+	</record>
+	<!--FORM-->
+	<record model="ir.ui.view" id="view_form_purchase_requisition_parametros">
+            <field name="name">purchase.requisition.parametros.form</field>
+            <field name="model">purchase.requisition.parametros</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Mantenimiento de Parámetros">
+			<group colspan="4" string = "Datos Generales" col="8">				
+                <field name="monto_max" colspan="2" />
+				<group colspan= "6"/>
+                <field name="user_autoriza_id" colspan="4" />
+				<group colspan= "4"/>
+				<field name="active" colspan="2" />
+				<group colspan= "6"/>
+			</group>
+                </form>
+            </field>
+        </record>	
+	<!--TREE-->
+	<record model="ir.ui.view" id="view_tree_purchase_requisition_parametros">
+            <field name="name">purchase.requisition.parametros.tree</field>
+            <field name="model">purchase.requisition.parametros</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+		<tree string="Listado de Parámetros">
+			<field name="monto_max"/>
+			<field name="user_autoriza_id"/>
+			<field name="active"/>
+                </tree>
+            </field>			
+        </record>
+	<!-- MENU -->
+	<menuitem name="Parámetros" id="menu_purchase_requisition_parametros" parent="purchase.menu_purchase_config_purchase" sequence="11" action="action_purchase_requisition_parametros"/>
+
+
+
+
+
+    <!--ORDENES DE COMPRA-->
+    <!--TREE-->
+        <record id="purchase.purchase_order_tree" model="ir.ui.view">
+            <field name="name">purchase.order.tree</field>
+            <field name="model">purchase.order</field>
+            <field name="arch" type="xml">
+                <tree string="Órdenes de Compra" colors="grey:state=='cancel';draft:state=='black';green:state=='done'">
+                    <field name="name" string="Código"/>
+                    <field name="date_order" string="Fecha"/>
+                    <field name="partner_id" string="Proveedor"/>
+                    <field name="requisition_id" string="Solicitud de Compra"/>
+                    <field name="amount_total" string="Valor Total"/>
+                    <field name="state" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+    <!--SEARCH-->
+        <record id="purchase_order_search" model="ir.ui.view">
+            <field name="name">purchase.order.list.select</field>
+            <field name="model">purchase.order</field>
+            <field name="arch" type="xml">
+                <search string="Órdenes de Compra">
+                    <field name="name" string="Código"/>
+                    <field name="date_order" string="Fecha"/>
+                    <field name="partner_id" string="Proveedor"/>
+                    <field name="requisition_id" string="Solicitud de Compra"/>
+                    <field name="amount_total" string="Valor Total"/>
+                    <separator/>
+                    <group expand="0" string="Agrupar Por">
+                        <filter string="Proveedor" icon="terp-partner" domain="[]" context="{'group_by':'partner_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+	<!--ACTION-->
+	<record model="ir.actions.act_window" id="action_purchase_order">
+	  <field name="name">Órdenes de Compra</field>
+	  <field name="type">ir.actions.act_window</field>
+	  <field name="res_model">purchase.order</field>
+	  <field name="view_type">form</field>
+	  <field name="view_mode">tree</field>
+	  <field name="domain">[('state','=','done')]</field>
+	  <field name="search_view_id" ref="purchase_order_search"/>
+	</record>
+	<!--MENU-->
+	<menuitem name="Órdenes de Compra" action="action_purchase_order" id="menu_purchase_order" parent="purchase.menu_procurement_management" sequence="21"/>
+
+
+
+    </data>
+</openerp>

@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+
+    <record id="view_wizard_exportar_iess" model="ir.ui.view">
+        <field name="name">Exportar IESS</field>
+        <field name="model">exportar.iess</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Exportar archivo IESS">
+                <label colspan="4" nolabel="1" string="Este asistente le permite exportar el archivo del rol para el IESS"/>	 
+                <group>
+                    <field name="datas1" filename="datas1_fname" readonly="1" colspan="1"/>
+                    <field name="datas1_fname" readonly="1" invisible="1" colspan="1"/>
+                    <field name="datas2" filename="datas2_fname" readonly="1" colspan="1"/>
+                    <field name="datas2_fname" readonly="1" invisible="1" colspan="1"/>
+                </group>
+                <group>
+                    <button name="generar_archivo" string="Generar" type="object" icon="gtk-execute"/>
+                    <button special="cancel" string="Cancelar" type="object" icon="gtk-cancel"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <act_window
+        id="act_exportar_iess"
+        name="Archivo IESS"
+        res_model="exportar.iess"
+        target="new"
+        view_mode="form"
+        src_model="hr.payslip.run"/>
+
+	</data>
+</openerp>

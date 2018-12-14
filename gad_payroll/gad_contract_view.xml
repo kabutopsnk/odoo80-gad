@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!-- HR.CONTRACT - CONTRATO DE EMPLEADO -->
+
+        <record id="l10n_ec_hr_contract_view_search" model="ir.ui.view">
+            <field name="name">hr.contract.view.search</field>
+            <field name="model">hr.contract</field>
+            <field name="inherit_id" ref="hr_contract.hr_contract_view_search"/>
+            <field name="arch" type="xml">
+                <data>
+                   <xpath expr="/search/field[@name='working_hours']" position="replace">
+                       <field name="trial_date_start"/>
+                       <field name="trial_date_end"/>
+                   </xpath>
+                   <xpath expr="/search/field[@name='date_start']" position="replace">
+                       <field name="date_start" string="Fecha inicio desde" filter_domain="[('date_start','&gt;=',self)]"/>
+                       <field name="date_start" string="Fecha inicio hasta" filter_domain="[('date_start','&lt;=',self)]"/>
+                   </xpath>
+                   <xpath expr="/search/field[@name='date_end']" position="replace">
+                       <field name="date_end" string="Fecha fin desde" filter_domain="[('date_end','&gt;=',self)]"/>
+                       <field name="date_end" string="Fecha fin hasta" filter_domain="[('date_end','&lt;=',self)]"/>
+                   </xpath>
+                   <xpath expr="/search/group[@string='Group By']" position="inside">
+                       <filter string="Actual" icon="terp-check" name="current"  domain="['|',('date_end','&gt;=', time.strftime('%%Y-%%m-%%d')),('date_end','=',False)]" help="Contracts in progress"/>
+                       <filter string="Sobrepasado" icon="terp-emblem-important" domain="[('date_end','&lt;', time.strftime('%%Y-%%m-%%d'))]" help="Contracts whose end date already passed"/>
+                       <filter string="Período de Prueba" icon="terp-emblem-important" domain="[('trial_date_start','&lt;=', time.strftime('%%Y-%%m-%%d')),'|',('trial_date_end','&gt;=', time.strftime('%%Y-%%m-%%d')),('trial_date_end','=',False)]" help="Contratos que se encuentran en el periodo de prueba"/>
+                   </xpath>
+                </data>
+            </field>
+        </record>
+
+        <record id="l10n_ec_inherit_view_contract_tree" model="ir.ui.view">
+            <field name="name">hr.contract.tree</field>
+            <field name="model">hr.contract</field>
+            <field name="inherit_id" ref="hr_contract.hr_contract_view_tree"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="/tree/field[@name='working_hours']" position="after">
+                        <field name="department_id"/>
+                    </xpath>
+                    <xpath expr="/tree/field[@name='date_end']" position="after">
+                        <field name="trial_date_end" string="Fin Periodo Prueba"/>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+
+        <record id="l10n_ec_inherit_view_contract_form" model="ir.ui.view">
+            <field name="name">hr.contract.form</field>
+            <field name="model">hr.contract</field>
+            <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="/form/sheet/notebook/page[@name='information']/group/group[@name='duration_group']/label[@for='trial_date_start']" position="replace">
+                    </xpath>
+                    <xpath expr="/form/sheet/notebook/page[@name='information']/group/group[@name='duration_group']/div" position="replace">
+                    </xpath>
+                    <xpath expr="/form/sheet/notebook/page[@name='information']/group/group[@name='duration_group']/field[@name='working_hours']" position="replace">
+                                    <field name="activo"/>
+                                    <label for="trial_date_start" string="Periodo de Prueba"/>
+                                    <div>
+                                        <field name="trial_date_start" class="oe_inline" on_change="onchange_periodo_prueba(trial_date_start)"/> - <field name="trial_date_end" class="oe_inline"/>
+                                    </div>
+                                    <!--label for="firstyear_date_start" string="Primer Año"/>
+                                    <div>
+                                        <field name="firstyear_date_start" class="oe_inline"/> - <field name="firstyear_date_end" class="oe_inline"/>
+                                    </div-->
+                                    <field name="working_hours"/>
+                    </xpath>
+                    <xpath expr="/form/sheet/group/group/field[@name='job_id']" position="replace">
+                        <field name="job_id" required="1"/>
+                        <field name="project_id"  on_change="limpiar_partida('project_id')" domain="[('date_start','&lt;=',time.strftime('%Y-%m-%d')),('date','&gt;=',time.strftime('%Y-%m-%d'))]"/>
+                        <field name="task_id" domain="[('project_id','=',project_id)]" on_change="limpiar_partida('task_id')"/>
+                        <field name="budget_id" domain="[('task_id','=',task_id)]"/>
+                    </xpath>
+                    <xpath expr="/form/sheet/group/group/field[@name='type_id']" position="after">
+                    	<field name="subtype_id" required="1" domain="[('type_id','=',type_id)]"/>
+                        <field name="department_id" required="1"/>
+                    </xpath>
+                    <field name="employee_id" position="replace">
+                        <field name="employee_id" placeholder="Ref. de Contrato" on_change="onchange_empleado(employee_id)"/>
+                    </field>
+                    <xpath expr="/form/sheet/notebook/page[@name='information']/group/group[@name='salary_and_advantages']/field[@name='advantages']" position="replace">
+                        <field name="fondo_reserva"/>
+                        <field name="decimo_tercero"/>
+                        <field name="decimo_cuarto"/>
+                        <field name="extension_iess"/>
+                        <field name="valor_adicional1"/>
+                        <field name="valor_adicional2"/>
+                        <field name="valor_adicional3"/>
+                        <field name="valor_adicional4"/>
+                        <field name="valor_adicional5"/>
+                    </xpath>
+                    <xpath expr="/form/sheet/notebook/page[@name='information']/group/group[@name='duration_group']" position="after">
+                      <group name="extra_group" string="Contratos anteriores">
+                        <field name="previous_contract"/>
+                        <field name="previous_contract_id" attrs="{'invisible':[('previous_contract','=',False)]}" domain="[('employee_id','=',employee_id),('name','!=',name)]"/>
+                        <field name="previous_days"/>
+                      </group>
+                    </xpath>
+                    <xpath expr="/form/sheet/notebook/page[@string='Work Permit']" position="replace">
+                    	<page string="Historial">
+                    		<field name="log_ids" nolabel="1">
+                    			<tree>
+                    				<field name="name" readonly="1"/>
+                    				<field name="date"/>
+                    				<field name="previous_value" readonly="1"/>
+                    				<field name="new_value" readonly="1"/>
+                    			</tree>
+                    		</field>
+                    	</page>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+
+        <record id="ec_hr_contract_payroll_view_form" model="ir.ui.view">
+            <field name="name">hr.contract.form</field>
+            <field name="model">hr.contract</field>
+            <field name="inherit_id" ref="hr_payroll.hr_contract_form_inherit"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//field[@name='schedule_pay']" position="replace">
+                                    <field name="schedule_pay" invisible="1"/>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+        
+        <!-- Subtipo de contrato -->
+
+        <record id="action_hr_contract_subtype" model="ir.actions.act_window">
+            <field name="name">Subtipo de Contrato</field>
+            <field name="res_model">hr.contract.subtype</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" eval="False"/>
+        </record>
+        
+        <record model="ir.ui.view" id="view_hr_contract_subtype_form">
+		<field name="name">hr.contract.subtype.form</field>
+		<field name="model">hr.contract.subtype</field>
+		<field name="type">form</field>
+		<field name="arch" type="xml">
+			<form string="Subtipo de Contrato">
+				<group colspan="4" col="4">
+			  		<field name="type_id"/>
+			  		<field name="name"/>
+		  		</group>
+		    </form>
+		</field>
+	  </record>
+	  
+	  <record model="ir.ui.view" id="view_hr_contract_subtype_tree">
+		<field name="name">hr.contract.subtype.tree</field>
+		<field name="model">hr.contract.subtype</field>
+		<field name="type">tree</field>
+		<field name="arch" type="xml">
+			<tree string="Subtipo de Contrato">
+				<field name="type_id"/>
+		  		<field name="name"/>
+		    </tree>
+		</field>
+	  </record>
+
+        <menuitem parent="hr_contract.next_id_56" id="menu_hr_contract_subtype" action="action_hr_contract_subtype"/>
+
+    </data>
+</openerp>

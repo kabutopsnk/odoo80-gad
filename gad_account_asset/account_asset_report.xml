@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+	<report 
+		id="action_report_account_asset_activo"
+		model="account.asset.asset"
+		string="Activo Fijo"
+		report_type="qweb-pdf"
+		name="gad_account_asset.account_asset_activo"
+		file="gad_account_asset.account_asset_activo"
+		/>
+
+	<report 
+		id="action_report_account_asset_transfer"
+		model="account.asset.transfer"
+		string="Transferencia de Activos Fijos"
+		report_type="qweb-pdf"
+		name="gad_account_asset.account_asset_transfer"
+		file="gad_account_asset.account_asset_transfer"
+		/>
+
+	<report 
+		id="action_report_account_asset_baja"
+		model="account.asset.bajas"
+		string="Baja de Activos Fijos"
+		report_type="qweb-pdf"
+		name="gad_account_asset.account_asset_baja"
+		file="gad_account_asset.account_asset_baja"
+		/>
+
+        <report 
+            id="action_report_asset_ingreso" 
+            model="wizard.account.asset.report_ingreso" 
+            string="Ingreso de Activos Fijos"
+            report_type="qweb-pdf"
+            name="gad_account_asset.account_asset_ingreso" 
+            file="gad_account_asset.account_asset_ingreso"
+            menu="False"
+            auto="False"
+        />
+
+        <report 
+            id="action_report_asset_tarjeta_bienes" 
+            model="wizard.account.asset.report_tarjeta_bienes" 
+            string="Tarjeta de Bienes"
+            report_type="qweb-pdf"
+            name="gad_account_asset.account_asset_tarjeta" 
+            file="gad_account_asset.account_asset_tarjeta"
+            menu="False"
+            auto="False"
+        />
+
+        <report 
+            id="action_report_asset_certificado_no" 
+            model="wizard.account.asset.report_certificado_no" 
+            string="Certificado No Tener Bienes"
+            report_type="qweb-pdf"
+            name="gad_account_asset.account_asset_certificado_no" 
+            file="gad_account_asset.account_asset_certificado_no"
+            menu="False"
+            auto="False"
+        />
+                 
+    </data>
+</openerp>

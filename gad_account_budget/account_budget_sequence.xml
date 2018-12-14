@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+        <!-- Sequences for crossovered.budget.doc -->
+        <record id="seq_type_crossovered_budget_doc" model="ir.sequence.type">
+            <field name="name">Documento Presupuestario</field>
+            <field name="code">crossovered.budget.doc</field>
+        </record>
+
+        <record id="seq_crossovered_budget_doc" model="ir.sequence">
+            <field name="name">Documento Presupuestario</field>
+            <field name="code">crossovered.budget.doc</field>
+            <field name="prefix">PR/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_type_crossovered_budget_reform" model="ir.sequence.type">
+            <field name="name">Reforma Presupuestaria</field>
+            <field name="code">crossovered.budget.reform</field>
+        </record>
+
+        <!-- Sequences for crossovered.budget.reform -->
+        <record id="seq_crossovered_budget_reform" model="ir.sequence">
+            <field name="name">Reforma Presupuestaria</field>
+            <field name="code">crossovered.budget.reform</field>
+            <field name="prefix">RF/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</openerp>

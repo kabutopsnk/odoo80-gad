@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding="UTF-8"?>
+<openerp>
+	<data>
+		
+		<menuitem id="menu_finance_spi" name="SPI" parent="account.menu_finance" sequence="6"/>
+		
+		<record id="view_account_spi_tree" model="ir.ui.view">
+			<field name="name">account.spi.tree</field>
+			<field name="model">account.spi</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="SPI Proveedores" colors="black:state == 'draft';blue:state == 'send';green:state == 'closed';grey:state == 'cancel'">
+					<field name="date"/>
+					<field name="file_account"/>
+					<field name="state"/>
+				</tree>
+			</field>
+		</record>
+		
+		<record id="view_account_spi_form" model="ir.ui.view">
+			<field name="name">account.spi.form</field>
+			<field name="model">account.spi</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="SPI Proveedores">
+					<header>
+						<button name="crear_spi" colspan="2" type="object" string="Generar SPI"/>
+						<field name="state" widget="statusbar" statusbar_colors='{"draft":"black","closed":"green","send":"blue"}'/>
+					</header>
+					<sheet>
+						<group>
+                			<!--field name="file_generate" readonly="1" colspan="2"/-->
+                			<field name="date"/>
+                			<field name="file_account"/>
+                			<!--field name="file_reference"/-->
+                			<field name="file_amount" readonly="1"/>
+                			<field name="file_dig" readonly="1"/>
+                			<field name="file_spi" readonly="1" filename="file_name"/>
+                			<field name="file_lb" readonly="1" filename="file_namelb"/>
+                			<field name="file_name" readonly="1" invisible="1"/>
+                			<field name="file_namelb" readonly="1" invisible="1"/>
+                			<!--button name="crear_cuentas"  colspan="2" type="object" string="Crear Cuentas" icon="gtk-execute" attrs="{'invisible':[('file_generate','=',True)]}"/-->
+                		</group>
+                		<field name="line_ids" nolabel="1">
+            				<tree editable="top">
+            					<field name="move_id" domain="[('credit','&gt;',0),('account_id.type','=','payable'),('partner_id','!=',False)]"/>
+            					<field name="partner_id"/>
+            					<field name="value"/>
+            					<field name="concept_id" required="1"/>
+            					<field name="state" readonly="1"/>
+            				</tree>
+            			</field>
+                		<field name="file_resume" nolabel="1" readonly="1">
+            				<tree>
+            					<field name="number" readonly="1"/>
+            					<field name="name" readonly="1"/>
+            					<field name="qty" readonly="1" sum="Transacciones"/>
+            					<field name="amount" readonly="1" sum="Total"/>
+            				</tree>
+            			</field>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		
+		<record id="action_account_spi" model="ir.actions.act_window">
+			<field name="name">SPI Proveedores</field>
+			<field name="res_model">account.spi</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+		
+		<menuitem id="menu_spi_proveedores" name="SPI Proveedores" parent="menu_finance_spi" action="action_account_spi"/>
+		
+		<record id="action_hr_payslip_run" model="ir.actions.act_window">
+			<field name="name">SPI Empleados</field>
+			<field name="res_model">hr.payslip.run</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+		
+		<menuitem id="menu_spi_empleados" name="SPI Empleados" parent="menu_finance_spi" action="action_hr_payslip_run"/>
+		
+		<record id="action_account_spi_concept" model="ir.actions.act_window">
+			<field name="name">Concepto SPI</field>
+			<field name="res_model">account.spi.concept</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+		
+		<menuitem id="menu_account_spi_concept" name="Concepto SPI" parent="menu_finance_spi" action="action_account_spi_concept"/>
+
+	</data>
+</openerp>

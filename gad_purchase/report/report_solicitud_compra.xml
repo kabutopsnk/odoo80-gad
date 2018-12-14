@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+<template id="report_solicitud_compra">
+	<t t-call="report.html_container">
+		<t t-foreach="docs" t-as="o">
+			<t t-call="report.external_layout">
+				<div class="header"/>
+				<div class="page">
+					<center>
+					    <table cellspacing="0" width="100%" style="font-size:12px;vertical-align:top;">
+
+					    	<tr>
+					    		<td colspan="6" style="font-size:18px;vertical-align:top;" width="100%">SOLICITUD DE COMPRA #<span t-field="o.name"/><br/></td>
+					    	</tr>
+					    	<tr><td colspan="6"> <br/> </td></tr>
+					    	<tr>
+					    		<th width="20%" style="text-align:left;" colspan="2">Detalle:</th>
+					    		<td width="80%" style="text-align:left;" colspan="4"><span t-field="o.detalle"/></td>
+					    	</tr>
+						    <tr>
+					    		<th width="20%" style="text-align:left;" colspan="2">Solicitante:</th>
+					    		<td width="80%" style="text-align:left;" colspan="4"><span t-field="o.solicitant_id.name_related"/></td>
+					    	</tr>
+						    <tr>
+					    		<th width="20%" style="text-align:left;" colspan="2">Departamento:</th>
+					    		<td width="80%" style="text-align:left;" colspan="4"><span t-field="o.department_id.name"/></td>
+					    	</tr>
+						    <tr>
+					    		<th width="20%" style="text-align:left;" colspan="2">Doc. Presupuesto:</th>
+					    		<td width="80%" style="text-align:left;" colspan="4"><span t-field="o.budget_doc_id.name"/> - <span t-field="o.budget_doc_id.description"/></td>
+					    	</tr>
+					    	<tr><td colspan="6"> <br/> </td></tr>
+					    	<tr><th colspan="6"> <br/> DETALLE DE PRODUCTOS </th></tr>
+						    <tr>
+							<td colspan="8" col="10">
+								<table  cellspacing="0" width="100%" colspan="10">
+									<tr colspan="10" col="10">
+				    						<th width="20%" style="text-align:left;" colspan="2">Producto</th>
+				    						<th width="20%" style="text-align:left;" colspan="2">Descripción</th>
+				    						<th width="15%" style="text-align:left;" colspan="2">Cantidad</th>
+				    						<th width="15%" style="text-align:left;" colspan="2">U. Medida</th>
+				    						<th width="30%" style="text-align:left;" colspan="2">Características</th>
+									</tr>
+					    				<t t-foreach="o.line_ids" t-as="line">
+										<tr colspan="10" col="10">
+				    							<td width="20%" style="text-align:left;" colspan="2"><span t-field="line.product_id.name"/></td>
+				    							<td width="20%" style="text-align:left;" colspan="2"><span t-field="line.name"/></td>
+				    							<td width="15%" style="text-align:left;" colspan="2"><span t-field="line.product_qty"/></td>
+				    							<td width="15%" style="text-align:left;" colspan="2"><span t-field="line.product_uom_id.name"/></td>
+				    							<td width="30%" style="text-align:left;" colspan="2"><span t-field="line.caracteristicas"/></td>
+				    						</tr>
+					    				</t>
+					    			</table>
+							</td>
+						</tr>
+					    	<tr><th colspan="4"> <br/> </th></tr>
+					    	<tr>
+					    		<th width="20%" style="text-align:left;" colspan="2">Estado:</th>
+					    		<p t-if="o.state == 'draft'">
+						    		<td width="80%" style="text-align:left;" colspan="4">Borrador</td>
+					    		</p>
+					    		<p t-if="o.state == 'in_progress'">
+						    		<td width="80%" style="text-align:left;" colspan="4">1.En Proceso</td>
+					    		</p>
+					    		<p t-if="o.state == 'approved'">
+						    		<td width="80%" style="text-align:left;" colspan="4">2.Aprobado</td>
+					    		</p>
+					    		<p t-if="o.state == 'certified'">
+						    		<td width="80%" style="text-align:left;" colspan="4">3.Certificado</td>
+					    		</p>
+					    		<p t-if="o.state == 'authorized'">
+						    		<td width="80%" style="text-align:left;" colspan="4">4.Autorizado</td>
+					    		</p>
+					    		<p t-if="o.state == 'done'">
+						    		<td width="80%" style="text-align:left;" colspan="4">5.Finalizado</td>
+					    		</p>
+					    		<p t-if="o.state == 'cancel'">
+						    		<td width="80%" style="text-align:left;" colspan="4">Cancelado</td>
+					    		</p>
+					    	</tr>
+						<tr>
+					    		<th width="20%" style="text-align:left;" colspan="2">Observaciones:</th>
+					    		<td width="80%" style="text-align:left;" colspan="4"><span t-field="o.description"/></td>
+					    	</tr>
+
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr col="8">
+					    	   <!--th width="25%" colspan="2" height="50px" style="text-align:center;"><br/>_____________________________<br/><span t-field="o.solicitant_id.name_related"/></th>
+					    	   <th width="25%" colspan="2" height="50px" style="text-align:center;"><br/>_____________________________<br/><span t-field="o.solicitant_id.department_id.manager_id.name_related"/></th>
+					    	   <th width="25%" colspan="2" height="50px" style="text-align:center;"><br/>_____________________________<br/><span t-field="o.employee_autoriza_id.name_related"/></th>
+					    	   <th width="25%" colspan="2" height="50px" style="text-align:center;"><br/>_____________________________<br/><span t-field="o.employee_autoriza_id.name_related"/></th-->
+					    	   <th width="25%" colspan="2" height="50px" style="text-align:center;"><br/> ________________________ <br/>SOLICITADO POR</th>
+					    	   <th width="25%" colspan="2" height="50px" style="text-align:center;"><br/> ________________________ <br/>APROBADO</th>
+					    	   <th width="25%" colspan="2" height="50px" style="text-align:center;"><br/> ________________________ <br/>DIRECTOR FINANCIERO</th>
+					    	   <th width="25%" colspan="2" height="50px" style="text-align:center;"><br/> ________________________ <br/>AUTORIZADO</th>
+					    	</tr>
+					    </table>
+				    </center>
+				</div>
+				<div class="footer"/>
+			</t>
+		</t>
+    </t>
+</template>
+</data>
+</openerp>

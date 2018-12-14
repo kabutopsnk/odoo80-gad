@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+<template id="budget_doc">
+	<t t-call="report.html_container">
+		<t t-foreach="docs" t-as="o">
+			<t t-call="report.external_layout">
+				<div class="header"/>
+				<div class="page">
+					<center>
+						<table cellspacing="0" width="100%" style="font-size:12px;vertical-align:top;">
+					    	<tr>
+					    		<td colspan="4" style="font-size:18px;vertical-align:top;" width="100%">DOCUMENTO PRESUPUESTARIO #<span t-field="o.name"/><br/></td>
+					    	</tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr>
+					    		<th width="20%" style="text-align:left;">Fecha Creación:</th>
+					    		<td width="30%" style="text-align:left;"><span t-field="o.date_create"/></td>
+					    		<th width="50%" colspan="2" />
+					    	</tr>
+					    	<tr>
+					    		<th width="20%" style="text-align:left;">Estado:</th>
+					    		<td width="80%" style="text-align:left;" colspan="3"><span t-field="o.state"/></td>
+					    	</tr>
+					    	<tr>
+					    		<th width="20%" style="text-align:left;">Descripción:</th>
+					    		<td width="80%" style="text-align:left;" colspan="3" ><span t-field="o.description"/></td>
+					    	</tr>
+                            <t t-if="o.state in ('certified','commited')">
+					        	<tr>
+					        		<th width="20%" style="text-align:left;">Fecha Certificado:</th>
+					        		<td width="80%" style="text-align:left;"><span t-field="o.date_certified"/></td>
+					        		<th width="50%" colspan="2" />
+					        	</tr>
+                            </t>
+                            <t t-if="o.state in ('commited')">
+					        	<tr>
+					        		<th width="20%" style="text-align:left;">Fecha Compromiso:</th>
+					        		<td width="80%" style="text-align:left;"><span t-field="o.date_commited"/></td>
+					        		<th width="50%" colspan="2" />
+					        	</tr>
+                                <tr>
+					        		<th width="20%" style="text-align:left;">Proveedor:</th>
+					        		<td width="80%" style="text-align:left;" colspan="3" ><span t-field="o.partner_id.display_name"/></td>
+					        	</tr>
+                            </t>
+					    	<tr><th colspan="4"> <br/>* DETALLE DE VALORES </th></tr>
+					    	<tr>
+							    <td colspan="8" width="100%">
+						    		<table cellspacing="0" width="100%" border="1">
+									<tr>
+										<th width="48%" style="text-align:left;">Partida Presupuestaria</th>
+										<th width="28%" style="text-align:left;">Descripción</th>
+										<th width="12%" style="text-align:center;">Certificado</th>
+										<th width="12%" style="text-align:center;">Comprometido</th>
+									</tr>
+						    		<t t-foreach="o.line_ids" t-as="line">
+									    <tr>
+                                            <td width="48%"><span t-field="line.budget_line_id.project_id.code"/>.<span t-field="line.budget_line_id.task_id.code"/>.<span t-field="line.budget_line_id.general_budget_id.code"/> - <span t-field="line.budget_line_id.general_budget_id.name"/> (<span t-field="line.budget_line_id.name"/>)</td>
+						    				<!--td width="50%"><span t-field="line.budget_line_id.display_name"/></td-->
+						        			<td width="28%"><span t-field="line.name"/></td>
+						        			<td width="12%" style="text-align:right;"><span t-field="line.certified_amount"/></td>
+						        			<td width="12%" style="text-align:right;"><span t-field="line.commited_amount"/></td>
+						    			</tr>
+						    		</t>
+						    		</table>
+						    	</td>
+						    </tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+                            <tr>
+					    		<th width="20%" style="text-align:left;">Observaciones:</th>
+					    		<td width="80%" style="text-align:left;" colspan="3"><span t-field="o.observaciones"/></td>
+					    	</tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr><td colspan="4"> <br/> </td></tr>
+					    	<tr>
+					    	   <th width="50%" colspan="4" height="50px" style="text-align:center;"><br/>_____________________________<br/><span t-field="o.employee_id.name_related"/></th>
+					    	   <th width="50%" colspan="4" height="50px" style="text-align:center;"><br/>_____________________________<br/>AUTORIZADO POR</th>
+					    	</tr>
+					    </table>
+				    </center>
+				</div>
+				<div class="footer"/>
+			</t>
+		</t>
+    </t>
+</template>
+</data>
+</openerp>

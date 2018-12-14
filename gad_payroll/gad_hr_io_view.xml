@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+    <menuitem id="menu_hr_io_root" parent="hr_payroll.menu_hr_root_payroll" name="Ingresos/Egresos" groups="base.group_hr_manager" sequence="100"/>
+
+      <!--Ingresos/Egresos Individuales -->
+
+      <record model="ir.ui.view" id="l10n_ec_view_io_line_form">
+		<field name="name">hr.io.line.form</field>
+		<field name="model">hr.io.line</field>
+		<field name="type">form</field>
+		<field name="arch" type="xml">
+		  <form string="Ingresos/Egresos" version="7.0">
+			<header>
+			  <button name="draft_to_send" states="draft" string="Procesar" type="object" icon="gtk-execute" groups="base.group_hr_manager"/>
+			  <button name="send_to_draft" states="send" string="Regresar a borrador" type="object" icon="gtk-execute" groups="base.group_hr_manager"/>
+			  <field name="state" widget="statusbar" statusbar_colors='{"draft":"black","send":"blue","paid":"green","cancel":"grey"}'/>
+			</header>
+			<sheet>
+		          <group>
+			    <group>
+			      <field name="employee_id"/>
+			      <field name="date"/>
+			      <field name="label"/>
+			    </group>
+			    <group>
+			      <field name="rule_id"/>
+			      <field name="value"/>
+			    </group>
+			    <group string="Resumen" colspan="4">
+			      <field name="summary" nolabel="1"/>
+			    </group>
+			    <group string="Varios" colspan="4">
+			      <group name="l10n_ec_hr_payroll">
+				<field name="head_id" readonly="1"/>
+				<field name="amortize_id" readonly="1"/>
+				<field name="holidays_id" readonly="1"/>
+				<field name="holidays_sold_id" readonly="1"/>
+				<field name="mark_id" readonly="1"/>
+			      </group>
+			      <group name="l10n_ec_hr_extra">
+			      </group>
+			    </group>
+		          </group>
+			</sheet>
+		  </form>
+		</field>
+      </record>
+	  
+	  
+      <record id="l10n_ec_view_io_line_tree" model="ir.ui.view">
+		<field name="name">hr.io.line.tree</field>
+		<field name="model">hr.io.line</field>
+		<field name="type">tree</field>
+		<field name="arch" type="xml">
+		  <tree string="Ingresos/Egresos Individual" colors="black:state == 'draft';blue:state == 'send';green:state == 'paid';grey:state == 'cancel'">
+			<field name="employee_id"/>
+			<field name="rule_id"/>
+			<field name="label"/>
+			<field name="date"/>
+			<field name="value" sum="Total"/>
+			<field name="state"/>
+		  </tree>
+		</field>
+      </record>
+
+      <record id="l10n_ec_view_io_line_search" model="ir.ui.view">
+	<field name="name">hr.io.line.search</field>
+	<field name="model">hr.io.line</field>
+	<field name="type">search</field>
+	<field name="arch" type="xml">
+	  <search string="Ingresos/Egresos Individual">
+	    <field name="employee_id"/>
+	    <field name="rule_id"/>
+	    <field name="date" string="Fecha desde" filter_domain="[('date','&gt;=',self)]"/>
+	    <field name="date" string="Fecha hasta" filter_domain="[('date','&lt;=',self)]"/>
+	    <field name="state"/>
+	    <newline />
+	    <group expand="1" string="Agrupar por...">
+	      <filter name="group_employee_id" string="Empleado" icon="terp-personal" domain="[]" context="{'group_by':'employee_id'}"/>
+	      <filter name="group_rule_id" string="Regla Salarial" icon="STOCK_INDENT" domain="[]" context="{'group_by':'rule_id'}"/>
+	      <filter name="group_state" string="Estado" icon="terp-stage" domain="[]" context="{'group_by':'state'}"/>
+	    </group>
+	  </search>
+	</field>
+      </record>
+
+      <record id="l10n_ec_action_io_line" model="ir.actions.act_window">
+		<field name="name">Ingresos/Egresos Individual</field>
+		<field name="res_model">hr.io.line</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+      </record>
+	  
+      <menuitem id="menu_hr_io_line" action="l10n_ec_action_io_line" parent="menu_hr_io_root" name="Individual" groups="base.group_hr_manager" sequence="10"/>
+
+
+      <!--Ingresos/Egresos Masivos -->
+
+      <record model="ir.ui.view" id="l10n_ec_view_io_head_form">
+		<field name="name">hr.io.head.form</field>
+		<field name="model">hr.io.head</field>
+		<field name="type">form</field>
+		<field name="arch" type="xml">
+		  <form string="Ingreso/Egreso" version="7.0">
+		      <header>
+			  <button name="draft_to_send" states="draft" string="Procesar" type="object" icon="gtk-execute" groups="base.group_hr_manager"/>
+			  <button name="send_to_draft" states="send" string="Regresar a borrador" type="object" icon="gtk-execute" groups="base.group_hr_manager"/>
+			  <field name="state"  widget="statusbar" statusbar_colors='{"draft":"black","send":"blue","paid":"green","cancel":"grey"}'/>
+		      </header>
+		      <sheet>
+			<group>
+			<group>
+			  <field name="rule_id"/>
+			  <field name="date"/>
+			  <field name="label"/>
+			</group>
+			<group >
+			  <field name="department_id" />
+			  <field name="value"/>
+			  <button name="load_employees" string="Cargar Empleados" type="object" icon="gtk-execute" states="draft"/>
+			  <button name="load_wizard_xls" string="Cargar Excel (XLS)" type="object" icon="gtk-execute" states="draft"/>
+			  <button name="modificar_etiquetas" string="Colocar Etiquetas HE" type="object" icon="gtk-execute" states="draft" confirm='\nEsta seguro de continuar? \nEsta opción solo debe ser usada en HORAS EXTRA'/>
+			</group>
+			</group>
+			<group string="Resumen">
+			  <field name="summary" nolabel="1"/>
+			</group>
+			<field name="line_ids" colspan="4" nolabel="1">
+			  <tree string="Detalle" editable="bottom" colors="black:state == 'draft';blue:state == 'send';green:state == 'paid';grey:state == 'cancel'">
+				<field name="employee_id"/>
+				<field name="state"/>
+				<field name="value" sum="Total $"/>
+			  </tree>
+			</field>
+		      </sheet>
+		  </form>
+		</field>
+      </record>
+	  
+      <record id="l10n_ec_view_io_head_tree" model="ir.ui.view">
+		<field name="name">hr.io.head.tree</field>
+		<field name="model">hr.io.head</field>
+		<field name="type">tree</field>
+		<field name="arch" type="xml">
+		  <tree string="Ingresos/Egresos" colors="black:state == 'draft';blue:state == 'send';green:state == 'paid';grey:state == 'cancel'">
+			<field name="rule_id"/>
+			<field name="date"/>
+			<field name="department_id"/>
+			<field name="state"/>
+		  </tree>
+		</field>
+      </record>
+
+      <record id="l10n_ec_view_io_head_search" model="ir.ui.view">
+	<field name="name">hr.io.head.search</field>
+	<field name="model">hr.io.head</field>
+	<field name="type">search</field>
+	<field name="arch" type="xml">
+	  <search string="Ingresos/Egresos">
+	    <field name="rule_id"/>
+	    <field name="date" string="Fecha desde" filter_domain="[('date','&gt;=',self)]"/>
+	    <field name="date" string="Fecha hasta" filter_domain="[('date','&lt;=',self)]"/>
+	    <field name="department_id"/>
+	    <field name="state"/>
+	    <newline/>
+	    <group expand="1" string="Agrupar por...">
+	      <filter name="group_rule" string="Regla Salarial" icon="STOCK_INDENT" domain="[]" context="{'group_by':'rule_id'}"/>
+	      <filter name="group_state" string="Estado" icon="terp-stage" domain="[]" context="{'group_by':'state'}"/>
+	    </group>
+	  </search>
+	</field>
+      </record>
+	  
+      <record id="l10n_ec_action_io_head" model="ir.actions.act_window">
+		<field name="name">Ingresos/Egresos Masivo</field>
+		<field name="res_model">hr.io.head</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+      </record>
+	  
+      <menuitem id="menu_hr_io_head" action="l10n_ec_action_io_head" parent="menu_hr_io_root" name="Masivos" groups="base.group_hr_manager" sequence="20"/>
+
+      <!--Ingresos/Egresos Amortizados -->
+
+      <record model="ir.ui.view" id="l10n_ec_view_io_amortize_form">
+		<field name="name">hr.io.amortize.form</field>
+		<field name="model">hr.io.amortize</field>
+		<field name="type">form</field>
+		<field name="arch" type="xml">
+		  <form string="Ingreso/Egreso Amortizado" version="7.0">
+		      <header>
+			  <button name="draft_to_send" states="draft" string="Procesar" type="object" icon="gtk-execute" groups="base.group_hr_manager"/>
+			  <!--button name="send_to_draft" states="send" string="Regresar a borrador" type="object" icon="gtk-execute" groups="base.group_hr_manager"/-->
+			  <button name="send_to_refinance" states="send" string="Refinanciar" type="object" icon="gtk-execute" groups="base.group_hr_manager"/>
+			  <button name="send_to_paid" states="send" string="Pagado" type="object" icon="gtk-execute" groups="base.group_hr_manager"/>
+			  <button name="send_to_cancel" states="send" string="Cancelar" type="object" icon="gtk-execute" groups="base.group_hr_manager"/>
+			  <field name="state"  widget="statusbar" statusbar_colors='{"draft":"black","send":"blue","paid":"green","cancel":"grey","refinance":"lightblue"}'/>
+		      </header>
+		      <sheet>
+			<group>
+			<group>
+			  <field name="rule_id"/>
+			  <field name="employee_id"/>
+			  <field name="date"/>
+			</group>
+			<group >
+			  <field name="value" />
+			  <field name="num_payments"/>
+			  <button name="calculate_lines" string="Calcular Lineas" type="object" icon="gtk-execute" states="draft"/>
+			</group>
+			</group>
+			<field name="line_ids" colspan="4" nolabel="1"/>
+		      </sheet>
+		  </form>
+		</field>
+      </record>
+	  
+      <record id="l10n_ec_view_io_amortize_tree" model="ir.ui.view">
+		<field name="name">hr.io.amortize.tree</field>
+		<field name="model">hr.io.amortize</field>
+		<field name="type">tree</field>
+		<field name="arch" type="xml">
+		  <tree string="Ingresos/Egresos Amortizados" colors="black:state == 'draft';blue:state == 'send';green:state == 'paid';grey:state == 'cancel';lightblue:state == 'refinance'">
+			<field name="rule_id"/>
+			<field name="employee_id"/>
+			<field name="date"/>
+			<field name="value"/>
+			<field name="num_payments"/>
+			<field name="state"/>
+		  </tree>
+		</field>
+      </record>
+
+      <record id="l10n_ec_view_io_amortize_search" model="ir.ui.view">
+	<field name="name">hr.io.amortize.search</field>
+	<field name="model">hr.io.amortize</field>
+	<field name="type">search</field>
+	<field name="arch" type="xml">
+	  <search string="Ingresos/Egresos Amortizados">
+	    <field name="rule_id"/>
+	    <field name="employee_id"/>
+	    <field name="date" string="Fecha desde" filter_domain="[('date','&gt;=',self)]"/>
+	    <field name="date" string="Fecha hasta" filter_domain="[('date','&lt;=',self)]"/>
+	    <field name="value"/>
+	    <field name="state"/>
+	    <newline />
+	    <group expand="1" string="Agrupar por...">
+	      <filter name="group_employee" string="Empleado" icon="STOCK_INDENT" domain="[]" context="{'group_by':'employee_id'}"/>
+	      <filter name="group_rule" string="Regla Salarial" icon="STOCK_INDENT" domain="[]" context="{'group_by':'rule_id'}"/>
+	      <filter name="group_state" string="Estado" icon="terp-stage" domain="[]" context="{'group_by':'state'}"/>
+	    </group>
+	  </search>
+	</field>
+      </record>
+	  
+      <record id="l10n_ec_action_io_amortize" model="ir.actions.act_window">
+		<field name="name">Ingresos/Egresos Amortizados</field>
+		<field name="res_model">hr.io.amortize</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+      </record>
+	  
+      <menuitem id="menu_hr_io_amortize" action="l10n_ec_action_io_amortize" parent="menu_hr_io_root" name="Amortizados" groups="base.group_hr_manager" sequence="30"/>
+
+
+      <!-- Venta de vacaciones -->
+
+      <record model="ir.ui.view" id="l10n_ec_view_holidays_sold_form">
+		<field name="name">hr.holidays.sold.form</field>
+		<field name="model">hr.holidays.sold</field>
+		<field name="type">form</field>
+		<field name="arch" type="xml">
+		  <form string="Venta de Vacaciones" version="7.0">
+		      <header>
+			  <button name="draft_to_send" states="draft" string="Procesar" type="object" icon="gtk-execute" groups="base.group_hr_manager" confirm="Está seguro que desea aprobar este registro?"/>
+			  <button name="send_to_draft" states="send" string="Regresar a borrador" type="object" icon="gtk-execute" groups="base.group_hr_manager"/>
+			  <field name="state"  widget="statusbar" statusbar_colors='{"draft":"black","send":"blue","paid":"green","cancel":"grey"}'/>
+		      </header>
+		      <sheet>
+			<group>
+			<group>
+			  <field name="name" on_change="onchange_employee(name)"/>
+			  <field name="date"/>
+			  <field name="days" on_change="onchange_employee_holidays(days, days_extra,name)"/>
+			  <field name="days_extra" on_change="onchange_employee_holidays(days, days_extra,name)"/>
+			  <!--field name="vacation_type"/-->
+			  <field name="employee_holidays" domain="[('employee_id','=',name)]"/>
+			  <field name="label"/>
+			  <!--field name="calc_type" on_change="onchange_employee_holidays(employee_holidays,days,calc_type)"/-->
+			</group>
+			<group >
+			  <field name="tax_value"/>
+			  <field name="notax_value"/>
+			  <field name="tax_value_extra"/>
+			  <field name="notax_value_extra"/>
+			  <button name="recalculate" string="Calcular" type="object" icon="gtk-execute" confirm="Está seguro que desea Calcular los registros? Si las lineas ya se encuentran agregadas en el rol de pagos, el cálculo no tendrá efecto en el rol."/>
+			</group>
+			</group>
+			<field name="line_ids" colspan="4" nolabel="1">
+			  <tree string="Detalle" editable="bottom" colors="black:state == 'draft';blue:state == 'send';green:state == 'paid';grey:state == 'cancel'">
+				<field name="employee_id"/>
+				<field name="rule_id"/>
+				<field name="state"/>
+				<field name="value" sum="Total $"/>
+			  </tree>
+			</field>
+		      </sheet>
+		  </form>
+		</field>
+      </record>
+	  
+      <record id="l10n_ec_view_holidays_sold_tree" model="ir.ui.view">
+		<field name="name">hr.holidays.sold.tree</field>
+		<field name="model">hr.holidays.sold</field>
+		<field name="type">tree</field>
+		<field name="arch" type="xml">
+		  <tree string="Venta de Vacaciones" colors="black:state == 'draft';blue:state == 'send';green:state == 'paid';grey:state == 'cancel'">
+			<field name="name"/>
+			<field name="date"/>
+			<field name="days"/>
+			<!--field name="vacation_type"/-->
+			<field name="employee_holidays"/>
+			<!--field name="calc_type"/-->
+			<field name="state"/>
+		  </tree>
+		</field>
+      </record>
+
+      <record id="l10n_ec_view_holidays_sold_search" model="ir.ui.view">
+	<field name="name">hr.holidays.sold.search</field>
+	<field name="model">hr.holidays.sold</field>
+	<field name="type">search</field>
+	<field name="arch" type="xml">
+	  <search string="Venta de Vacaciones">
+	    <field name="date" string="Fecha desde" filter_domain="[('date','&gt;=',self)]"/>
+	    <field name="date" string="Fecha hasta" filter_domain="[('date','&lt;=',self)]"/>
+	    <field name="state"/>
+	    <field name="name"/>
+	    <!--field name="vacation_type"/-->
+	    <!--field name="calc_type"/-->
+	    <newline/>
+	    <group expand="1" string="Agrupar por...">
+	      <filter name="group_state" string="Estado" icon="terp-stage" domain="[]" context="{'group_by':'state'}"/>
+	      <filter name="group_employee" string="Empleado" domain="[]" context="{'group_by':'employee_id'}"/>
+	      <!--filter name="group_vacation" string="Tipo de vacaciones" domain="[]" context="{'group_by':'vacation_type'}"/-->
+	      <!--filter name="group_calc" string="Tipo de cálculo" domain="[]" context="{'group_by':'calc_type'}"/-->
+	    </group>
+	  </search>
+	</field>
+      </record>
+	  
+      <record id="l10n_ec_action_holidays_sold" model="ir.actions.act_window">
+		<field name="name">Venta de Vacaciones</field>
+		<field name="res_model">hr.holidays.sold</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+      </record>
+	  
+      <menuitem id="menu_hr_holidays_sold" action="l10n_ec_action_holidays_sold" parent="gad_payroll.menu_hr_io_root" name="Vacaciones No Gozadas" groups="base.group_hr_manager" sequence="50"/>
+
+
+    </data>
+</openerp>

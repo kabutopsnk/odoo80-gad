@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+		
+		
+		<menuitem name="Reporting" id="base.menu_reporting" parent="gad_tools.menu_extras" groups="base.group_user" sequence="170"/>
+		<menuitem id="menu_finance_hide" name="Administración Financiera" parent="gad_tools.menu_extras" sequence="901"/>
+		
+		<menuitem id="account.menu_finance_periodical_processing" name="Periodic Processing" parent="menu_finance_hide" sequence="13" groups="account.group_account_user,account.group_account_manager"/>
+		
+		<menuitem id="account.menu_finance_reports" name="Reporting" parent="menu_finance_hide" sequence="14" groups="account.group_account_user,account.group_account_manager"/>
+		<!--menuitem id="account.menu_finance_bank_and_cash" name="Bank and Cash" parent="menu_finance_hide" sequence="4" groups="account.group_account_user,account.group_account_manager"/-->
+		
+		<menuitem id="menu_account_procesos" name="Procesamiento" parent="account.menu_finance"/>
+		
+	</data>
+</openerp>

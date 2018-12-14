@@ -1,0 +1,683 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+	<!-- *** MENU PRINCIPAL *** -->
+	<menuitem name="Presupuesto" id="menu_main_presupuesto" sequence="41" web_icon="images/Presupuesto.png" web_icon_hover="images/Presupuesto_hover.png" groups="gad_account_budget.group_gad_budget"/>
+	<!--SUBMENUS-->
+	<!--menuitem name="Documentos Presupuestarios" id="menu_presupuesto_documentos" parent="menu_main_presupuesto" sequence="1" />
+	<menuitem name="Reformas Presupuestarias" id="menu_presupuesto_reformas" parent="menu_main_presupuesto" sequence="2" /-->
+	<menuitem name="Presupuestos" id="menu_presupuesto_presupuesto" parent="menu_main_presupuesto" sequence="3" />		
+	<menuitem name="Documentos" id="menu_presupuesto_documentos" parent="menu_main_presupuesto" sequence="4" />
+	<menuitem name="E-Sigef" id="menu_presupuesto_esigef" parent="menu_main_presupuesto" sequence="5" />
+	<menuitem name="Configuración" id="menu_presupuesto_configuracion" parent="menu_main_presupuesto" sequence="6" />
+	<!--groups="gad_account_budget.group_gad_budget" -->
+
+
+	<!-- *** PARTIDAS PRESUPUESTARIAS *** -->
+	<!--FORM-->
+	<record id="account_budget.view_budget_post_form_inherit" model="ir.ui.view">
+	      <field name="name">account.budget.post.form</field>
+	      <field name="model">account.budget.post</field>
+	      <field name="inherit_id" ref="account_budget.view_budget_post_form"/>
+	      <field name="arch" type="xml">
+		<xpath expr="/form" position="attributes">
+			<attribute name="string">Partidas Presupuestarias</attribute>
+		</xpath>
+		<xpath expr="/form/group/field[@name='code']" position="after"> 
+			<field name="budget_type"/>
+			<field name="parent_id"/>
+			<field name="nivel"/>
+			<field name="type"/>
+		</xpath>
+		<xpath expr="/form/notebook/page[@string='Budget Lines']" position="replace">
+			<page string="Detalle Partidas">
+				<group colspan="4">
+					<field name="child_ids" colspan="4" nolabel="1" readonly="1">
+					      <tree string="Detalle Partidas" colors="blue:type == 'view';black:type == 'normal'">
+						<field name="code"/>
+		  				<field name="name"/>
+					  	<field name="parent_id"/>
+					  	<!--field name="parent_id3"/-->
+					  	<field name="parent_id2"/>
+					  	<field name="parent_id1"/>
+		  				<field name="budget_type"/>
+						<field name="nivel"/>
+		  				<field name="type"/>
+					      </tree>
+					</field>
+				</group>
+			</page>
+		</xpath>
+	      </field>
+	</record>	
+	<!--TREE-->
+	<record id="account_budget.view_budget_post_tree" model="ir.ui.view">
+	      <field name="name">account.budget.post.tree</field>
+	      <field name="model">account.budget.post</field>
+	      <field name="type">tree</field>
+	      <field name="arch" type="xml">
+		<tree string="Partidas Presupuestarias" colors="blue:type == 'view';black:type == 'normal'">
+		  <field name="code"/>
+		  <field name="name"/>
+		  <field name="parent_id"/>
+		  <!--field name="parent_id3"/-->
+		  <field name="parent_id2"/>
+		  <field name="parent_id1"/>
+		  <field name="budget_type"/>
+		  <field name="nivel"/>
+		  <field name="type"/>
+		</tree>
+	      </field>
+	 </record>
+	<!--SEARCH-->
+	<record id="account_budget.view_budget_post_search" model="ir.ui.view">
+	    <field name="name">account.budget.post.search</field>
+	    <field name="model">account.budget.post</field>
+	    <field name="type">search</field>
+	    <field name="arch" type="xml">
+	      <search string="Buscar Partidas Presupuestarias">
+		<group>
+		  <field name="code"/>
+		  <field name="name"/>
+		  <field name="parent_id"/>
+		  <field name="budget_type"/>   
+		  <field name="nivel"/>
+		  <field name="type"/>      
+		</group>
+	      </search>
+	    </field>
+	</record>
+	<!-- MENU -->
+	<menuitem name="Partidas Presupuestarias" id="account_budget.menu_budget_post_form" parent="menu_presupuesto_configuracion" sequence="10" action="account_budget.open_budget_post_form" />
+
+
+	<!-- ORIENTACION DE GASTO -->
+	<!--ACTION-->
+	<record id="action_crossovered_budget_expense" model="ir.actions.act_window">
+	      <field name="name">Orientación de Gasto</field>
+	      <field name="res_model">crossovered.budget.expense</field>
+	      <field name="type">ir.actions.act_window</field>
+	      <field name="view_type">form</field>
+	      <field name="view_mode">tree,form</field>
+	</record>
+	<!--FORM-->
+	<record id="view_crossovered_budget_expense_form" model="ir.ui.view">
+	    	<field name="name">view.crossovered.budget.expense.form</field>
+	    	<field name="model">crossovered.budget.expense</field>
+	    	<field name="type">form</field>
+	    	<field name="arch" type="xml">
+	    		<form string="Orientación de Gasto">
+	    			<group col="6" colspan="4">
+		    			<field name="code" colspan="2"/>
+		    			<field name="name" colspan="4"/>
+		    			<field name="type" colspan="2"/>
+		    			<field name="parent_id" colspan="4"/>
+	    			</group>
+	    		</form>
+	    	</field>
+	</record>
+	<!--TREE-->
+    	<record id="view_crossovered_budget_expense_tree" model="ir.ui.view">
+	    	<field name="name">view.crossovered.budget.expense.tree</field>
+	    	<field name="model">crossovered.budget.expense</field>
+	    	<field name="type">tree</field>
+	    	<field name="arch" type="xml">
+	    		<tree string="Orientación de Gasto" colors="blue:type == 'view';black:type == 'normal'">
+	    			<field name="code"/>
+	    			<field name="name"/>
+	    			<field name="parent_id"/>
+	    			<field name="type"/>
+	    		</tree>
+	    	</field>
+	</record>
+	<!--SEARCH-->
+	<record id="view_crossovered_budget_expense_search" model="ir.ui.view">
+	    	<field name="name">crossovered.budget.expense.search</field>
+	    	<field name="model">crossovered.budget.expense</field>
+	    	<field name="type">search</field>
+	    	<field name="arch" type="xml">
+	    		<search string="Orientación de Gasto">
+	    			<group>
+	    				<field name="code"/>
+	    				<field name="name"/>
+	    				<field name="type"/>
+	    				<field name="parent_id"/>
+	    			</group>
+	    		</search>
+	    	</field>
+	</record>
+	<!--MENU-->
+	<menuitem name="Orientación de Gasto" action="action_crossovered_budget_expense" id="menu_crossovered_budget_expense" parent="menu_presupuesto_configuracion" sequence="20"/>
+
+
+
+	<!-- *** PRESUPUESTOS *** -->
+	<!--FORM-->
+	<record id="crossovered_budget_view_form_inherit" model="ir.ui.view">
+	      <field name="name">view.acc.cross.bugdet.int</field>
+	      <field name="model">crossovered.budget</field>
+	      <field name="inherit_id" ref="account_budget.crossovered_budget_view_form"/>
+	      <field name="arch" type="xml">
+		<xpath expr="/form/header/button[@name='confirm']" position="replace">
+                        <button string="Confirmar" name="budget_confirm" states="draft" type="object" confirm="Seguro desea CONFIRMAR el Presupuesto?" class="oe_highlight"/> 
+		</xpath>
+		<xpath expr="/form/header/button[@name='validate']" position="replace"> 
+                        <button string="Aprobar Ejecución" name="budget_validate" states="confirm" type="object" confirm="Seguro desea APROBAR LA EJECUCIÓN del Presupuesto?" class="oe_highlight"/>
+                        <button string="Regresar a Borrador" name="budget_draft" states="confirm" type="object" confirm="Seguro desea PASAR A BORRADOR el Presupuesto?" class="oe_highlight"/>
+                        <button string="Regresar a Confirmar" name="budget_confirm" states="validate" type="object" confirm="Seguro desea REGRESAR A CONFIRMAR el Presupuesto?" class="oe_highlight"/> 
+		</xpath>
+		<xpath expr="/form/header/button[@name='done']" position="replace"> </xpath>
+		<xpath expr="/form/header/button[@name='draft']" position="replace"> </xpath>
+		<xpath expr="/form/header/button[@name='cancel']" position="replace"> </xpath>
+		<!--Reemplazar sheet-->
+		<xpath expr="/form/sheet" position="replace">
+		    <div class="oe_title">
+                            <label for="name" class="oe_edit_only"/>
+                            <h1>
+                                <field name="name" attrs="{'readonly':[('state','!=','draft')]}"/>
+                            </h1>
+                    </div>
+		    <group>
+			<group col="6">
+				<field name="fy_id" colspan="2" attrs="{'readonly': [('state','!=','draft')]}"/>
+				<field name="code" colspan="2" attrs="{'readonly':[('state','!=','draft')]}"/>
+				<group colspan="2"/>
+				<field name="budget_type" colspan="2" attrs="{'readonly': [('state','!=','draft')]}"/>
+				<label for="date_from" string="Duration"/>
+		                <div>
+		                        <field name="date_from" class="oe_inline" attrs="{'readonly':[('state','!=','draft')]}"/> - 
+		                        <field name="date_to" class="oe_inline" attrs="{'readonly':[('state','!=','draft')]}" nolabel="1"/>
+		                </div>
+			</group>
+		    </group>
+		    <notebook>
+                            <page string="Líneas Presupuestarias">
+                                <field name="crossovered_budget_line" colspan="4" nolabel="1" readonly="1">
+                                    <tree string="Budget Lines">
+                                        <field name="project_id"/>
+                                        <field name="task_id"/>
+                                        <field name="general_budget_id" string="Partida"/>
+                                        <field name="budget_expense_id"/>
+                                        <field name="budget_line_id_ing" string="Partida Ingreso Rel."/>
+                                        <field name="planned_amount" string="INICIAL" sum="INICIAL"/>
+                                        <field name="transfer_amount" sum="Reformas"/>
+                                        <field name="coded_amount" sum="CODIFICADO"/>
+                                        <field name="commited_amount" sum="Comprometido"/>
+                                        <field name="used_amount" sum="Utilizado" invisible="1"/>
+                                        <field name="available_amount" sum="DISPONIBLE" invisible="1"/>
+                                    </tree>
+                                    <form string="Líneas Presupuestarias">
+                                        <group>
+                                            <group colspan="4" col="4">
+                                                <field name="project_id" colspan="4"/>
+                                                <field name="task_id" colspan="4"/>
+                                                <field name="general_budget_id" string="Partida Presupuestaria" colspan="4"/>
+                                                <field name="name" colspan="4"/>
+                                                <field name="budget_expense_id" colspan="4"/>
+                                            </group>
+                                            <group colspan="4" col="6">
+                                                <field name="planned_amount" string="INICIAL" colspan="2"/>
+                                        	    <field name="transfer_amount" colspan="2"/>
+	                                            <field name="coded_amount" colspan="2"/>
+						                        <group colspan="2"/>
+        	                                    <field name="used_amount" colspan="2"/>
+        	                                    <field name="available_amount" colspan="2"/>
+                                            </group>
+                                            <group colspan="4" string="Relación con Ingresos" col="4">
+                                                <field name="project_id_ing" colspan="4"/>
+				                                <field name="task_id_ing" colspan="4"/>
+				                                <field name="budget_line_id_ing" colspan="4"/>
+                                            </group>
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                      </notebook>
+		</xpath>
+
+	      </field>
+	</record>	
+	<!--TREE-->
+	<record id="account_budget.crossovered_budget_view_tree" model="ir.ui.view">
+	      <field name="name">crossovered.budget.view.tree</field>
+	      <field name="model">crossovered.budget</field>
+	      <field name="type">tree</field>
+	      <field name="arch" type="xml">
+		<tree string="Presupuestos" colors="black:state=='draft';blue:state=='confirm';green:state=='validate'">
+		  <field name="fy_id"/>
+		  <field name="budget_type"/>
+		  <field name="name"/>
+		  <field name="state"/>
+		</tree>
+	      </field>
+	 </record>
+	<!--SEARCH-->
+	<record id="account_budget.view_crossovered_budget_search" model="ir.ui.view">
+	    <field name="name">crossovered.budget.search</field>
+	    <field name="model">crossovered.budget</field>
+	    <field name="type">search</field>
+	    <field name="arch" type="xml">
+	      <search string="Buscar Presupuestos">
+		<group>
+		  <field name="fy_id"/>
+		  <field name="budget_type"/>
+		  <field name="name"/>
+		  <field name="state"/>          
+		</group>
+	      </search>
+	    </field>
+	</record>
+	<!-- MENU -->
+	<menuitem parent="menu_presupuesto_presupuesto" id="account_budget.menu_act_crossovered_budget_view" action="account_budget.act_crossovered_budget_view" sequence="10" />
+	
+
+
+	<!--LINEAS PRESUPUESTARIAS-->
+	<record model="ir.ui.view" id="account_budget.view_crossovered_budget_line_form">
+            <field name="name">crossovered.budget.line.form</field>
+            <field name="model">crossovered.budget.lines</field>
+            <field name="arch" type="xml">
+                <form string="Líneas Presupuestarias">
+                    <sheet>
+                        <group colspan="4" col="8">
+                            <field name="analytic_account_id" invisible="1" colspan="4"/>
+                            <field name="crossovered_budget_id" invisible="1" colspan="4"/>
+                            <field name="general_budget_id" colspan="8" string="Partida Presupuestaria" domain="[('type','=','normal')]"/>
+                            <field name="name" colspan="8" string="Descripción"/>
+		                    <field name="budget_expense_id" colspan="8" domain="[('type','=','normal')]"/>
+            			    <field name="planned_amount" string="Asignación Inicial" colspan="4"/>
+			                <group colspan="4"/>
+                            <group colspan="8" string="Relación con Ingresos" col="4">
+                                <field name="project_id_ing" colspan="4" on_change="onchange_project(project_id_ing)" domain="[('budget_type','=','I')]"/>
+				                <field name="task_id_ing" colspan="4" on_change="onchange_task(task_id_ing)" domain="[('project_id','=',project_id_ing)]"/>
+				                <field name="budget_line_id_ing" string="Partida" colspan="4" domain="[('task_id','=',task_id_ing)]"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+		<record model="ir.ui.view" id="account_budget.view_crossovered_budget_line_tree">
+            <field name="name">crossovered.budget.lines.tree</field>
+            <field name="model">crossovered.budget.lines</field>
+            <field name="arch" type="xml">
+                <tree string="Cédula Presupuestaria de Gastos">
+                    <field name="analytic_account_id" groups="analytic.group_analytic_accounting" invisible="1"/>
+                    <field name="crossovered_budget_id" invisible="1"/>
+                    <field name="estrategy_id"/>
+                    <field name="program_id"/>
+                    <field name="project_id"/>
+                    <field name="task_id"/>
+                    <field name="general_budget_id" string="Partida"/>
+                    <field name="name"/>
+                    <field name="budget_line_id_ing" string="Rel. Ingresos"/>
+                    <field name="date_from" invisible="1"/>
+                    <field name="date_to" invisible="1"/>
+                    <field name="paid_date" invisible="1"/>
+                    <field name="planned_amount" string="INICIAL" sum="planned_amount"/>
+                    <field name="transfer_amount" string="REFORMAS" sum="transfer_amount"/>
+                    <field name="coded_amount" string="CODIFICADO" sum="coded_amount"/>
+                    <field name="commited_amount" string="COMPROMETIDO" sum="commited_amount"/>
+                </tree>
+            </field>
+        </record>
+
+		<record model="ir.ui.view" id="view_crossovered_budget_line_tree_ingresos">
+            <field name="name">crossovered.budget.lines.tree.ingresos</field>
+            <field name="model">crossovered.budget.lines</field>
+            <field name="arch" type="xml">
+                <tree string="Cédula Presupuestaria de Ingresos">
+                    <field name="analytic_account_id" groups="analytic.group_analytic_accounting" invisible="1"/>
+                    <field name="crossovered_budget_id" invisible="1"/>
+                    <field name="estrategy_id" invisible="1"/>
+                    <field name="program_id" invisible="1"/>
+                    <field name="project_id"/>
+                    <field name="task_id"/>
+                    <field name="general_budget_id" string="Partida"/>
+                    <field name="name" string="Descripción"/>
+                    <field name="planned_amount" string="INICIAL" sum="planned_amount"/>
+                    <field name="transfer_amount" string="REFORMAS" sum="transfer_amount"/>
+                    <field name="coded_amount" string="CODIFICADO" sum="coded_amount"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="account_budget.view_crossovered_budget_line_search">
+            <field name="name">crossovered.budget.lines.search</field>
+            <field name="model">crossovered.budget.lines</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Lineas Presupuestarias">
+                    <field name="estrategy_id"/>
+                    <field name="program_id"/>
+                    <field name="project_id"/>
+                    <field name="task_id"/>
+                    <field name="general_budget_id"/>
+                    <field name="name"/>
+                    <group expand="1" string="Agrupar por...">
+                        <!--filter name="group_estrategy_id" string="Área" domain="[]" context="{'group_by':'estrategy_id'}"/>
+                        <filter name="group_program_id" string="Programa" domain="[]" context="{'group_by':'program_id'}"/-->
+                    	<filter name="group_project_id" string="Proyecto" domain="[]" context="{'group_by':'project_id'}"/>
+                    	<filter name="group_task_id" string="Actividad" domain="[]" context="{'group_by':'task_id'}"/>
+                    	<filter name="group_general_budget_id" string="Partida Presupuestaria" domain="[]" context="{'group_by':'general_budget_id'}"/>
+                    	<filter name="group_budget_line_id_ing" string="Rel. Ingresos" domain="[]" context="{'group_by':'budget_line_id_ing'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+		
+                                        
+                                        
+
+
+	<!-- ***DOCUMENTOS PRESUPUESTARIOS*** -->
+	<!--ACTION-->
+        <record model="ir.actions.act_window" id="action_crossovered_budget_doc">
+			<field name="name">Documentos Presupuestarios</field>
+			<field name="res_model">crossovered.budget.doc</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="context">{}</field>
+	</record>
+	<!--FORM-->
+	<record model="ir.ui.view" id="view_form_crossovered_budget_doc">
+            <field name="name">crossovered.budget.doc.form</field>
+            <field name="model">crossovered.budget.doc</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Documentos Presupuestarios">
+			<header>
+				<button name="estado_certified" states="draft,commited" string="Certificado" confirm="Poner en estado CERTIFICADO el Documento?" type="object" icon="gtk-yes" colspan="2"/>
+				<button name="estado_draft" states="certified" string="Regresar a Borrador" confirm="Poner en estado BORRADOR el Documento?" type="object" icon="gtk-execute" colspan="2"/>
+				<button name="estado_commited" states="certified" string="Compromiso" confirm="Desea COMPROMETER el Documento?" type="object" icon="terp-check" colspan="2"/>
+				<button name="estado_cancelled" states="draft,certified" string="Cancelar Documento" confirm="Desea CANCELAR el Documento?" type="object" icon="terp-gtk-stop" colspan="2"/>
+				<field name="state" nolabel="1" widget="statusbar" statusbar_colors='{"draft":"black","certified":"blue","commited":"green","cancelled":"grey"}' statusbar_visible="draft,certified,commited,cancelled" select="1" readonly="1"/>
+			</header>
+			<group colspan="4" string="Datos Generales" col="8">
+				<field name="user_id" colspan="4" readonly="1"/>
+				<field name="date_create" colspan="2" readonly="1"/>
+				<group colspan="2"/>
+				<field name="name" colspan="2" readonly="1"/>
+				<group colspan="6"/>
+				<field name="description" colspan="6" attrs="{'readonly': [('state','!=','draft')]}"/>
+				<group colspan="2"/>
+				<field name="employee_id" colspan="4" attrs="{'readonly': [('state','!=','draft')]}"/>
+				<field name="date_certified" colspan="2" attrs="{'readonly': [('state','!=','draft')]}"/>
+				<group colspan="2"/>
+			</group>
+			<group string="Datos de Compromiso" attrs="{'invisible': [('state','=','draft')]}" colspan="4" col="8">
+				<field name="partner_id" colspan="4" attrs="{'readonly': [('state','!=','certified')]}"/>
+				<field name="date_commited" colspan="2" attrs="{'readonly': [('state','!=','certified')]}"/>
+				<group colspan="2"/>
+			</group>
+			<group colspan="4" string="Líneas de Presupuesto">
+				<field name="line_ids" colspan="4" nolabel="1" attrs="{'readonly': [('state','in',['cancelled'])]}">
+				      <tree string="Líneas de Presupuesto">
+					<field name="project_id"/>
+					<field name="task_id" string="Actividad"/>
+					<field name="budget_line_id" string="Partida"/>
+					<field name="name"/>
+					<field name="certified_amount" sum="Certificado"/>
+					<field name="commited_amount" sum="Comprometido"/>
+					<field name="state"/>
+				      </tree>
+				</field>
+			</group>
+			<group string="Observaciones">
+				<field name="observaciones" nolabel="1" colspan="8" attrs="{'readonly': [('state','!=','draft')]}"/>
+			</group>
+                </form>
+            </field>
+        </record>	
+	<!--TREE-->
+	<record model="ir.ui.view" id="view_tree_crossovered_budget_doc">
+            <field name="name">crossovered.budget.doc.tree</field>
+            <field name="model">crossovered.budget.doc</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+		<tree string="Listado de Documentos Presupuestarios" colors="black:state == 'draft'; blue:state == 'certified'; green:state == 'commited'; grey:state == 'cancelled'">
+			<field name="name"/>
+			<field name="description"/>
+			<field name="state"/>
+                </tree>
+            </field>			
+        </record>
+	<!--SEARCH-->
+	<record id="view_search_crossovered_budget_doc" model="ir.ui.view">
+            <field name="name">crossovered.budget.doc.search</field>
+            <field name="model">crossovered.budget.doc</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Buscar Documentos Presupuestarios">
+                   <group>
+			<field name="name" />
+			<field name="description" />
+			<field name="state" />
+                   </group>
+                   <newline />
+               </search>
+            </field>
+        </record>
+	<!-- MENU -->
+	<menuitem name="Documentos Presupuesto" id="menu_presupuesto_budget_doc" parent="menu_presupuesto_documentos" sequence="10" action="action_crossovered_budget_doc" />
+
+
+
+	<!--***DOCUMENTOS PRESUPUESTARIOS - DETALLE***-->
+	<!--FORM-->
+	<record id="view_form_crossovered_budget_doc_line" model="ir.ui.view">
+            <field name="name">crossovered.budget.doc.line.form</field>
+            <field name="model">crossovered.budget.doc.line</field>
+            <field eval="2" name="priority"/>
+            <field name="arch" type="xml">
+                <form string="Detalle Documento Presupuestario">
+			<group colspan="4" string = "Detalle Presupuestario" col="8">
+				<field name="project_id" colspan="8" on_change="onchange_project(project_id)" domain="[('state','=','exec')]" attrs="{'readonly': [('state','in',['cancelled','commited'])]}"/>
+				<field name="task_id" colspan="8" on_change="onchange_task(task_id)" domain="[('project_id','=',project_id)]" attrs="{'readonly': [('state','in',['cancelled','commited'])]}"/>
+				<field name="budget_line_id" string="Partida" colspan="8" on_change="onchange_partida(budget_line_id)" domain="[('task_id','=',task_id)]" attrs="{'readonly': [('state','in',['cancelled','commited'])]}"/>
+				<group colspan="6"/>
+				<field name="available_amount" string="Disponible" colspan="2" readonly="1"/>
+				<field name="name" colspan="8" attrs="{'readonly': [('state','in',['cancelled','commited'])]}"/>
+				<field name="certified_amount" string="Valor Certificado" colspan="2" attrs="{'readonly': [('state','in',['cancelled','commited'])]}"/>
+				<group colspan="6"/>
+				<field name="commited_amount" string="Valor Comprometido" colspan="2" attrs="{'invisible': [('state','=','draft')], 'readonly': [('state','=','cancelled')]}"/>
+				<button name="igual_valor" states="certified" string="Igual Valor" type="object" icon="gtk-yes" colspan="2"/>
+				<group colspan="4"/>
+				<field name="state" invisible="1"/>
+			</group>
+                </form>
+            </field>
+        </record>
+	<!--ACTION-->
+        <record model="ir.actions.act_window" id="action_crossovered_budget_doc_line">
+			<field name="name">Detalle Docs. Presupuesto</field>
+			<field name="res_model">crossovered.budget.doc.line</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree</field>
+			<field name="context">{}</field>
+	</record>
+	<!--TREE-->
+	<record model="ir.ui.view" id="view_tree_crossovered_budget_doc_line">
+            <field name="name">crossovered.budget.doc.line.tree</field>
+            <field name="model">crossovered.budget.doc.line</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+		<tree string="Listado de Detalle de Documentos Presupuestarios" colors="black:state == 'draft'; blue:state == 'certified'; green:state == 'commited'; grey:state == 'cancelled'">
+			<field name="budget_doc_id"/>
+			<field name="project_id"/>
+			<field name="task_id"/>
+			<field name="general_budget_id"/>
+			<field name="budget_line_id" string="Línea Presupuesto"/>
+			<!--field name="name"/-->
+			<field name="certified_amount" sum="certified_amount"/>
+			<field name="commited_amount" sum="commited_amount"/>
+			<field name="accrued_amount" sum="accrued_amount"/>
+			<field name="paid_amount" sum="paid_amount"/>
+			<field name="state"/>
+                </tree>
+            </field>			
+        </record>
+	<!--SEARCH-->
+	<record id="view_search_crossovered_budget_doc_line" model="ir.ui.view">
+            <field name="name">crossovered.budget.doc.line.search</field>
+            <field name="model">crossovered.budget.doc.line</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Buscar Detalle de Docs Presupuestarios">
+                   <group>
+			<field name="budget_doc_id"/>
+			<field name="project_id"/>
+			<field name="task_id"/>
+			<field name="general_budget_id"/>
+			<field name="budget_line_id" string="Línea Presupuesto"/>
+			<!--field name="name"/-->
+			<field name="certified_amount"/>
+			<field name="commited_amount"/>
+			<field name="accrued_amount"/>
+			<field name="paid_amount"/>
+			<field name="state"/>
+                   </group>
+                   <newline />
+		<group expand="0" string="Agrupar Por...">
+		  <filter string="Documento" name="budget_doc_id"  icon="terp-personal" domain="[]" context="{'group_by':'budget_doc_id'}"/>
+		  <filter string="Proyecto" icon="terp-personal" domain="[]" context="{'group_by':'project_id'}"/>
+		  <filter string="Actividad" icon="terp-personal" domain="[]" context="{'group_by':'task_id'}"/>
+		  <filter string="Partida" icon="terp-personal" domain="[]" context="{'group_by':'general_budget_id'}"/>
+		  <filter string="Linea Presupuesto" icon="terp-personal" domain="[]" context="{'group_by':'budget_line_id'}"/>
+		  <filter string="Estado" domain="[]" context="{'group_by':'state'}" icon="terp-folder-blue"/>
+		</group>
+
+               </search>
+            </field>
+        </record>
+	<!-- MENU -->
+	<menuitem name="Detalle Docs Presupuesto" id="menu_presupuesto_budget_doc_line" parent="menu_presupuesto_documentos" sequence="20" action="action_crossovered_budget_doc_line" />
+
+
+
+	<!-- ***REFORMAS PRESUPUESTARIAS*** -->
+	<!--ACTION-->
+        <record model="ir.actions.act_window" id="action_crossovered_budget_reform">
+			<field name="name">Reformas Presupuestarias</field>
+			<field name="res_model">crossovered.budget.reform</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="context">{}</field>
+	</record>
+	<!--FORM-->
+	<record model="ir.ui.view" id="view_form_crossovered_budget_reform">
+            <field name="name">crossovered.budget.reform.form</field>
+            <field name="model">crossovered.budget.reform</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Reformas Presupuestarias">
+			<header>
+				<button name="estado_draft" states="done" string="Regresar a Borrador" confirm="Poner en estado BORRADOR el Documento?" type="object" icon="gtk-execute" colspan="2"/>
+				<button name="estado_done" states="draft" string="Procesar" confirm="Desea PROCESAR el Documento?" type="object" icon="terp-check" colspan="2"/>
+				<button name="estado_cancelled" states="draft,done" string="Cancelar Documento" confirm="Desea CANCELAR el Documento?" type="object" icon="terp-gtk-stop" colspan="2"/>
+				<field name="state" nolabel="1" widget="statusbar" statusbar_colors='{"draft":"black","done":"green","cancelled":"grey"}' statusbar_visible="draft,done,cancelled" select="1" readonly="1"/>
+			</header>
+			<group colspan="4" string="Datos Generales" col="8">
+				<field name="user_id" colspan="4" readonly="1"/>
+				<field name="date_create" colspan="2" readonly="1"/>
+				<group colspan="2"/>
+				<field name="name" colspan="2" readonly="1"/>
+				<group colspan="6"/>
+				<field name="type_transaction" on_change="onchange_tipotran(type_transaction)" colspan="2" attrs="{'readonly': [('state','!=','draft')]}"/>
+				<field name="fecha" colspan="2" attrs="{'readonly': [('state','!=','draft')]}" required="1"/>
+				<group colspan="4"/>
+				<field name="description" colspan="6" attrs="{'readonly': [('state','!=','draft')]}"/>
+				<group colspan="2"/>
+			</group>
+			<group colspan="4" string="Líneas de Detalle">
+				<field name="line_ids" colspan="4" nolabel="1" attrs="{'readonly': [('state','!=','draft')]}" context="{'default_type_transaction': type_transaction}">
+				      <tree string="Líneas de Detalle">
+					<field name="type_transaction"/>
+					<field name="budget1_id" string="Origen"/>
+					<field name="budget2_id" string="Destino"/>
+					<field name="amount" sum="Valor"/>
+					<field name="state"/>
+				      </tree>
+				</field>
+			        <!--button name="action_print_report" string="Imprimir Documento" type="object" states="certified,commited" icon="gtk-print"/-->
+			</group>
+			<group string="Observaciones">
+				<field name="observaciones" nolabel="1" colspan="8" attrs="{'readonly': [('state','!=','draft')]}"/>
+			</group>
+                </form>
+            </field>
+        </record>	
+	<!--TREE-->
+	<record model="ir.ui.view" id="view_tree_crossovered_budget_reform">
+            <field name="name">crossovered.budget.reform.tree</field>
+            <field name="model">crossovered.budget.reform</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+		<tree string="Listado de Reformas Presupuestarias" colors="black:state == 'draft'; green:state == 'done'; grey:state == 'cancelled'">
+			<field name="name"/>
+			<field name="type_transaction"/>
+			<field name="description"/>
+			<field name="state"/>
+                </tree>
+            </field>			
+        </record>
+	<!--SEARCH-->
+	<record id="view_search_crossovered_budget_reform" model="ir.ui.view">
+            <field name="name">crossovered.budget.reform.search</field>
+            <field name="model">crossovered.budget.reform</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Buscar Reformas Presupuestarias">
+                   <group>
+			<field name="name" />
+			<field name="type_transaction" />
+			<field name="description" />
+			<field name="state" />
+                   </group>
+                   <newline />
+               </search>
+            </field>
+        </record>
+	<!-- MENU -->
+	<menuitem name="Reformas Presupuesto" id="menu_presupuesto_budget_reform" parent="menu_presupuesto_documentos" sequence="30" action="action_crossovered_budget_reform" />
+
+
+
+	<!--***REFORMAS PRESUPUESTARIAS - DETALLE***-->
+	<!--FORM-->
+	<record id="view_form_crossovered_budget_reform_line" model="ir.ui.view">
+            <field name="name">crossovered.budget.reform.line.form</field>
+            <field name="model">crossovered.budget.reform.line</field>
+            <field eval="2" name="priority"/>
+            <field name="arch" type="xml">
+                <form string="Detalle Reforma Presupuestaria">
+			<group colspan="4" col="8">
+				<group string="Datos Generales" colspan="8" col="8">
+					<field name="type_transaction" colspan="2" invisible="1"/>
+					<group colspan="6"/>
+					<field name="name" colspan="8"/>
+					<field name="amount" colspan="2" on_change="onchange_amount(amount, amount_b1, type_transaction)"/>
+					<group colspan="6"/>
+					<field name="state" invisible="1"/>
+				</group>
+				<group string="Origen" colspan="8" col="8">
+					<field name="project1_id" colspan="8" on_change="onchange_project1(project1_id)" domain="[('state','=','exec')]" attrs="{'readonly': [('state','!=','draft')]}"/>
+					<field name="task1_id" colspan="8" on_change="onchange_task1(task1_id)" domain="[('project_id','=',project1_id)]" attrs="{'readonly': [('state','!=','draft')]}"/>
+					<field name="budget1_id" colspan="8" on_change="onchange_partida1(budget1_id)" domain="[('task_id','=',task1_id)]" attrs="{'readonly': [('state','!=','draft')]}"/>
+					<field name="amount_b1" string="Disponible" colspan="2" invisible="1"/>
+				</group>
+				<group string="Destino" colspan="8" col="8" attrs="{'invisible': [('type_transaction','!=','transferencia')]}">
+					<field name="project2_id" colspan="8" on_change="onchange_project2(project2_id)" domain="[('state','=','exec')]" attrs="{'readonly': [('state','!=','draft')], 'required': [('type_transaction','=','transferencia')]}"/>
+					<field name="task2_id" colspan="8" on_change="onchange_task2(task2_id)" domain="[('project_id','=',project2_id)]" attrs="{'readonly': [('state','!=','draft')], 'required': [('type_transaction','=','transferencia')]}"/>
+					<field name="budget2_id" colspan="8" on_change="onchange_partida2(budget2_id)" domain="[('task_id','=',task2_id)]" attrs="{'readonly': [('state','!=','draft')], 'required': [('type_transaction','=','transferencia')]}"/>
+					<field name="amount_b2" string="Disponible" colspan="2" invisible="1"/>
+				</group>				
+			</group>
+                </form>
+            </field>
+        </record>
+
+
+    </data>
+</openerp>
