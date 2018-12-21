@@ -1,8 +1,8 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 project_axis_manager,project.axis.manager,model_project_axis,project.group_project_manager,1,1,1,1
 project_axis_user,project.axis.user,model_project_axis,project.group_project_user,1,0,0,0
-project_estrategy_manager,project.estrategy.manager,model_project_estrategy,project.group_project_manager,1,1,1,1
-project_estrategy_user,project.estrategy.user,model_project_estrategy,project.group_project_user,1,0,0,0
+project_strategy_manager,project.strategy.manager,model_project_strategy,project.group_project_manager,1,1,1,1
+project_strategy_user,project.strategy.user,model_project_strategy,project.group_project_user,1,0,0,0
 project_program_manager,project.program.manager,model_project_program,project.group_project_manager,1,1,1,1
 project_program_user,project.program.user,model_project_program,project.group_project_user,1,0,0,0
 project_modalidad_manager,project.modalidad.manager,model_project_modalidad,project.group_project_manager,1,1,1,1

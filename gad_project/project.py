@@ -3,7 +3,7 @@
 #
 #    OpenERP, Open Source Management Solution
 #    Copyright (C) 2011 OpenERP SA (<http://openerp.com>).
-#    Application developed by: Rafael Patricio Argudo Cobos
+#    Application developed by: Carlos Andrés Ordóñez P.
 #    Country: Ecuador
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -30,6 +30,7 @@ import exceptions
 import openerp.addons.decimal_precision as dp
 from datetime import datetime, date
 import time
+import code
 #, timedelta
 #import datetime
 #from datetime import 
@@ -67,13 +68,13 @@ class ProjectAxis(osv.Model):
         for r in self.browse(cr, uid, ids, context):
             new_name = r.name
             if r.sequence:
-                new_name = ' - '.join([str(r.sequence), new_name])
+                new_name = ' - '.join([str(r.code), new_name])
             res.append((r.id, new_name))
         return res
 
     _columns = dict(
         name = fields.char(u'Componente', size=64, required=True),
-        sequence = fields.char(u'Código', size=5, required=True),
+        code = fields.char(u'Código', size=5, required=True),
         active = fields.boolean(u'Activo'),
         )
 
@@ -81,15 +82,15 @@ class ProjectAxis(osv.Model):
         'active': True,
         }
 
-    _order = 'sequence'
+    _order = 'code'
     
 ProjectAxis()
 
 
 #***ESTRATEGIA/POLITICA***
-class ProjectEstrategy(osv.Model):
-    _name = 'project.estrategy'
-    _description = u'Áreas'
+class ProjectStrategy(osv.Model):
+    _name = 'project.strategy'
+    _description = u'Estrategias'
 
     def name_get(self, cr, uid, ids, context=None):
         """
@@ -102,14 +103,14 @@ class ProjectEstrategy(osv.Model):
         for r in self.browse(cr, uid, ids, context):
             new_name = r.name
             if r.sequence:
-                new_name = ' - '.join([str(r.sequence), new_name])
+                new_name = ' - '.join([str(r.code), new_name])
             res.append((r.id, new_name))
         return res
 
     _columns = dict(
         name = fields.char(u'Área', size=128, required=True),
         axis_id = fields.many2one('project.axis', u'Componente', required=True),
-        sequence = fields.char(u'Código', size=5, required=True),
+        code = fields.char(u'Código', size=5, required=True),
         active = fields.boolean(u'Activo'),
         )
 
@@ -117,9 +118,9 @@ class ProjectEstrategy(osv.Model):
         'active': True,
         }
 
-    _order = 'axis_id,sequence'
+    _order = 'axis_id,code'
 
-ProjectEstrategy()
+ProjectStrategy()
 
 
 #***PROGRAMA***
@@ -129,7 +130,7 @@ class ProjectProgram(osv.Model):
     _description = 'Programas'
 
     def onchange_axis(self, cr, uid, ids, axis_id=False, context=None):
-		return {'value': {'estrategy_id': False}}
+		return {'value': {'strategy_id': False}}
 
     def name_get(self, cr, uid, ids, context=None):
         """
@@ -142,15 +143,15 @@ class ProjectProgram(osv.Model):
         for r in self.browse(cr, uid, ids, context):
             new_name = r.name
             if r.sequence:
-                new_name = ' - '.join([str(r.sequence), new_name])
+                new_name = ' - '.join([str(r.code), new_name])
             res.append((r.id, new_name))
         return res
 
     _columns = dict(
-        name = fields.char('Programa', size=128, required=True),
-        axis_id = fields.many2one('project.axis', u'Componente', required=True),
-        estrategy_id = fields.many2one('project.estrategy', string=u'Área', required=True),
-        sequence = fields.char(u'Código', size=5, required=True),
+        name = fields.char(u'Programa', size=128, required=True),
+        axis_id = fields.many2one('project.axis', u'Eje', required=True),
+        strategy_id = fields.many2one('project.strategy', string=u'Objetivo', required=True),
+        code = fields.char(u'Código', size=5, required=True),
         active = fields.boolean(u'Activo'),
         )
 
@@ -158,29 +159,72 @@ class ProjectProgram(osv.Model):
         'active': True,
         }
 
-    _order = 'axis_id,estrategy_id,sequence'
+    _order = 'axis_id,strategy_id,code'
 
 ProjectProgram()
+
+class ProjectSubprogram(osv.Model):
+
+    _name = 'project.subprogram'
+    _description = 'Subprogramas'
+
+    def onchange_axis(self, cr, uid, ids, axis_id=False, context=None):
+        return {'value': {'strategy_id': False, 'program_id': False}}
+    
+    def onchange_strategy(self, cr, uid, ids, strategy_id=False, context=None):
+        return {'value': {'program_id': False}}
+
+    def name_get(self, cr, uid, ids, context=None):
+        """
+        Contructor de texto cuando el objeto se reprenta
+        en un campo many2one
+        """        
+        if context is None:
+            context = {}
+        res = []
+        for r in self.browse(cr, uid, ids, context):
+            new_name = r.name
+            if r.sequence:
+                new_name = ' - '.join([str(r.code), new_name])
+            res.append((r.id, new_name))
+        return res
+
+    _columns = dict(
+        name = fields.char(u'Subprograma', size=128, required=True),
+        axis_id = fields.many2one('project.axis', u'Eje', required=True),
+        strategy_id = fields.many2one('project.strategy', string=u'Objetivo', required=True),
+        program_id = fields.many2one('project.program', string=u'Programa', required=True),
+        code = fields.char(u'Código', size=5, required=True),
+        active = fields.boolean(u'Activo'),
+        )
+
+    _defaults = {
+        'active': True,
+        }
+
+    _order = 'axis_id,strategy_id,program_id,code'
+
+ProjectSubprogram()
 
 
 
 #***MODALIDAD***
-class ProjectModalidad(osv.Model):
+class ProjectFinancing(osv.Model):
 
-    _name = 'project.modalidad'
-    _description = u'Modalidad de Ejecución'
+    _name = 'project.financing'
+    _description = u'Fuente de financiamiento'
 
     _columns = dict(
-        name = fields.char(u'Modalidad de Ejecución', size=128, required=True),
-        sequence = fields.integer(u'Secuencia', required=True),
+        name = fields.char(u'Fuente de Financiamiento', size=128, required=True),
+        code = fields.char(u'Código', size=5, required=True),
         )
 
     _defaults = {
         }
 
-    _order = 'sequence'
+    _order = 'code'
 
-ProjectModalidad()
+ProjectFinancing()
 
 
 
@@ -246,10 +290,13 @@ class ProjectProject(osv.Model):
     STATES = {'open':[('readonly',False)]}
 
     def onchange_axis_project(self, cr, uid, ids, axis_id=False, context=None):
-        return {'value': {'estrategy_id': False,'program_id': False}}
+        return {'value': {'strategy_id': False,'program_id': False,'subprogram_id': False}}
 
-    def onchange_estrategy_project(self, cr, uid, ids, estrategy_id=False, context=None):
-        return {'value': {'program_id': False}}
+    def onchange_strategy_project(self, cr, uid, ids, strategy_id=False, context=None):
+        return {'value': {'program_id': False, 'subprogram_id': False}}
+    
+    def onchange_program_project(self, cr, uid, ids, strategy_id=False, context=None):
+        return {'value': {'subprogram_id': False}}
 
     def onchange_project(self, cr, uid, ids, project_object_id=False, context=None):
         codigo = ''
@@ -353,11 +400,12 @@ class ProjectProject(osv.Model):
         project_object_id = fields.many2one('project.object', string=u'Proyecto', required=True),
         code_project = fields.related('project_object_id', 'code', type='char', size=20, string=u'Código', store=True, readonly=True),
         #Información General
-        axis_id = fields.many2one('project.axis', string=u'Componente', required=True),
-        estrategy_id = fields.many2one('project.estrategy', string=u'Área', required=True),
+        axis_id = fields.many2one('project.axis', string=u'Eje Estratégico', required=True),
+        strategy_id = fields.many2one('project.strategy', string=u'Objetivo', required=True),
         program_id = fields.many2one('project.program', string=u'Programa', required=True),
+        subprogram_id = fields.many2one('project.program', string=u'Subprograma', required=True),
         description = fields.text(u'Descripción', required=True),
-        modalidad_id = fields.many2one('project.modalidad', string=u'Modalidad Ejecución', required=True),
+        #modalidad_id = fields.many2one('project.modalidad', string=u'Modalidad Ejecución', required=True),
         #Valores
         planned_amount = fields.float('INICIAL', required=True, digits_compute=dp.get_precision('Account')),
         transfer_amount = fields.float('Reformas', required=True, digits_compute=dp.get_precision('Account')),
@@ -527,7 +575,7 @@ ProjectTaskHistorialAvance()
 #    _inherit = 'crossovered.budget.lines'
 #
 #    _columns = {
-#        'estrategy_id': fields.related('project_id', 'estrategy_id', type='many2one', relation="project.estrategy", string=u'Área', store=True, readonly=True),
+#        'strategy_id': fields.related('project_id', 'strategy_id', type='many2one', relation="project.strategy", string=u'Área', store=True, readonly=True),
 #        'program_id': fields.related('project_id', 'program_id', type='many2one', relation="project.program", string=u'Programa', store=True, readonly=True),
 #    }
 #

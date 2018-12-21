@@ -36,7 +36,7 @@ import openerp.addons.decimal_precision as dp
 class AccountBudgetPost(osv.Model):
     _inherit = 'account.budget.post'
 
-    def _parent1(self, cr, uid, ids, fields, args, context):
+    """def _parent1_RESPALDO(self, cr, uid, ids, fields, args, context):
         res={}
         for obj in self.browse(cr, uid, ids):
             parent1=''
@@ -47,9 +47,9 @@ class AccountBudgetPost(osv.Model):
             if obj.nivel=='5':
                 parent1=' - '.join([obj.parent_id.parent_id.parent_id.parent_id.code or '', obj.parent_id.parent_id.parent_id.parent_id.name or ''])
             res[obj.id] = parent1
-        return res
+        return res"""
 
-    def _parent2(self, cr, uid, ids, fields, args, context):
+    """def _parent2_RESPALDO(self, cr, uid, ids, fields, args, context):
         res={}
         for obj in self.browse(cr, uid, ids):
             parent2=''
@@ -58,7 +58,7 @@ class AccountBudgetPost(osv.Model):
             if obj.nivel=='5':
                 parent2=' - '.join([obj.parent_id.parent_id.parent_id.code or '', obj.parent_id.parent_id.parent_id.name or ''])
             res[obj.id] = parent2
-        return res
+        return res"""
 
     #def _parent3(self, cr, uid, ids, fields, args, context):
     #    res={}
@@ -71,13 +71,13 @@ class AccountBudgetPost(osv.Model):
 
     _columns = {
     'budget_type': fields.selection([('G','Gasto'),('I','Ingreso')], u'Tipo Presupuestario', required=True),
-    'nivel': fields.selection([('1','1'),('2','2'),('3','3'),('4','4'),('5','5')], u'Nivel', required=True),
+    #'nivel': fields.selection([('1','1'),('2','2'),('3','3'),('4','4'),('5','5')], u'Nivel', required=True),
     'type': fields.selection([('view','Vista'),('normal','Normal')], u'Tipo', required=True),
     'parent_id': fields.many2one('account.budget.post', u'Partida Padre'),
     #'parent_id3': fields.function(_parent3, store=False, string='P. Nivel 3', type='text'),
-    'parent_id2': fields.function(_parent2, store=False, string='P. Nivel 2', type='text'),
-    'parent_id1': fields.function(_parent1, store=False, string='P. Nivel 1', type='text'),
-    'child_ids' : fields.one2many('account.budget.post', 'parent_id', 'Detalle Partidas'),
+    #'parent_id2': fields.function(_parent2, store=False, string='P. Nivel 2', type='text'),
+    #'parent_id1': fields.function(_parent1, store=False, string='P. Nivel 1', type='text'),
+    'child_ids' : fields.one2many('account.budget.post', 'parent_id', u'Detalle Partidas'),
     }
 
     _sql_constraints = [('unique_code','unique(code)',u'No se pueden registrar Partidas Duplicadas...')]
@@ -173,11 +173,11 @@ CrossoveredBudget()
 class CrossoveredBudgetLines(osv.osv):
     _inherit = 'crossovered.budget.lines'
 
-    def onchange_project(self, cr, uid, ids, project_id=False, context=None):
+    """def onchange_project(self, cr, uid, ids, project_id=False, context=None):
         return {'value': {'task_id_ing': False,'budget_line_id_ing': False}}
 
     def onchange_task(self, cr, uid, ids, task_id=False, context=None):
-        return {'value': {'budget_line_id_ing': False}}
+        return {'value': {'budget_line_id_ing': False}}"""
 
     def _get_docs(self, cr, uid, ids, context):
         result = {}
@@ -247,7 +247,8 @@ class CrossoveredBudgetLines(osv.osv):
         'estrategy_id': fields.related('project_id', 'estrategy_id', type='many2one', relation="project.estrategy", string=u'Área', store=False, readonly=True),
         'program_id': fields.related('project_id', 'program_id', type='many2one', relation="project.program", string=u'Programa', store=False, readonly=True),
         'name': fields.text(u'Descripción', required=True),
-        'budget_expense_id': fields.many2one('crossovered.budget.expense', u'Orientación de Gasto', required=True),
+        'budget_expense_id': fields.many2one('crossovered.budget.expense', u'Orientación de Gasto', required=False),
+        'financing_id': fields.many2one('project.financing', u'Fuente de financiamiento', required=True),
         'planned_amount':fields.float('INICIAL', required=True, digits_compute=dp.get_precision('Account')),
         'transfer_amount':fields.function(_calcular_valores, string='Reformas', store=STORE_VAR, method=True, multi='budget_lines', digits_compute=dp.get_precision('Account')),
         'coded_amount':fields.function(_calcular_valores, string='CODIFICADO', store=STORE_VAR, method=True, multi='budget_lines', digits_compute=dp.get_precision('Account')),
@@ -261,9 +262,9 @@ class CrossoveredBudgetLines(osv.osv):
         'reform_line1_ids' : fields.one2many('crossovered.budget.reform.line', 'budget1_id', 'Reformas Origen'),
         'reform_line2_ids' : fields.one2many('crossovered.budget.reform.line', 'budget2_id', 'Reformas Destino'),
         #Relación con Ingresos
-        'project_id_ing': fields.many2one('project.project', u'Proyecto', required=False),
-        'task_id_ing': fields.many2one('project.task', u'Actividad', required=False),
-        'budget_line_id_ing': fields.many2one('crossovered.budget.lines', u'Partida', required=False),
+        #'project_id_ing': fields.many2one('project.project', u'Proyecto', required=False),
+        #'task_id_ing': fields.many2one('project.task', u'Actividad', required=False),
+        #'budget_line_id_ing': fields.many2one('crossovered.budget.lines', u'Partida', required=False),
         #Otros / No van
         'date_from': fields.date('Start Date', required=False),
         'date_to': fields.date('End Date', required=False),
@@ -832,6 +833,37 @@ class CrossoveredBudgetReformLine(osv.Model):
         return res
 
 CrossoveredBudgetReformLine()
+
+class account_budget_concept_type(osv.Model):
+    _name = 'account.budget.concept.type'
+    _description = 'Tipo de Concepto Interno'
+      
+    _columns = {
+        'code': fields.char(u'Código', size=10, required=True),
+        'name': fields.char(u'Nombre', size=128, required=True),
+    }
+
+account_budget_concept_type()
+
+class AccountBudgetConcept(osv.Model):
+
+    _name = 'account.budget.concept'
+    _description = 'Concepto Interno'
+    
+    def _get_code(self, cr, uid, ids, name, args, context=None):
+        res = {}
+        for concept in self.browse(cr, uid, ids, context):
+            res[concept.id] = '%s %s %s' % (concept.department_id.code, concept.type_id.code, concept.id)
+        return res
+    
+    _columns = {
+        'name': fields.char(u'Concepto Interno', size=200, required=True),
+        'code':fields.function(_get_code, u'Código', type='char', store=True),
+        'department_id': fields.many2one('hr.department', u'Dependencia', required=True),
+        'type_id': fields.many2one('account.budget.concept.type', u'Tipo'),
+        }
+
+AccountBudgetConcept()
 
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

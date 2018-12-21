@@ -35,7 +35,7 @@
 			<group colspan="4" string = "Datos Generales" col="8">
 				<field name="name" colspan="4" />
 				<group colspan= "4"/>
-				<field name="sequence" colspan="2" />
+				<field name="code" colspan="2" />
 				<group colspan= "6"/>
 				<field name="active" colspan="2" />
 				<group colspan= "6"/>
@@ -45,49 +45,49 @@
         </record>	
 	<!--TREE-->
 	<record model="ir.ui.view" id="view_tree_project_axis">
-            <field name="name">project.axis.tree</field>
-            <field name="model">project.axis</field>
-            <field name="type">tree</field>
-            <field name="arch" type="xml">
-		<tree string="Listado de Componentes">
-			<field name="name"/>
-			<field name="sequence"/>
-			<field name="active"/>
-                </tree>
-            </field>			
-        </record>
+		<field name="name">project.axis.tree</field>
+		<field name="model">project.axis</field>
+		<field name="type">tree</field>
+		<field name="arch" type="xml">
+			<tree string="Listado de Ejes">
+				<field name="code"/>
+				<field name="name"/>
+				<field name="active"/>
+			</tree>
+		</field>
+	</record>
+	
 	<!--SEARCH-->
 	<record id="view_search_project_axis" model="ir.ui.view">
-            <field name="name">project.axis.search</field>
-            <field name="model">project.axis</field>
-            <field name="type">search</field>
-            <field name="arch" type="xml">
-                <search string="Buscar Componentes">
-                   <group>
-			<field name="name" />
-                   </group>
-                   <newline />
-               </search>
-            </field>
-        </record>
+		<field name="name">project.axis.search</field>
+		<field name="model">project.axis</field>
+		<field name="type">search</field>
+		<field name="arch" type="xml">
+			<search string="Buscar Ejes">
+				<field name="name" />
+				<field name="code" />
+			</search>
+		</field>
+	</record>
+	
 	<!-- MENU -->
-	<menuitem name="Componentes" id="menu_project_axis" parent="base.menu_definitions" sequence="11" action="action_project_axis" groups="project.group_project_manager"/>
+	<menuitem name="Ejes Estratégicos" id="menu_project_axis" parent="base.menu_definitions" sequence="11" action="action_project_axis" groups="project.group_project_manager"/>
 
 
 
 	<!-- *** AREAS *** -->
 	<!--ACTION-->
-        <record model="ir.actions.act_window" id="action_project_estrategy">
+	<record model="ir.actions.act_window" id="action_project_strategy">
 			<field name="name">Áreas</field>
-			<field name="res_model">project.estrategy</field>
+			<field name="res_model">project.strategy</field>
 			<field name="view_type">form</field>
 			<field name="view_mode">tree,form</field>
 			<field name="context">{}</field>
 	</record>
 	<!--FORM-->
-	<record model="ir.ui.view" id="view_form_project_estrategy">
-            <field name="name">project.estrategy.form</field>
-            <field name="model">project.estrategy</field>
+	<record model="ir.ui.view" id="view_form_project_strategy">
+            <field name="name">project.strategy.form</field>
+            <field name="model">project.strategy</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <form string="Mantenimiento de Áreas">
@@ -96,7 +96,7 @@
 				<group colspan= "4"/>
 				<field name="name" colspan="4" />
 				<group colspan= "4"/>
-				<field name="sequence" colspan="2" />
+				<field name="code" colspan="2" />
 				<group colspan= "6"/>
 				<field name="active" colspan="2" />
 				<group colspan= "6"/>
@@ -105,31 +105,29 @@
             </field>
         </record>	
 	<!--TREE-->
-	<record model="ir.ui.view" id="view_tree_project_estrategy">
-            <field name="name">project.estrategy.tree</field>
-            <field name="model">project.estrategy</field>
+	<record model="ir.ui.view" id="view_tree_project_strategy">
+            <field name="name">project.strategy.tree</field>
+            <field name="model">project.strategy</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
 		<tree string="Listado de Áreas">
 			<field name="axis_id"/>			
 			<field name="name"/>
-			<field name="sequence"/>
+			<field name="code"/>
 			<field name="active"/>
                 </tree>
             </field>			
         </record>
 	<!--SEARCH-->
-	<record id="view_search_project_estrategy" model="ir.ui.view">
-            <field name="name">project.estrategy.search</field>
-            <field name="model">project.estrategy</field>
+	<record id="view_search_project_strategy" model="ir.ui.view">
+            <field name="name">project.strategy.search</field>
+            <field name="model">project.strategy</field>
             <field name="type">search</field>
             <field name="arch" type="xml">
                 <search string="Buscar Áreas">
-                   <group>
 			<field name="axis_id" />
 			<field name="name" />
-                   </group>
-		   <newline />
+			<field name="code" />
 		   <group expand="1" string="Agrupar por...">
 		  	<filter string="Componente" name="g_axis_id" context="{'group_by': 'axis_id'}"/>          
 		   </group>
@@ -137,7 +135,7 @@
             </field>
         </record>
 	<!-- MENU -->
-	<menuitem name="Áreas" id="menu_project_estrategy" parent="base.menu_definitions" sequence="12" action="action_project_estrategy" groups="project.group_project_manager"/>
+	<menuitem name="Objetivos" id="menu_project_strategy" parent="base.menu_definitions" sequence="12" action="action_project_strategy" groups="project.group_project_manager"/>
 
 
 
@@ -160,11 +158,11 @@
 			<group colspan="4" string = "Datos Generales" col="8">
 				<field name="axis_id" colspan="4" on_change="onchange_axis(axis_id)"/>
 				<group colspan= "4"/>
-				<field name="estrategy_id" colspan="4" domain="[('axis_id','=',axis_id)]"/>
+				<field name="strategy_id" colspan="4" domain="[('axis_id','=',axis_id)]"/>
 				<group colspan= "4"/>
 				<field name="name" colspan="4" />
 				<group colspan= "4"/>
-				<field name="sequence" colspan="2" />
+				<field name="code" colspan="2" />
 				<group colspan= "6"/>
 				<field name="active" colspan="2" />
 				<group colspan= "6"/>
@@ -180,9 +178,9 @@
             <field name="arch" type="xml">
 		<tree string="Listado de Programas">
 			<field name="axis_id"/>			
-			<field name="estrategy_id"/>	
+			<field name="strategy_id"/>	
 			<field name="name"/>
-			<field name="sequence"/>
+			<field name="code"/>
 			<field name="active"/>
                 </tree>
             </field>			
@@ -196,13 +194,14 @@
                 <search string="Buscar Programas">
                    <group>
 			<field name="axis_id" />
-			<field name="estrategy_id" />
+			<field name="strategy_id" />
 			<field name="name" />
+			<field name="code" />
                    </group>
                    <newline />
 		   <group expand="1" string="Agrupar por...">
 		  	<filter string="Componente" name="g_axis_id" context="{'group_by': 'axis_id'}"/>          
-		  	<filter string="Área" name="g_estrategy_id_id" context="{'group_by': 'estrategy_id'}"/>          
+		  	<filter string="Área" name="g_strategy_id_id" context="{'group_by': 'strategy_id'}"/>          
 		   </group>
 
                </search>
@@ -210,61 +209,135 @@
         </record>
 	<!-- MENU -->
 	<menuitem name="Programas" id="menu_project_program" parent="base.menu_definitions" sequence="13" action="action_project_program" groups="project.group_project_manager"/>
+	
+	<!-- *** SUBPROGRAMAS *** -->
+	<!--ACTION-->
+	<record model="ir.actions.act_window" id="action_project_subprogram">
+		<field name="name">Subprogramas</field>
+		<field name="res_model">project.subprogram</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+		<field name="context">{}</field>
+	</record>
+	
+	<!--FORM-->
+	<record model="ir.ui.view" id="view_form_project_subprogram">
+		<field name="name">project.subprogram.form</field>
+		<field name="model">project.subprogram</field>
+		<field name="type">form</field>
+		<field name="arch" type="xml">
+			<form string="Mantenimiento de Subprogramas">
+				<group colspan="4" string = "Datos Generales" col="8">
+					<field name="axis_id" colspan="4" on_change="onchange_axis(axis_id)"/>
+					<group colspan= "4"/>
+					<field name="strategy_id" colspan="4" domain="[('axis_id','=',axis_id)]" on_change="onchange_strategy(strategy_id)"/>
+					<group colspan= "4"/>
+					<field name="program_id" colspan="4" domain="[('strategy_id','=',axis_id)]"/>
+					<group colspan= "4"/>
+					<field name="name" colspan="4" />
+					<group colspan= "4"/>
+					<field name="code" colspan="2" />
+					<group colspan= "6"/>
+					<field name="active" colspan="2" />
+					<group colspan= "6"/>
+				</group>
+			</form>
+		</field>
+	</record>	
+	<!--TREE-->
+	<record model="ir.ui.view" id="view_tree_project_subprogram">
+		<field name="name">project.subprogram.tree</field>
+		<field name="model">project.subprogram</field>
+		<field name="type">tree</field>
+		<field name="arch" type="xml">
+			<tree string="Listado de Subprogramas">
+				<field name="axis_id"/>
+				<field name="strategy_id"/>
+				<field name="program_id"/>
+				<field name="name"/>
+				<field name="code"/>
+				<field name="active"/>
+			</tree>
+		</field>
+	</record>
+	<!--SEARCH-->
+	<record id="view_search_project_subprogram" model="ir.ui.view">
+		<field name="name">project.subprogram.search</field>
+		<field name="model">project.subprogram</field>
+		<field name="type">search</field>
+		<field name="arch" type="xml">
+			<search string="Buscar Subprogramas">
+				<field name="axis_id" />
+				<field name="strategy_id" />
+				<field name="program_id" />
+				<field name="name" />
+				<field name="code" />
+				<group expand="1" string="Agrupar por...">
+					<filter string="Eje" name="g_axis_id" context="{'group_by': 'axis_id'}"/>
+					<filter string="Objetivo" name="g_strategy_id" context="{'group_by': 'strategy_id'}"/>
+					<filter string="Programa" name="g_program_id" context="{'group_by': 'program_id'}"/>
+				</group>
+			</search>
+		</field>
+	</record>
+	<!-- MENU -->
+	<menuitem name="Subprogramas" id="menu_project_subprogram" parent="base.menu_definitions" sequence="14" action="action_project_subprogram" groups="project.group_project_manager"/>
 
 
 
 	<!-- *** MODALIDAD EJECUCION *** -->
 	<!--ACTION-->
-        <record model="ir.actions.act_window" id="action_project_modalidad">
-			<field name="name">Modalidad de Ejecución</field>
-			<field name="res_model">project.modalidad</field>
+        <record model="ir.actions.act_window" id="action_project_financing">
+			<field name="name">Fuente de Financiamiento</field>
+			<field name="res_model">project.financing</field>
 			<field name="view_type">form</field>
 			<field name="view_mode">tree,form</field>
 			<field name="context">{}</field>
 	</record>
 	<!--FORM-->
-	<record model="ir.ui.view" id="view_form_project_modalidad">
-            <field name="name">project.modalidad.form</field>
-            <field name="model">project.modalidad</field>
+	<record model="ir.ui.view" id="view_form_project_financing">
+            <field name="name">project.financing.form</field>
+            <field name="model">project.financing</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
-                <form string="Mantenimiento de Modalidad de Ejecución">
+                <form string="Mantenimiento de Fuente de Financiamiento">
 			<group colspan="4" string = "Datos Generales" col="8">
 				<field name="name" colspan="4" />
 				<group colspan= "4"/>
-				<field name="sequence" colspan="2" />
+				<field name="code" colspan="2" />
 				<group colspan= "6"/>
 			</group>
                 </form>
             </field>
         </record>	
 	<!--TREE-->
-	<record model="ir.ui.view" id="view_tree_project_modalidad">
-            <field name="name">project.modalidad.tree</field>
-            <field name="model">project.modalidad</field>
+	<record model="ir.ui.view" id="view_tree_project_financing">
+            <field name="name">project.financing.tree</field>
+            <field name="model">project.financing</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
-		<tree string="Listado de Modalidad de Ejecución">
+		<tree string="Listado de Fuente de Financiamiento">
 			<field name="name"/>
-			<field name="sequence"/>
+			<field name="code"/>
                 </tree>
             </field>			
         </record>
 	<!--SEARCH-->
-	<record id="view_search_project_modalidad" model="ir.ui.view">
-            <field name="name">project.modalidad.search</field>
-            <field name="model">project.modalidad</field>
+	<record id="view_search_project_financing" model="ir.ui.view">
+            <field name="name">project.financing.search</field>
+            <field name="model">project.financing</field>
             <field name="type">search</field>
             <field name="arch" type="xml">
-                <search string="Buscar Modalidad">
+                <search string="Buscar Fuente de Financiamiento">
                    <group>
 			<field name="name" />
+			<field name="code" />
                    </group>
                </search>
             </field>
         </record>
 	<!-- MENU -->
-	<menuitem name="Modalidad Ejecución" id="menu_project_modalidad" parent="base.menu_definitions" sequence="21" action="action_project_modalidad" groups="project.group_project_manager"/>
+	<menuitem name="Fuente de Financiamiento" id="menu_project_financing" parent="base.menu_definitions" sequence="21" action="action_project_financing" groups="project.group_project_manager"/>
 
 
 
@@ -397,10 +470,11 @@
 				</group>
 				<group colspan="4" string="Estructura" col="4">
 					<field name="axis_id" colspan="4" on_change="onchange_axis_project(axis_id)" attrs="{'readonly': [('state','!=','open')]}"/>
-					<field name="estrategy_id" colspan="4" on_change="onchange_estrategy_project(estrategy_id)" domain="[('axis_id','=',axis_id)]" attrs="{'readonly': [('state','!=','open')]}"/>
-					<field name="program_id" colspan="4" domain="[('estrategy_id','=',estrategy_id)]" attrs="{'readonly': [('state','!=','open')]}"/>
+					<field name="strategy_id" colspan="4" on_change="onchange_strategy_project(strategy_id)" domain="[('axis_id','=',axis_id)]" attrs="{'readonly': [('state','!=','open')]}"/>
+					<field name="program_id" colspan="4" on_change="onchange_program_project(program_id)" domain="[('strategy_id','=',strategy_id)]" attrs="{'readonly': [('state','!=','open')]}"/>
+					<field name="subprogram_id" colspan="4" domain="[('program_id','=',program_id)]" attrs="{'readonly': [('state','!=','open')]}"/>
 					<field name="department_id" colspan="4" attrs="{'readonly': [('state','!=','open')]}"/>
-					<field name="modalidad_id" colspan="4" attrs="{'readonly': [('state','!=','open')]}"/>
+					<!--field name="modalidad_id" colspan="4" attrs="{'readonly': [('state','!=','open')]}"/-->
 					<field name="seguimiento_senplades" colspan="4" attrs="{'readonly': [('state','!=','open')]}"/>
 					<field name="name" colspan="2" invisible="1"/>
 					<field name="code" colspan="2" invisible="1"/>
@@ -468,7 +542,7 @@
 			<field name="code_project" invisible="1"/>
 			<field name="project_object_id"/>
 			<field name="axis_id" invisible="1"/>
-		  	<field name="estrategy_id" invisible="1"/>
+		  	<field name="strategy_id" invisible="1"/>
 			<field name="department_id"/>
 			<field name="user_id"/>
 			<field name="seguimiento_senplades"/>
@@ -490,7 +564,7 @@
 		  <field name="code_project"/>
 		  <field name="project_object_id" string="Proyecto"/>
 		  <field name="axis_id"/>
-		  <field name="estrategy_id"/>
+		  <field name="strategy_id"/>
 		  <field name="user_id"/>
 		  <field name="seguimiento_senplades"/>
 		  <field name="state" string="Estado"/>          
@@ -500,7 +574,7 @@
 		  <filter string="Responsable" name="Manager"  icon="terp-personal" domain="[]" context="{'group_by':'user_id'}"/>
 		  <separator orientation="vertical"/>
 		  <filter string="Componente" help="Eje" icon="terp-folder-blue" domain="[]" context="{'group_by':'axis_id'}"/>
-		  <filter string="Política pública" domain="[]" icon="terp-folder-blue" context="{'group_by': 'estrategy_id'}"/>
+		  <filter string="Política pública" domain="[]" icon="terp-folder-blue" context="{'group_by': 'strategy_id'}"/>
 		  <separator orientation="vertical"/>
 		  <filter string="Estado" domain="[]" context="{'group_by':'state'}" icon="terp-folder-blue"/>
 		</group>
